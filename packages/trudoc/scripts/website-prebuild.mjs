@@ -3,11 +3,44 @@
  * Set BESKID_SKIP_TRUDOC_VERIFY=1 in container builds (no .git / skip heavy gates).
  */
 import { spawnSync } from 'node:child_process';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const websiteRoot = path.resolve(__dirname, '../../../site/website');
+
+function resolveWebsiteRoot() {
+	if (process.env.BESKID_WEBSITE_ROOT) {
+		return path.resolve(process.env.BESKID_WEBSITE_ROOT);
+	}
+	const cwd = process.cwd();
+	const cwdPkg = path.join(cwd, 'package.json');
+	if (existsSync(cwdPkg)) {
+		try {
+			const pkg = JSON.parse(readFileSync(cwdPkg, 'utf8'));
+			if (pkg.name === 'beskid-website') {
+				return cwd;
+			}
+		} catch {
+			/* fall through */
+		}
+	}
+	const candidates = [
+		path.resolve(__dirname, '../../../../site/website'),
+		path.resolve(__dirname, '../../../site/website'),
+	];
+	for (const candidate of candidates) {
+		if (existsSync(path.join(candidate, 'package.json'))) {
+			return candidate;
+		}
+	}
+	console.error(
+		'website-prebuild: could not find site/website (set BESKID_WEBSITE_ROOT or run from site/website)',
+	);
+	process.exit(1);
+}
+
+const websiteRoot = resolveWebsiteRoot();
 
 function run(label, args) {
 	const r = spawnSync('bun', ['run', ...args], {
