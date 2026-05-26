@@ -4,10 +4,10 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const bookCssPath = path.resolve(__dirname, '../../beskid-docs-ui/src/styles/book.css');
+import { resolveDocsUiRoot } from './resolve-docs-ui-root.mjs';
+
+const bookCssPath = path.join(resolveDocsUiRoot(), 'src/styles/book.css');
 
 const REQUIRED = [
 	'STARLIGHT_BOOK_LAYOUT_GUARD',
