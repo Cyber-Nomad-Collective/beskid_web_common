@@ -7,10 +7,10 @@
 	],
 	"packageManager": "bun@1.3.0",
 	"scripts": {
-		"typecheck": "bun run --filter '@beskid/trudoc' typecheck",
-		"build": "bun run --filter '@beskid/docs-ui' build:hub-client",
+		"typecheck": "bun run --filter '@cyber-nomad-collective/trudoc' typecheck",
+		"build": "bun run --filter '@cyber-nomad-collective/docs-ui' build:hub-client",
 		"test": "bun test",
-		"lint": "bun run --filter '@beskid/eslint-config' --if-present echo ok"
+		"lint": "bun run --filter '@cyber-nomad-collective/eslint-config' --if-present echo ok"
 	},
 	"repository": {
 		"type": "git",

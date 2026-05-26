@@ -1,7 +1,7 @@
 import type { CollectionEntry } from 'astro:content';
 import fs from 'node:fs/promises';
 import pathModule from 'node:path';
-import type { RelatedTopicPayload } from '@beskid/trudoc/platform-spec';
+import type { RelatedTopicPayload } from '@cyber-nomad-collective/trudoc/platform-spec';
 import { parseAdrSections, type AdrSectionKey } from './parseAdrSections';
 import { renderAdrSectionMarkdown } from './renderAdrMarkdown';
 import { docEntryHref, docEntrySlug, normalizedPathname } from './specSlug';

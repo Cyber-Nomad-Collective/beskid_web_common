@@ -6,11 +6,13 @@ Shared **TypeScript** packages for Beskid documentation sites (`site/website`), 
 
 | Package | npm name | Purpose |
 |---------|----------|---------|
-| [trudoc](./packages/trudoc/) | `@beskid/trudoc` | Layout trees, platform-spec/book nav, Zod schemas, verify CLI, Astro integration |
-| [docs-ui](./packages/docs-ui/) | `@beskid/docs-ui` | Starlight chrome, platform-spec reader, book shell, hub widget |
-| [eslint-config](./packages/eslint-config/) | `@beskid/eslint-config` | Reserved (not published yet) |
+| [trudoc](./packages/trudoc/) | `@cyber-nomad-collective/trudoc` | Layout trees, platform-spec/book nav, Zod schemas, verify CLI, Astro integration |
+| [docs-ui](./packages/docs-ui/) | `@cyber-nomad-collective/docs-ui` | Starlight chrome, platform-spec reader, book shell, hub widget |
+| [eslint-config](./packages/eslint-config/) | `@cyber-nomad-collective/eslint-config` | Reserved (not published yet) |
 
-**Dependency rule:** `@beskid/docs-ui` → `@beskid/trudoc` only (no reverse dependency).
+**Dependency rule:** `@cyber-nomad-collective/docs-ui` → `@cyber-nomad-collective/trudoc` only (no reverse dependency).
+
+**Import alias:** GitHub Packages scope must match the org (`@cyber-nomad-collective`). Apps may keep `@beskid/*` imports via npm aliases (see [`.npmrc.example`](./.npmrc.example)).
 
 ## Development
 
@@ -22,14 +24,14 @@ bun run build   # hub client bundle for @beskid/docs-ui
 
 ## Publishing (GitHub Packages)
 
-Packages publish to `https://npm.pkg.github.com` under the `@beskid` scope when a version tag is pushed (`v*` → all packages) or manually via workflow dispatch.
+Packages publish to `https://npm.pkg.github.com` under the `@cyber-nomad-collective` scope when a version tag is pushed (`v*` → all packages) or manually via workflow dispatch.
 
 ### Consumer `.npmrc`
 
 Copy [`.npmrc.example`](./.npmrc.example):
 
 ```ini
-@beskid:registry=https://npm.pkg.github.com
+@cyber-nomad-collective:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -42,8 +44,9 @@ Until the superrepo drops vendored `packages/trudoc`, consumers can alias the le
 ```json
 {
   "dependencies": {
-    "@beskid/docs-ui": "^0.1.0",
-    "trudoc": "npm:@beskid/trudoc@^0.1.0"
+    "@cyber-nomad-collective/docs-ui": "^0.1.0",
+    "trudoc": "npm:@cyber-nomad-collective/trudoc@^0.1.0",
+    "@beskid/trudoc": "npm:@cyber-nomad-collective/trudoc@^0.1.0"
   }
 }
 ```

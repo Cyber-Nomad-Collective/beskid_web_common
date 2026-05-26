@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { escapeHtml, renderRelatedTopicsSection, type RelatedTopicPayload } from '@beskid/trudoc/platform-spec';
+import { escapeHtml, renderRelatedTopicsSection, type RelatedTopicPayload } from '@cyber-nomad-collective/trudoc/platform-spec';
 import { onPageNavigation } from './view-transition-lifecycle';
 
 type GraphPayloadNode = {

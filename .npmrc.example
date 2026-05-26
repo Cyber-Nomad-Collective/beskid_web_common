@@ -1,3 +1,5 @@
 # GitHub Packages — copy to ~/.npmrc or project .npmrc (never commit tokens).
-@beskid:registry=https://npm.pkg.github.com
+@cyber-nomad-collective:registry=https://npm.pkg.github.com
+# Optional alias so imports can stay @beskid/* in app package.json:
+# "@beskid/trudoc": "npm:@cyber-nomad-collective/trudoc@^0.1.0"
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}

@@ -1,5 +1,5 @@
 {
-	"name": "@beskid/trudoc",
+	"name": "@cyber-nomad-collective/trudoc",
 	"version": "0.1.0",
 	"description": "Opinionated docs validation and Starlight helpers (layout trees, CI verify, optional Astro integration).",
 	"type": "module",

@@ -1,6 +1,6 @@
 import type { CollectionEntry } from 'astro:content';
-import { SKIP_NAV_DOMAINS } from '@beskid/trudoc/platform-spec';
-import type { GitCommitRow, GitFileMeta, NavTreeNode, PlatformSpecGitMeta } from '@beskid/trudoc/platform-spec';
+import { SKIP_NAV_DOMAINS } from '@cyber-nomad-collective/trudoc/platform-spec';
+import type { GitCommitRow, GitFileMeta, NavTreeNode, PlatformSpecGitMeta } from '@cyber-nomad-collective/trudoc/platform-spec';
 import { docEntryHref, normalizeDocSlug } from './specSlug';
 
 export type DomainNavCounts = {

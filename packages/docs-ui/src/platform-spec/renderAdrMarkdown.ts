@@ -1,6 +1,6 @@
 import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
-import { remarkInlineRepoPaths } from '@beskid/trudoc/scripts/remark-inline-repo-paths.mjs';
+import { remarkInlineRepoPaths } from '@cyber-nomad-collective/trudoc/scripts/remark-inline-repo-paths.mjs';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
