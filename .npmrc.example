@@ -1,0 +1,3 @@
+# GitHub Packages — copy to ~/.npmrc or project .npmrc (never commit tokens).
+@beskid:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}

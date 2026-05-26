@@ -1,0 +1,20 @@
+{
+	"name": "beskid-web-common",
+	"private": true,
+	"description": "Shared TypeScript packages for Beskid documentation sites, tracker, and tooling.",
+	"workspaces": [
+		"packages/*"
+	],
+	"packageManager": "bun@1.3.0",
+	"scripts": {
+		"typecheck": "bun run --filter '@beskid/trudoc' typecheck",
+		"build": "bun run --filter '@beskid/docs-ui' build:hub-client",
+		"test": "bun test",
+		"lint": "bun run --filter '@beskid/eslint-config' --if-present echo ok"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Cyber-Nomad-Collective/beskid_web_common.git"
+	},
+	"license": "MIT"
+}
