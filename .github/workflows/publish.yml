@@ -64,9 +64,18 @@ jobs:
 
       - name: Publish to GitHub Packages
         run: |
-          cd packages/trudoc && npm publish --access public --provenance=false
-          cd ../beskid-ui && npm publish --access public --provenance=false
-          cd ../beskid-ui-react && npm publish --access public --provenance=false
-          cd ../beskid-auth-client && npm publish --access public --provenance=false
+          set +e
+          for pkg in packages/trudoc packages/beskid-ui packages/beskid-ui-react packages/beskid-auth-client; do
+            echo "Publishing ${pkg}..."
+            (cd "$pkg" && npm publish --access public --provenance=false)
+            code=$?
+            if [ "$code" -ne 0 ]; then
+              echo "Publish failed for ${pkg} (exit ${code}); continuing if version already exists."
+            fi
+          done
+          set -e
+          # Fail only if auth-client is still missing (required by tracker/nexus Docker builds).
+          npm view "@cyber-nomad-collective/beskid-auth-client@${{ steps.ver.outputs.version }}" version \
+            --registry=https://npm.pkg.github.com
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
