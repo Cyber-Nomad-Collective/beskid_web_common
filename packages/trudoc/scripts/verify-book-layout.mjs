@@ -5,9 +5,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { resolveDocsUiRoot } from './resolve-docs-ui-root.mjs';
+import { resolveBeskidUiRoot } from './resolve-beskid-ui-root.mjs';
 
-const bookCssPath = path.join(resolveDocsUiRoot(), 'src/styles/book.css');
+const bookCssPath = path.join(resolveBeskidUiRoot(), 'src/styles/book.css');
 
 const REQUIRED = [
 	'STARLIGHT_BOOK_LAYOUT_GUARD',

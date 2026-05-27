@@ -1,0 +1,47 @@
+{
+	"name": "@beskid/auth-client",
+	"version": "0.1.0",
+	"description": "Typed client and handoff utilities for the Beskid auth hub (OpenAPI v1).",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Cyber-Nomad-Collective/beskid_web_common.git",
+		"directory": "packages/beskid-auth-client"
+	},
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com",
+		"access": "public"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		},
+		"./handoff": {
+			"types": "./dist/handoff.d.ts",
+			"default": "./dist/handoff.js"
+		},
+		"./v1": {
+			"types": "./dist/v1/client.d.ts",
+			"default": "./dist/v1/client.js"
+		},
+		"./v1/types": {
+			"types": "./dist/v1/types.d.ts",
+			"default": "./dist/v1/types.js"
+		},
+		"./openapi/v1": "./openapi/v1/openapi.yaml"
+	},
+	"files": ["dist", "src", "openapi", "README.md"],
+	"scripts": {
+		"build": "tsc",
+		"typecheck": "tsc --noEmit"
+	},
+	"dependencies": {
+		"jose": "^6.2.3"
+	},
+	"devDependencies": {
+		"@types/node": "^22.15.0",
+		"typescript": "^5.8.2"
+	},
+	"license": "MIT"
+}

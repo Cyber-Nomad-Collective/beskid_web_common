@@ -1,4 +1,4 @@
 node_modules/
-packages/docs-ui/dist/
+packages/beskid-ui/dist/
 *.log
 .DS_Store

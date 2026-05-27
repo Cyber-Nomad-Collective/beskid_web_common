@@ -7,10 +7,12 @@ Shared **TypeScript** packages for Beskid documentation sites (`site/website`), 
 | Package | npm name | Purpose |
 |---------|----------|---------|
 | [trudoc](./packages/trudoc/) | `@cyber-nomad-collective/trudoc` | Layout trees, platform-spec/book nav, Zod schemas, verify CLI, Astro integration |
-| [docs-ui](./packages/docs-ui/) | `@cyber-nomad-collective/docs-ui` | Starlight chrome, platform-spec reader, book shell, hub widget |
+| [beskid-ui](./packages/beskid-ui/) | `@cyber-nomad-collective/beskid-ui` | Starlight chrome, platform-spec reader, book shell, hub widget |
+| [beskid-ui-react](./packages/beskid-ui-react/) | `@cyber-nomad-collective/beskid-ui-react` | Shared shadcn React components (auth, tracker) |
+| [beskid-auth-client](./packages/beskid-auth-client/) | `@cyber-nomad-collective/beskid-auth-client` | Auth hub OpenAPI v1 client + handoff JWT utilities |
 | [eslint-config](./packages/eslint-config/) | `@cyber-nomad-collective/eslint-config` | Reserved (not published yet) |
 
-**Dependency rule:** `@cyber-nomad-collective/docs-ui` → `@cyber-nomad-collective/trudoc` only (no reverse dependency).
+**Dependency rule:** `@cyber-nomad-collective/beskid-ui` → `@cyber-nomad-collective/trudoc` only (no reverse dependency).
 
 **Import alias:** GitHub Packages scope must match the org (`@cyber-nomad-collective`). Apps may keep `@beskid/*` imports via npm aliases (see [`.npmrc.example`](./.npmrc.example)).
 
@@ -19,7 +21,7 @@ Shared **TypeScript** packages for Beskid documentation sites (`site/website`), 
 ```bash
 bun install
 bun run typecheck
-bun run build   # hub client bundle for @beskid/docs-ui
+bun run build   # hub client bundle for @beskid/beskid-ui
 ```
 
 ## Publishing (GitHub Packages)
@@ -44,7 +46,7 @@ Until the superrepo drops vendored `packages/trudoc`, consumers can alias the le
 ```json
 {
   "dependencies": {
-    "@cyber-nomad-collective/docs-ui": "^0.1.0",
+    "@cyber-nomad-collective/beskid-ui": "^0.1.0",
     "trudoc": "npm:@cyber-nomad-collective/trudoc@^0.1.0",
     "@beskid/trudoc": "npm:@cyber-nomad-collective/trudoc@^0.1.0"
   }
@@ -65,4 +67,4 @@ See [beskid `docs/beskid-web-common.md`](https://github.com/Cyber-Nomad-Collecti
 
 ## CSS mirroring
 
-`packages/trudoc/css/` and `packages/docs-ui/src/styles/` intentionally mirror platform-spec styles. When changing tokens, update **both** trees until a single `@beskid/docs-ui` style entrypoint replaces the duplicate (tracked in migration doc).
+`packages/trudoc/css/` and `packages/beskid-ui/src/styles/` intentionally mirror platform-spec styles. When changing tokens, update **both** trees until a single `@beskid/beskid-ui` style entrypoint replaces the duplicate (tracked in migration doc).

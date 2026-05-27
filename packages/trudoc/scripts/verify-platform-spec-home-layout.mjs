@@ -4,9 +4,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { resolveDocsUiRoot } from './resolve-docs-ui-root.mjs';
+import { resolveBeskidUiRoot } from './resolve-beskid-ui-root.mjs';
 
-const cssPath = path.join(resolveDocsUiRoot(), 'src/styles/platform-spec-map-and-shell.css');
+const cssPath = path.join(resolveBeskidUiRoot(), 'src/styles/platform-spec-map-and-shell.css');
 
 const REQUIRED = [
 	'STARLIGHT_PLATFORM_SPEC_HOME_LAYOUT_GUARD',

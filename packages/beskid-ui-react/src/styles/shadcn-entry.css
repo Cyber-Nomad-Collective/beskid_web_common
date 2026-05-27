@@ -1,0 +1,6 @@
+/**
+ * Import in consumer apps (e.g. tracker styles.css):
+ * @import "@beskid/ui-react/styles/shadcn-entry.css";
+ */
+@import "./beskid-tokens.css";
+@import "./shadcn-theme.css";

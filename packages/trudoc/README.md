@@ -4,7 +4,7 @@ Extractable **documentation framework** pieces from the Beskid Starlight site: l
 
 ## Contributor setup
 
-From the **superrepo root** (Bun workspaces link `site/website`, `packages/trudoc`, and `packages/beskid-docs-ui`):
+From the **superrepo root** (Bun workspaces link `site/website`, `packages/trudoc`, and `packages/beskid-ui`):
 
 ```bash
 bun install
@@ -71,7 +71,7 @@ schema: docsSchema({ extend: platformSpecExtend }),
 
 ## CSS layers (Beskid site)
 
-Platform-spec and Starlight shell styles live in **`packages/beskid-docs-ui/src/styles/`** (imported via `@beskid/docs-ui/shell-css` in `site/website/astro.config.mjs`). The same filenames are mirrored under `packages/trudoc/css/` for third-party consumers who do not use `@beskid/docs-ui`.
+Platform-spec and Starlight shell styles live in **`packages/beskid-ui/src/styles/`** (imported via `@beskid/beskid-ui/shell-css` in `site/website/astro.config.mjs`). The same filenames are mirrored under `packages/trudoc/css/` for third-party consumers who do not use `@beskid/beskid-ui`.
 
 ## See also
 

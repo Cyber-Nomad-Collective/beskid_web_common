@@ -1,0 +1,364 @@
+openapi: 3.1.0
+info:
+  title: Beskid Auth Hub API
+  version: 1.0.0
+  description: |
+    Versioned HTTP API for the Beskid auth hub (`/api/v1/*`).
+    Browser OAuth flows use `/login` and `/callback` (not under `/api/v1`).
+servers:
+  - url: https://auth.beskid-lang.org
+    description: Production
+  - url: http://localhost:8090
+    description: Local development
+tags:
+  - name: health
+  - name: session
+  - name: apps
+  - name: admin
+  - name: pairing
+paths:
+  /api/v1/health:
+    get:
+      tags: [health]
+      operationId: getHealth
+      summary: Liveness probe
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+  /api/v1/openapi.json:
+    get:
+      tags: [health]
+      operationId: getOpenApiDocument
+      summary: OpenAPI document for this API version
+      responses:
+        "200":
+          description: OpenAPI 3.1 document
+          content:
+            application/json:
+              schema:
+                type: object
+  /api/v1/me:
+    get:
+      tags: [session]
+      operationId: getMe
+      summary: Current hub session (GitHub profile)
+      responses:
+        "200":
+          description: Authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MeResponse"
+        "401":
+          description: Not signed in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/apps:
+    get:
+      tags: [apps]
+      operationId: listApps
+      summary: Consumer applications registered on the hub
+      responses:
+        "200":
+          description: App list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AppsResponse"
+  /api/v1/admin/status:
+    get:
+      tags: [admin]
+      operationId: getAdminStatus
+      summary: Onboarding and configuration status
+      responses:
+        "200":
+          description: Status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AdminStatusResponse"
+  /api/v1/admin/setup:
+    post:
+      tags: [admin]
+      operationId: postAdminSetup
+      summary: First-run onboarding (GitHub OAuth + consumer apps)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminSetupRequest"
+      responses:
+        "200":
+          description: Config saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OkResponse"
+        "400":
+          description: Invalid payload
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "403":
+          description: Already configured or invalid setup token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/pairing/requests:
+    post:
+      tags: [pairing]
+      operationId: createPairingRequest
+      summary: Create a pairing request (hub admin session)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PairingRequestCreate"
+      responses:
+        "200":
+          description: Pairing code and approve link template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PairingRequestCreated"
+        "401":
+          description: Hub admin session required
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/pairing/approve:
+    post:
+      tags: [pairing]
+      operationId: approvePairing
+      summary: Approve pairing and receive handoff secret once
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PairingApproveRequest"
+      responses:
+        "200":
+          description: Handoff secret (shown once)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PairingApproveResponse"
+        "400":
+          description: Invalid code or mismatch
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/pairing/status:
+    get:
+      tags: [pairing]
+      operationId: getPairingStatus
+      summary: Whether an app is paired (no secrets)
+      parameters:
+        - name: appId
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [tracker, nexus, pckg]
+      responses:
+        "200":
+          description: Pairing status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PairingStatusResponse"
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required: [ok, version]
+      properties:
+        ok:
+          type: boolean
+          const: true
+        version:
+          type: string
+          example: v1
+    OkResponse:
+      type: object
+      required: [ok]
+      properties:
+        ok:
+          type: boolean
+          const: true
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    AuthUser:
+      type: object
+      required: [login, avatarUrl]
+      properties:
+        login:
+          type: string
+        name:
+          type: string
+          nullable: true
+        avatarUrl:
+          type: string
+    MeResponse:
+      type: object
+      required: [user, isAdmin]
+      properties:
+        user:
+          $ref: "#/components/schemas/AuthUser"
+        isAdmin:
+          type: boolean
+    AuthApp:
+      type: object
+      required: [id, label, description, publicUrl, loginUrl]
+      properties:
+        id:
+          type: string
+          enum: [tracker, nexus, pckg]
+        label:
+          type: string
+        description:
+          type: string
+        publicUrl:
+          type: string
+          format: uri
+        loginUrl:
+          type: string
+          format: uri
+        enabled:
+          type: boolean
+    AppsResponse:
+      type: object
+      required: [apps]
+      properties:
+        apps:
+          type: array
+          items:
+            $ref: "#/components/schemas/AuthApp"
+    AdminStatusResponse:
+      type: object
+      required: [onboarded, oauthConfigured, hasSessionSecret, appCount]
+      properties:
+        onboarded:
+          type: boolean
+        oauthConfigured:
+          type: boolean
+        oauthSource:
+          type: string
+          enum: [env, db, file, none]
+        hasSessionSecret:
+          type: boolean
+        hasSetupToken:
+          type: boolean
+        appCount:
+          type: integer
+    PairingRequestCreate:
+      type: object
+      required: [appId, publicUrl]
+      properties:
+        appId:
+          type: string
+          enum: [tracker, nexus, pckg]
+        publicUrl:
+          type: string
+          format: uri
+    PairingRequestCreated:
+      type: object
+      required: [requestId, pairingCode, expiresAt, approveUrlTemplate]
+      properties:
+        requestId:
+          type: string
+        pairingCode:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        approveUrlTemplate:
+          type: string
+          format: uri
+    PairingApproveRequest:
+      type: object
+      required: [code, appId, publicUrl, approverLogin]
+      properties:
+        code:
+          type: string
+        appId:
+          type: string
+          enum: [tracker, nexus, pckg]
+        publicUrl:
+          type: string
+          format: uri
+        approverLogin:
+          type: string
+        approvalNonce:
+          type: string
+    PairingApproveResponse:
+      type: object
+      required: [serviceToken]
+      properties:
+        serviceToken:
+          type: string
+    PairingStatusResponse:
+      type: object
+      required: [appId, paired]
+      properties:
+        appId:
+          type: string
+          enum: [tracker, nexus, pckg]
+        paired:
+          type: boolean
+        publicUrl:
+          type: string
+          format: uri
+    AdminSetupRequest:
+      type: object
+      required:
+        - githubClientId
+        - githubClientSecret
+        - githubOAuthCallbackUrl
+        - adminGitHubLogins
+      properties:
+        setupToken:
+          type: string
+        githubClientId:
+          type: string
+        githubClientSecret:
+          type: string
+        githubOAuthCallbackUrl:
+          type: string
+          format: uri
+        adminGitHubLogins:
+          type: array
+          items:
+            type: string
+        apps:
+          type: array
+          items:
+            type: object
+            required: [id, publicUrl]
+            properties:
+              id:
+                type: string
+                enum: [tracker, nexus, pckg]
+              publicUrl:
+                type: string
+                format: uri
+              enabled:
+                type: boolean
+          description: Deprecated — use pairing flow instead

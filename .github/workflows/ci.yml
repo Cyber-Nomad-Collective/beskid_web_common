@@ -26,5 +26,5 @@ jobs:
       - name: Typecheck
         run: bun run typecheck
 
-      - name: Build docs-ui hub client
+      - name: Build beskid-ui hub client
         run: bun run build
