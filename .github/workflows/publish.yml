@@ -64,18 +64,47 @@ jobs:
 
       - name: Publish to GitHub Packages
         run: |
-          set +e
-          for pkg in packages/trudoc packages/beskid-ui packages/beskid-ui-react packages/beskid-auth-client; do
-            echo "Publishing ${pkg}..."
-            (cd "$pkg" && npm publish --access public --provenance=false)
-            code=$?
-            if [ "$code" -ne 0 ]; then
-              echo "Publish failed for ${pkg} (exit ${code}); continuing if version already exists."
+          set -euo pipefail
+          VER="${{ steps.ver.outputs.version }}"
+          REGISTRY="https://npm.pkg.github.com"
+          PACKAGES=(
+            packages/trudoc
+            packages/beskid-ui
+            packages/beskid-ui-react
+            packages/beskid-auth-client
+          )
+
+          pkg_name() {
+            node -pe "require('./${1}/package.json').name"
+          }
+
+          pkg_published() {
+            npm view "$(pkg_name "$1")@${VER}" version --registry="${REGISTRY}" >/dev/null 2>&1
+          }
+
+          for pkg in "${PACKAGES[@]}"; do
+            name="$(pkg_name "${pkg}")"
+            if pkg_published "${pkg}"; then
+              echo "Skip ${name}@${VER} (already on GitHub Packages)"
+              continue
+            fi
+            echo "Publishing ${name}@${VER} from ${pkg}..."
+            (cd "${pkg}" && npm publish --access public --provenance=false)
+          done
+
+          echo "Verifying all packages are available at ${VER}..."
+          missing=0
+          for pkg in "${PACKAGES[@]}"; do
+            name="$(pkg_name "${pkg}")"
+            if ! pkg_published "${pkg}"; then
+              echo "::error::Missing ${name}@${VER} on GitHub Packages"
+              missing=1
+            else
+              echo "OK ${name}@$(npm view "${name}@${VER}" version --registry="${REGISTRY}")"
             fi
           done
-          set -e
-          # Fail only if auth-client is still missing (required by tracker/nexus Docker builds).
-          npm view "@cyber-nomad-collective/beskid-auth-client@${{ steps.ver.outputs.version }}" version \
-            --registry=https://npm.pkg.github.com
+          if [ "${missing}" -ne 0 ]; then
+            exit 1
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
