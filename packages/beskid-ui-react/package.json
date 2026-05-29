@@ -29,7 +29,11 @@
 		"./styles/shadcn-theme.css": "./src/styles/shadcn-theme.css",
 		"./ui/*": "./src/components/ui/*.tsx"
 	},
-	"files": ["src", "components.json", "README.md"],
+	"files": [
+		"src",
+		"components.json",
+		"README.md"
+	],
 	"scripts": {
 		"typecheck": "tsc --noEmit"
 	},
