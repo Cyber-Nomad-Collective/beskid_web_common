@@ -1,0 +1,1 @@
+{"version":3,"file":"nitro-plugin.d.ts","sourceRoot":"","sources":["../src/nitro-plugin.ts"],"names":[],"mappings":"AAEA,OAAO,EAGN,KAAK,oBAAoB,EACzB,MAAM,YAAY,CAAC;AAEpB,MAAM,MAAM,yBAAyB,GAAG,oBAAoB,CAAC;AAE7D,wBAAgB,8BAA8B,CAAC,OAAO,EAAE,yBAAyB,OAwBhF;AAED,wBAAsB,cAAc,IAAI,OAAO,CAAC,QAAQ,CAAC,CAQxD"}

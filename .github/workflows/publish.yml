@@ -52,7 +52,7 @@ jobs:
       - name: Apply version to publishable packages
         run: |
           VER="${{ steps.ver.outputs.version }}"
-          for pkg in packages/trudoc packages/beskid-ui packages/beskid-ui-react packages/beskid-auth-client; do
+          for pkg in packages/trudoc packages/beskid-ui packages/beskid-ui-react packages/beskid-auth-client packages/beskid-server-observability; do
             node -e "
               const fs = require('fs');
               const p = '$pkg/package.json';
@@ -72,6 +72,7 @@ jobs:
             packages/beskid-ui
             packages/beskid-ui-react
             packages/beskid-auth-client
+            packages/beskid-server-observability
           )
 
           pkg_name() {

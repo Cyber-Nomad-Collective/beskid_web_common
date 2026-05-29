@@ -7,8 +7,8 @@
 	],
 	"packageManager": "bun@1.3.14",
 	"scripts": {
-		"typecheck": "bun run --filter '@cyber-nomad-collective/trudoc' typecheck && bun run --filter '@cyber-nomad-collective/beskid-ui-react' typecheck && bun run --filter '@cyber-nomad-collective/beskid-auth-client' build && bun run --filter '@cyber-nomad-collective/beskid-auth-client' typecheck",
-		"build": "bun run --filter '@cyber-nomad-collective/beskid-ui' build:hub-client",
+		"typecheck": "bun run --filter '@cyber-nomad-collective/trudoc' typecheck && bun run --filter '@cyber-nomad-collective/beskid-ui-react' typecheck && bun run --filter '@cyber-nomad-collective/beskid-auth-client' build && bun run --filter '@cyber-nomad-collective/beskid-auth-client' typecheck && bun run --filter '@cyber-nomad-collective/beskid-server-observability' build && bun run --filter '@cyber-nomad-collective/beskid-server-observability' typecheck",
+		"build": "bun run --filter '@cyber-nomad-collective/beskid-ui' build:hub-client && bun run --filter '@cyber-nomad-collective/beskid-server-observability' build",
 		"test": "bun test",
 		"lint": "bun run --filter '@cyber-nomad-collective/eslint-config' --if-present echo ok"
 	},
