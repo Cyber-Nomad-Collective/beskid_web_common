@@ -4,3 +4,8 @@
  */
 @import "./beskid-tokens.css";
 @import "./shadcn-theme.css";
+
+/* shadcn v4 components use rounded-4xl; expose the token for Tailwind consumers. */
+@theme inline {
+	--radius-4xl: calc(var(--radius, 0.75rem) + 0.5rem);
+}

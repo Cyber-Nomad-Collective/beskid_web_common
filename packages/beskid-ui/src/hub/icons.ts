@@ -1,6 +1,12 @@
 /** Lucide-style stroke icons (24×24) for Beskid hub tiles. */
 
-export type BeskidHubIcon = "home" | "platform-spec" | "book" | "pckg" | "roadmap";
+export type BeskidHubIcon =
+	| "home"
+	| "platform-spec"
+	| "book"
+	| "pckg"
+	| "tracker"
+	| "nexus";
 
 const SVG_ATTRS =
 	'xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
@@ -12,8 +18,10 @@ const PATHS: Record<BeskidHubIcon, string> = {
 	book: '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
 	pckg:
 		'<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>',
-	roadmap:
-		'<path d="M6 5v11"/><path d="M12 5v6"/><path d="M18 5v14"/><path d="M6 16h12"/>',
+	tracker:
+		'<path d="M13 5h8"/><path d="M13 12h8"/><path d="M13 19h8"/><path d="m3 7 2 2 4-4"/><path d="m3 14 2 2 4-4"/>',
+	nexus:
+		'<circle cx="5" cy="6" r="3"/><path d="M5 9v6"/><circle cx="5" cy="18" r="3"/><path d="M12 6h5a2 2 0 0 1 2 2v7"/><path d="M12 18h5a2 2 0 0 0 2-2V9"/><circle cx="19" cy="6" r="3"/><circle cx="19" cy="18" r="3"/>',
 };
 
 export function hubIconSvg(icon: BeskidHubIcon): string {

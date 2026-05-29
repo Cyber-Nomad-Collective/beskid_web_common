@@ -39,6 +39,12 @@ export const BESKID_SERVICES: BeskidService[] = [
 		id: "tracker",
 		label: "Tracker",
 		href: "https://tracker.beskid-lang.org/",
-		icon: "roadmap",
+		icon: "tracker",
+	},
+	{
+		id: "nexus",
+		label: "Nexus",
+		href: "https://nexus.beskid-lang.org/",
+		icon: "nexus",
 	},
 ];
