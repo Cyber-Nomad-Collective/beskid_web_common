@@ -24,6 +24,7 @@
 		"./lib/utils": "./src/lib/utils.ts",
 		"./hooks/use-mobile": "./src/hooks/use-mobile.ts",
 		"./auth": "./src/components/auth/index.ts",
+		"./settings": "./src/components/settings/index.ts",
 		"./styles/shadcn-entry.css": "./src/styles/shadcn-entry.css",
 		"./styles/beskid-tokens.css": "./src/styles/beskid-tokens.css",
 		"./styles/shadcn-theme.css": "./src/styles/shadcn-theme.css",
