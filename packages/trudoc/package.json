@@ -30,6 +30,8 @@
 		"./scripts/remark-inline-repo-paths.mjs": "./scripts/remark-inline-repo-paths.mjs",
 		"./scripts/architecture-graph-c4.mjs": "./scripts/architecture-graph-c4.mjs",
 		"./platform-spec": "./src/platform-spec/index.ts",
+		"./platform-spec/docs-spec": "./src/platform-spec/docs-spec/index.ts",
+		"./platform-spec/docs-spec/*": "./src/platform-spec/docs-spec/*.ts",
 		"./platform-spec/*": "./src/platform-spec/*.ts",
 		"./verify": "./src/verify/index.ts",
 		"./verify/*": "./src/verify/*.ts",

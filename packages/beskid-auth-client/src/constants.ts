@@ -6,7 +6,7 @@ export const AUTH_API_VERSION = "v1";
 export const HANDOFF_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const HUB_USER_TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60;
 
-export const AUTH_APP_IDS = ["tracker", "nexus", "pckg"] as const;
+export const AUTH_APP_IDS = ["tracker", "nexus", "pckg", "platform-spec"] as const;
 
 export const AUTH_APP_META: Record<
 	AuthAppId,
@@ -23,5 +23,9 @@ export const AUTH_APP_META: Record<
 	pckg: {
 		label: "pckg registry",
 		description: "Package registry accounts and publishing.",
+	},
+	"platform-spec": {
+		label: "Platform Spec Editor",
+		description: "Normative platform-spec drafts, moderation, and git sync.",
 	},
 };

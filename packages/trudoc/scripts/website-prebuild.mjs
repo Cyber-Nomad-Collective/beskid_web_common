@@ -60,13 +60,22 @@ const skipTrudoc =
 	process.env.BESKID_SKIP_TRUDOC_VERIFY === 'true';
 
 run('sync:cli-version', ['sync:cli-version']);
-run('generate:platform-spec-git-meta', ['generate:platform-spec-git-meta']);
-run('generate:platform-spec-nav-tree', ['generate:platform-spec-nav-tree']);
-run('generate:platform-spec-catalog', ['generate:platform-spec-catalog']);
 run('generate:book-nav-tree', ['generate:book-nav-tree']);
 run('verify:book-images', ['verify:book-images']);
 run('verify:book-layout', ['verify:book-layout']);
-run('verify:platform-spec-home-layout', ['verify:platform-spec-home-layout']);
+
+const skipWebsitePlatformSpec =
+	process.env.BESKID_SKIP_WEBSITE_PLATFORM_SPEC !== '0';
+if (skipWebsitePlatformSpec) {
+	console.warn(
+		'website-prebuild: platform-spec generators skipped (served from spec.beskid-lang.org). Set BESKID_SKIP_WEBSITE_PLATFORM_SPEC=0 to restore.',
+	);
+} else {
+	run('generate:platform-spec-git-meta', ['generate:platform-spec-git-meta']);
+	run('generate:platform-spec-nav-tree', ['generate:platform-spec-nav-tree']);
+	run('generate:platform-spec-catalog', ['generate:platform-spec-catalog']);
+	run('verify:platform-spec-home-layout', ['verify:platform-spec-home-layout']);
+}
 
 if (skipTrudoc) {
 	console.warn('website-prebuild: BESKID_SKIP_TRUDOC_VERIFY set — skipping verify:trudoc (run in CI on main).');
