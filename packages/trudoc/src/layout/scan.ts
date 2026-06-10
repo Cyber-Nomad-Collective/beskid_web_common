@@ -1,32 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { LayoutContractFile, LayoutLevel, LayoutPresetKey, LayoutTreeNode, PathClass } from './schema';
+import type { LayoutContractFile, LayoutLevel, LayoutPresetKey, LayoutTreeNode } from './schema';
+import { classifyPlatformSpecRel, type PathClass } from './path-class';
 import { effectiveLayoutSchema, parseLayoutContractJson } from './schema';
 import { mergeArticleDefaults, mergeLayoutContract, toEffectiveLayout } from './merge';
 import { defaultArticleDefaultsForFeature, getPresetBase } from './presets';
 
 const SPEC_SEGMENT = `${path.sep}src${path.sep}content${path.sep}docs${path.sep}platform-spec`;
 
-export type { PathClass } from './schema';
-
-export function classifyPlatformSpecRel(relPosix: string): PathClass {
-	const segments = relPosix.split('/').filter(Boolean);
-	const base = segments.at(-1)?.replace(/\.(md|mdx)$/i, '') ?? '';
-	const isIndex = base === 'index';
-
-	if (segments.length === 1 && isIndex) return 'domain-root';
-	if (segments.length === 2 && isIndex) return 'domain';
-	if (segments.length === 3 && isIndex) return 'area';
-	if (segments.length === 4 && isIndex) return 'feature';
-	/** Area-level articles: non-`index` leaf directly under an area hub. */
-	if (segments.length === 3 && !isIndex) return 'article';
-	/** Feature ADRs: leaf under `<feature>/adr/`. */
-	if (segments.length >= 5 && segments.at(-2) === 'adr' && !isIndex) return 'adr';
-	/** Feature-bundle articles: non-`index` leaf under a feature folder (not under `adr/`). */
-	if (segments.length >= 4 && !isIndex && segments.at(-2) !== 'adr') return 'article';
-	return 'legacy-or-bridge';
-}
+export type { PathClass } from './path-class';
+export { classifyPlatformSpecRel } from './path-class';
 
 export function filePathToDocSlug(absFile: string, docsRoot: string): string {
 	const rel = path.relative(docsRoot, absFile).split(path.sep).join('/');

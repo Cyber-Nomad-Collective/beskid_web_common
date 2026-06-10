@@ -1,4 +1,4 @@
-import { classifyPlatformSpecRel } from '../../layout/scan';
+import { classifyPlatformSpecRel } from '../../layout/path-class';
 
 export type PathClass =
 	| 'domain-root'
