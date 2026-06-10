@@ -8,7 +8,7 @@ const specPerson = z.object({
 });
 
 const relatedTopicSchema = z.object({
-	type: z.enum(['Domain', 'Area', 'Feature']),
+	type: z.enum(['Domain', 'Area', 'Feature', 'ADR', 'Article']),
 	title: nonEmptyString,
 	href: nonEmptyString,
 	relation: nonEmptyString.optional(),
@@ -41,7 +41,7 @@ const platformSpecBaseSchema = z.object({
 	architectureGraph: architectureGraphSchema.optional(),
 });
 
-const platformSpecStatusSchema = z.enum(['Standard', 'Proposed']);
+const platformSpecStatusSchema = z.enum(['Standard', 'Proposed', 'Superseded']);
 
 export const domainSpecSchema = platformSpecBaseSchema.extend({
 	specLevel: z.literal('domain'),

@@ -6,7 +6,7 @@
 export type RelatedTopicSeverity = 'informational' | 'low' | 'medium' | 'high' | 'critical';
 
 export type RelatedTopicPayload = {
-	type: 'Domain' | 'Area' | 'Feature';
+	type: 'Domain' | 'Area' | 'Feature' | 'ADR' | 'Article';
 	title: string;
 	href: string;
 	relation?: string;
@@ -22,6 +22,8 @@ const typeClass: Record<RelatedTopicPayload['type'], string> = {
 	Domain: 'related-topics__type--domain',
 	Area: 'related-topics__type--area',
 	Feature: 'related-topics__type--feature',
+	ADR: 'related-topics__type--feature',
+	Article: 'related-topics__type--feature',
 };
 
 const severityClass: Record<RelatedTopicSeverity, string> = {
