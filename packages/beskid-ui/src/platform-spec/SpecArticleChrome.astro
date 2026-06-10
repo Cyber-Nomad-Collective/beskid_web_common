@@ -3,7 +3,7 @@ import OpenInGraphButton from './OpenInGraphButton.astro';
 import SpecReaderShell from './SpecReaderShell.astro';
 import SpecStandingMeta from './SpecStandingMeta.astro';
 import { getCollection } from 'astro:content';
-import { readPlatformSpecLayoutReportOrThrow } from '@cyber-nomad-collective/trudoc/layout';
+import { readPlatformSpecLayoutReportOrThrow } from '@cyber-nomad-collective/trudoc/layout/layout-report-file';
 import { docEntryHref, docEntrySlug } from './specSlug';
 import { computeSpecReaderState, loadArchitectureGraphForEntry } from './specReaderContext';
 
