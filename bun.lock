@@ -61,7 +61,7 @@
     },
     "packages/beskid-ui-react": {
       "name": "@cyber-nomad-collective/beskid-ui-react",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "dependencies": {
         "@base-ui/react": "^1.5.0",
         "@cyber-nomad-collective/spec-core": "workspace:*",
@@ -107,7 +107,7 @@
       "name": "@cyber-nomad-collective/spec-core",
       "version": "0.2.0",
       "dependencies": {
-        "@cyber-nomad-collective/trudoc": "workspace:*",
+        "@cyber-nomad-collective/trudoc": "file:../trudoc",
         "yaml": "^2.7.0",
         "zod": "^4.4.3",
       },
@@ -1671,6 +1671,8 @@
     "@babel/helper-compilation-targets/semver": ["semver@6.3.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
 
     "@cyber-nomad-collective/beskid-ui/@cyber-nomad-collective/trudoc": ["@cyber-nomad-collective/trudoc@file:packages/trudoc", { "dependencies": { "yaml": "^2.7.0", "zod": "^4.4.3" }, "devDependencies": { "@types/node": "^22.13.5", "astro": "^6.2.2", "tsx": "^4.19.4", "typescript": "^5.8.2", "vite": "^6.4.0" }, "peerDependencies": { "astro": ">=4.0.0" }, "optionalPeers": ["astro"], "bin": { "trudoc": "bin/trudoc.mjs", "trudoc-layout": "bin/trudoc-layout.mjs" } }],
+
+    "@cyber-nomad-collective/spec-core/@cyber-nomad-collective/trudoc": ["@cyber-nomad-collective/trudoc@file:packages/trudoc", { "dependencies": { "yaml": "^2.7.0", "zod": "^4.4.3" }, "devDependencies": { "@types/node": "^22.13.5", "astro": "^6.2.2", "tsx": "^4.19.4", "typescript": "^5.8.2", "vite": "^6.4.0" }, "peerDependencies": { "astro": ">=4.0.0" }, "optionalPeers": ["astro"], "bin": { "trudoc": "bin/trudoc.mjs", "trudoc-layout": "bin/trudoc-layout.mjs" } }],
 
     "@mdx-js/mdx/@types/estree": ["@types/estree@1.0.9", "", {}, "sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg=="],
 
