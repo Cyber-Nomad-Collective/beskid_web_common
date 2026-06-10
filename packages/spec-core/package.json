@@ -36,7 +36,7 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@cyber-nomad-collective/trudoc": "workspace:*",
+		"@cyber-nomad-collective/trudoc": "file:../trudoc",
 		"yaml": "^2.7.0",
 		"zod": "^4.4.3"
 	},
