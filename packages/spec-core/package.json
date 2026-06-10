@@ -1,6 +1,6 @@
 {
 	"name": "@cyber-nomad-collective/spec-core",
-	"version": "0.2.1",
+	"version": "0.2.0",
 	"description": "Structured platform-spec workspace schemas, validation, MDX emit/import, and grid layout for Beskid spec tooling.",
 	"type": "module",
 	"repository": {
@@ -36,7 +36,7 @@
 		"test": "vitest run"
 	},
 	"dependencies": {
-		"@cyber-nomad-collective/trudoc": "^0.2.1",
+		"@cyber-nomad-collective/trudoc": "workspace:*",
 		"yaml": "^2.7.0",
 		"zod": "^4.4.3"
 	},
