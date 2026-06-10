@@ -7,8 +7,8 @@ import {
 	layoutFileWithGrid,
 	type GridLayoutItem,
 	type LayoutFile,
+	type WidgetSpec,
 } from "@cyber-nomad-collective/spec-core";
-import type { WidgetSpec } from "@cyber-nomad-collective/trudoc/layout";
 import { Button } from "../components/ui/button.js";
 import { BUILTIN_WIDGET_REGISTRY, widgetRegistryMap } from "./registry.js";
 import type { SpecWidgetRegistration } from "./types.js";
