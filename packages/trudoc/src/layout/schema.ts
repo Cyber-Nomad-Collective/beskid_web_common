@@ -19,6 +19,17 @@ export const layoutPresetKeySchema = z.enum([
 
 export type LayoutPresetKey = z.infer<typeof layoutPresetKeySchema>;
 
+/** Classifies a platform-spec doc path segment layout (no Node deps — safe for client bundles). */
+export type PathClass =
+	| 'domain-root'
+	| 'domain'
+	| 'area'
+	| 'feature'
+	| 'article'
+	| 'adr'
+	| 'component'
+	| 'legacy-or-bridge';
+
 const sectionRuleSchema = z.object({
 	id: z.string().min(1),
 	required: z.boolean().default(true),

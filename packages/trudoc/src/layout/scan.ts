@@ -1,22 +1,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { LayoutContractFile, LayoutLevel, LayoutPresetKey, LayoutTreeNode } from './schema';
+import type { LayoutContractFile, LayoutLevel, LayoutPresetKey, LayoutTreeNode, PathClass } from './schema';
 import { effectiveLayoutSchema, parseLayoutContractJson } from './schema';
 import { mergeArticleDefaults, mergeLayoutContract, toEffectiveLayout } from './merge';
 import { defaultArticleDefaultsForFeature, getPresetBase } from './presets';
 
 const SPEC_SEGMENT = `${path.sep}src${path.sep}content${path.sep}docs${path.sep}platform-spec`;
 
-export type PathClass =
-	| 'domain-root'
-	| 'domain'
-	| 'area'
-	| 'feature'
-	| 'article'
-	| 'adr'
-	| 'component'
-	| 'legacy-or-bridge';
+export type { PathClass } from './schema';
 
 export function classifyPlatformSpecRel(relPosix: string): PathClass {
 	const segments = relPosix.split('/').filter(Boolean);

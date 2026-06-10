@@ -1,5 +1,4 @@
-import type { LayoutLevel } from '../layout/schema';
-import type { PathClass } from '../layout/scan';
+import type { LayoutLevel, PathClass } from '../layout/schema';
 
 export type NavTreeLevel = LayoutLevel;
 
