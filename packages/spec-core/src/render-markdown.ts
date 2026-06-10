@@ -1,5 +1,5 @@
 import { parseMarkdownSections, type MarkdownSection } from "./markdown-content.js";
-import type { LayoutFile } from "./grid-layout.js";
+import type { LayoutFile, WidgetSpec } from "./grid-layout.js";
 
 export interface RenderedSpecSection {
 	id: string;
@@ -23,8 +23,9 @@ export function sectionsForLayout(
 		return parsed;
 	}
 
-	const sectionWidgets = layout.widgets.filter(
-		(widget) => widget.type === "specSection",
+	const sectionWidgets = (layout.widgets ?? []).filter(
+		(widget): widget is WidgetSpec & { type: "specSection"; props?: { id?: string } } =>
+			(widget as { type: string }).type === "specSection",
 	);
 	if (sectionWidgets.length === 0) {
 		return parsed;
@@ -34,10 +35,8 @@ export function sectionsForLayout(
 	const ordered: MarkdownSection[] = [];
 
 	for (const widget of sectionWidgets) {
-		const id =
-			"props" in widget && widget.props && "id" in widget.props
-				? String((widget.props as { id?: string }).id ?? "")
-				: "";
+		const props = (widget as { props?: { id?: string } }).props;
+		const id = props?.id ? String(props.id) : "";
 		if (!id) continue;
 		const section = byId.get(id);
 		if (section) ordered.push(section);
