@@ -1,22 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import type { CatalogEntry, NavTreeNode } from "./types.js";
 import { SpecNavRail } from "./spec-nav-rail.js";
 import { Badge } from "../components/ui/badge.js";
+
+export type SpecHomeViewMode = "browse" | "map";
 
 export interface PlatformSpecHomeProps {
 	catalog: CatalogEntry[];
 	navTree: NavTreeNode[];
 	onNavigate?: (href: string) => void;
+	viewMode?: SpecHomeViewMode;
 }
 
 export function PlatformSpecHome({
 	catalog,
 	navTree,
 	onNavigate,
+	viewMode = "browse",
 }: PlatformSpecHomeProps) {
-	const [tab, setTab] = useState<"browse" | "map">("browse");
 	const domains = catalog.filter((e) => e.pathClass === "domain");
 	const stats = {
 		domains: domains.length,
@@ -50,32 +52,7 @@ export function PlatformSpecHome({
 				</div>
 			</section>
 
-			<div className="flex gap-2">
-				<button
-					type="button"
-					className={`rounded-md px-4 py-2 text-sm font-medium ${
-						tab === "browse"
-							? "bg-primary text-primary-foreground"
-							: "border border-border"
-					}`}
-					onClick={() => setTab("browse")}
-				>
-					Browse
-				</button>
-				<button
-					type="button"
-					className={`rounded-md px-4 py-2 text-sm font-medium ${
-						tab === "map"
-							? "bg-primary text-primary-foreground"
-							: "border border-border"
-					}`}
-					onClick={() => setTab("map")}
-				>
-					Map
-				</button>
-			</div>
-
-			{tab === "browse" ? (
+			{viewMode === "browse" ? (
 				<div className="grid gap-6 lg:grid-cols-[240px_1fr]">
 					<SpecNavRail
 						navTree={navTree}

@@ -58,11 +58,11 @@ describe("scaffold-node", () => {
 		const result = createSpecNode({
 			workspaceDir: dir,
 			typeFlag: "ADR",
-			slug: "platform-spec/compiler/pipeline/build/adr-0001",
+			slug: "platform-spec/compiler/pipeline/build/adr/0001-example",
 			title: "Example ADR",
 			parentSlug: "platform-spec/compiler/pipeline/build",
 		});
-		expect(result.node.adrStatus).toBe("proposed");
+		expect(result.node.adrStatus).toBe("Proposed");
 		expect(fs.existsSync(path.join(result.nodeDir, "content.md"))).toBe(true);
 		const report = validateWorkspace(dir);
 		expect(report.ok).toBe(true);

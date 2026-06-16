@@ -17,6 +17,14 @@ export const SPEC_MARKDOWN_FILE = "content.md";
 
 export const SPEC_COMMENTS_FILE = "comments.json";
 
+export const SPEC_RELATED_FILE = "related.json";
+
+export const SPEC_ARTICLES_DIR = "articles";
+
+export const SPEC_ADR_DIR = "adr";
+
 export const SPEC_TEMPLATES_DIR = ".spec/templates";
 
 export const SPEC_ARCHITECTURE_DIR = ".spec/architecture";
+
+export const SPEC_SEED_CHECKSUM_FILE = ".spec/seed-checksum";

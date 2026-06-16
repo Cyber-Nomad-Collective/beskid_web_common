@@ -22,6 +22,7 @@
 		"./content": "./src/content/schema.ts",
 		"./grid-layout": "./src/grid-layout.ts",
 		"./path-rules": "./src/path-rules.ts",
+		"./node-path": "./src/node-path.ts",
 		"./emit-mdx": "./src/emit-mdx.ts",
 		"./import-legacy-mdx": "./src/import-legacy-mdx.ts",
 		"./validate-workspace": "./src/validate-workspace.ts",
@@ -37,7 +38,8 @@
 	},
 	"dependencies": {
 		"@cyber-nomad-collective/trudoc": "file:../trudoc",
-		"yaml": "^2.7.0",
+		"@markschema/mdshape": "^1.0.0",
+		"yaml": "^2.9.0",
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {

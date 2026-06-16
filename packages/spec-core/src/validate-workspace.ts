@@ -6,17 +6,16 @@ import {
 	SPEC_LAYOUT_FILE,
 	SPEC_MARKDOWN_FILE,
 	SPEC_NODE_FILE,
+	SPEC_RELATED_FILE,
 	SPEC_WORKSPACE_MANIFEST,
 } from "./constants.js";
 import { parseNodeComments } from "./comments/schema.js";
-import { parseNodeContent } from "./content/schema.js";
 import { parseLayoutFile } from "./grid-layout.js";
 import {
-	readNodeMarkdown,
-	validateMarkdownContent,
-} from "./markdown-content.js";
-import { parseNodeMetadata } from "./node/schema.js";
-import { slugFromNodeDir } from "./path-rules.js";
+	collectContentNodeDirs,
+	parseNodeDocument,
+} from "./node-document.js";
+import { parseRelatedFile } from "./related/schema.js";
 import {
 	DEFAULT_WORKSPACE_MANIFEST,
 	parseWorkspaceManifest,
@@ -24,6 +23,9 @@ import {
 	type WorkspaceManifest,
 } from "./workspace/schema.js";
 import { createSpecNode, defaultManifestForNormativeRepo } from "./scaffold-node.js";
+import { ensureDefaultTemplates } from "./template-resolve.js";
+import { validateNodeDocumentContent } from "./validate-node-document.js";
+import { validateArchitectureGraphsInWorkspace } from "./architecture/validate.js";
 
 export interface ValidationIssue {
 	code: string;
@@ -36,26 +38,6 @@ export interface ValidationReport {
 	ok: boolean;
 	issues: ValidationIssue[];
 	nodeCount: number;
-}
-
-function collectNodeDirs(contentRoot: string): string[] {
-	const dirs: string[] = [];
-	if (!fs.existsSync(contentRoot)) return dirs;
-
-	function walk(dir: string) {
-		const nodeJson = path.join(dir, SPEC_NODE_FILE);
-		if (fs.existsSync(nodeJson)) {
-			dirs.push(dir);
-		}
-		for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-			if (entry.isDirectory() && !entry.name.startsWith(".")) {
-				walk(path.join(dir, entry.name));
-			}
-		}
-	}
-
-	walk(contentRoot);
-	return dirs;
 }
 
 function allowedChildLevels(
@@ -106,17 +88,38 @@ export function validateWorkspace(workspaceDir: string): ValidationReport {
 	}
 
 	const contentRoot = path.join(workspaceDir, manifest.contentRoot);
-	const nodeDirs = collectNodeDirs(contentRoot);
+	const nodeDirs = collectContentNodeDirs(contentRoot);
 	const nodesBySlug = new Map<string, { dir: string; level: SpecLevel }>();
 
 	for (const nodeDir of nodeDirs) {
 		const rel = path.relative(workspaceDir, nodeDir);
+		const markdownPath = path.join(nodeDir, SPEC_MARKDOWN_FILE);
+		const nodeJsonPath = path.join(nodeDir, SPEC_NODE_FILE);
+		const contentJsonPath = path.join(nodeDir, SPEC_CONTENT_FILE);
+
+		if (fs.existsSync(nodeJsonPath)) {
+			issues.push({
+				code: "legacy-node-json",
+				severity: "error",
+				path: nodeJsonPath,
+				message: `Remove ${SPEC_NODE_FILE}; run spec migrate v2`,
+			});
+		}
+		if (fs.existsSync(contentJsonPath)) {
+			issues.push({
+				code: "legacy-content-json",
+				severity: "error",
+				path: contentJsonPath,
+				message: `Remove ${SPEC_CONTENT_FILE}; run spec migrate v2`,
+			});
+		}
+
 		try {
-			const node = parseNodeMetadata(
-				JSON.parse(fs.readFileSync(path.join(nodeDir, SPEC_NODE_FILE), "utf8")),
-				path.join(rel, SPEC_NODE_FILE),
-			);
-			nodesBySlug.set(node.slug, { dir: nodeDir, level: node.specLevel });
+			const doc = parseNodeDocument({ nodeDir, workspaceDir, manifest });
+			nodesBySlug.set(doc.node.slug, {
+				dir: nodeDir,
+				level: doc.node.specLevel,
+			});
 
 			const layoutPath = path.join(nodeDir, SPEC_LAYOUT_FILE);
 			if (fs.existsSync(layoutPath)) {
@@ -126,40 +129,19 @@ export function validateWorkspace(workspaceDir: string): ValidationReport {
 				);
 			}
 
-			const contentPath = path.join(nodeDir, SPEC_CONTENT_FILE);
-			const markdownPath = path.join(nodeDir, SPEC_MARKDOWN_FILE);
-			if (fs.existsSync(markdownPath)) {
-				const markdown = readNodeMarkdown(nodeDir);
-				for (const issue of validateMarkdownContent(
-					workspaceDir,
-					manifest,
-					node,
-					markdown,
-				)) {
-					issues.push({
-						code: issue.code,
-						severity: "error",
-						path: markdownPath,
-						message: issue.message,
-					});
-				}
-			} else if (fs.existsSync(contentPath)) {
-				parseNodeContent(
-					JSON.parse(fs.readFileSync(contentPath, "utf8")),
-					contentPath,
-				);
+			for (const issue of validateNodeDocumentContent({
+				workspaceDir,
+				manifest,
+				node: doc.node,
+				frontmatter: doc.frontmatter,
+				body: doc.body,
+				markdownPath,
+			})) {
 				issues.push({
-					code: "legacy-content-json",
-					severity: "warning",
-					path: contentPath,
-					message: `Prefer ${SPEC_MARKDOWN_FILE}; run spec import-assistant --apply`,
-				});
-			} else {
-				issues.push({
-					code: "missing-content",
+					code: issue.code,
 					severity: "error",
 					path: markdownPath,
-					message: `Missing ${SPEC_MARKDOWN_FILE}`,
+					message: issue.message,
 				});
 			}
 
@@ -171,26 +153,31 @@ export function validateWorkspace(workspaceDir: string): ValidationReport {
 				);
 			}
 
-			const computedSlug = slugFromNodeDir(
-				manifest.contentRoot,
-				nodeDir,
-				workspaceDir,
-			);
-			if (computedSlug !== node.slug) {
+			const relatedPath = path.join(nodeDir, SPEC_RELATED_FILE);
+			if (fs.existsSync(relatedPath)) {
+				parseRelatedFile(
+					JSON.parse(fs.readFileSync(relatedPath, "utf8")),
+					relatedPath,
+				);
+			} else if (
+				doc.node.specLevel === "domain" ||
+				doc.node.specLevel === "area" ||
+				doc.node.specLevel === "feature"
+			) {
 				issues.push({
-					code: "slug-mismatch",
-					severity: "error",
-					path: path.join(rel, SPEC_NODE_FILE),
-					message: `Slug ${node.slug} does not match path ${computedSlug}`,
+					code: "missing-related",
+					severity: "warning",
+					path: relatedPath,
+					message: `Missing ${SPEC_RELATED_FILE}`,
 				});
 			}
 
-			if (!manifest.nodeTypes[node.specLevel]) {
+			if (!manifest.nodeTypes[doc.node.specLevel]) {
 				issues.push({
 					code: "unregistered-node-type",
 					severity: "error",
-					path: path.join(rel, SPEC_NODE_FILE),
-					message: `Node type ${node.specLevel} is not registered in spec.json`,
+					path: markdownPath,
+					message: `Node type ${doc.node.specLevel} is not registered in spec.json`,
 				});
 			}
 		} catch (err) {
@@ -204,22 +191,22 @@ export function validateWorkspace(workspaceDir: string): ValidationReport {
 	}
 
 	for (const [slug, { level }] of nodesBySlug) {
-		const node = parseNodeMetadata(
-			JSON.parse(
-				fs.readFileSync(
-					path.join(nodesBySlug.get(slug)!.dir, SPEC_NODE_FILE),
-					"utf8",
-				),
-			),
-		);
-		if (node.parentSlug) {
-			const parent = nodesBySlug.get(node.parentSlug);
+		const doc = parseNodeDocument({
+			nodeDir: nodesBySlug.get(slug)!.dir,
+			workspaceDir,
+			manifest,
+		});
+		if (doc.node.parentSlug) {
+			const parent = nodesBySlug.get(doc.node.parentSlug);
 			if (!parent) {
+				// The platform-spec root hub can be implicit for tooling that only scaffolds
+				// subtrees. Treat it as always present unless explicitly represented as a node.
+				if (doc.node.parentSlug === "platform-spec") continue;
 				issues.push({
 					code: "missing-parent",
 					severity: "error",
 					path: slug,
-					message: `Parent slug ${node.parentSlug} not found`,
+					message: `Parent slug ${doc.node.parentSlug} not found`,
 				});
 				continue;
 			}
@@ -233,6 +220,21 @@ export function validateWorkspace(workspaceDir: string): ValidationReport {
 				});
 			}
 		}
+	}
+
+	// Validate typed architecture graphs (if the workspace registers and/or stores any).
+	const knownSpecSlugs = new Set(nodesBySlug.keys());
+	const archIssues = validateArchitectureGraphsInWorkspace(
+		workspaceDir,
+		knownSpecSlugs,
+	);
+	for (const issue of archIssues) {
+		issues.push({
+			code: issue.code,
+			severity: "error",
+			path: issue.path ?? "architecture-graph",
+			message: issue.message,
+		});
 	}
 
 	const errors = issues.filter((i) => i.severity === "error");
@@ -255,9 +257,10 @@ export function initWorkspace(
 		path.join(workspaceDir, SPEC_WORKSPACE_MANIFEST),
 		`${JSON.stringify(manifest, null, 2)}\n`,
 	);
+	ensureDefaultTemplates(workspaceDir);
 
 	const rootNodeDir = path.join(workspaceDir, manifest.contentRoot);
-	if (!fs.existsSync(path.join(rootNodeDir, SPEC_NODE_FILE))) {
+	if (!fs.existsSync(path.join(rootNodeDir, SPEC_MARKDOWN_FILE))) {
 		createSpecNode({
 			workspaceDir,
 			typeFlag: "Root",

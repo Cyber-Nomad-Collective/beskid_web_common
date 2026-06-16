@@ -1,29 +1,46 @@
 import fs from "node:fs";
 import path from "node:path";
-import { parse as parseYaml } from "yaml";
+import { createRequire } from "node:module";
 import type { LayoutPresetKey } from "@cyber-nomad-collective/trudoc/layout";
 import { getPresetBase } from "@cyber-nomad-collective/trudoc/layout";
 import {
-	SPEC_CONTENT_FILE,
+	SPEC_ADR_DIR,
+	SPEC_ARTICLES_DIR,
 	SPEC_LAYOUT_FILE,
+	SPEC_MARKDOWN_FILE,
 	SPEC_NODE_FILE,
+	SPEC_RELATED_FILE,
 } from "./constants.js";
-import { emptyNodeContent, type ContentBlock, type NodeContent } from "./content/schema.js";
+import { type ContentBlock, type NodeContent } from "./content/schema.js";
 import { layoutFileWithGrid, type LayoutFile } from "./grid-layout.js";
+import { isHubLevel } from "./node-path.js";
 import type { NodeMetadata } from "./node/schema.js";
+import {
+	pathClassFromNodeRel,
+	parentSlugFromNodeRel,
+} from "./node-path.js";
 import {
 	pathClassFromRel,
 	parentSlugFromPath,
 	slugFromSpecRel,
 	specLevelFromPathClass,
 } from "./path-rules.js";
+import {
+	emptyRelatedFile,
+	relatedTopicsFromFrontmatter,
+} from "./related/schema.js";
 import type { WorkspaceManifest } from "./workspace/schema.js";
+import { writeNodeMarkdown } from "./markdown-content.js";
+import { stripMdxPresentationSurface } from "./strip-mdx-surface.js";
 
 const SPEC_SECTION_RE =
 	/<SpecSection\s+id=["']([^"']+)["'](?:\s+title=["']([^"']*)["'])?\s*\/?>([\s\S]*?)<\/SpecSection>|<SpecSection\s+id=["']([^"']+)["'](?:\s+title=["']([^"']*)["'])?\s*\/>/gi;
 
 const DOMAIN_TILES_RE =
 	/<DomainTiles\s+pathPrefix=["']([^"']+)["'](?:\s+heading=["']([^"']*)["'])?\s*\/?>/gi;
+
+const require = createRequire(import.meta.url);
+const { parse: parseYaml } = require("yaml") as typeof import("yaml");
 
 export function splitMdxFrontmatter(raw: string): {
 	frontmatter: Record<string, unknown>;
@@ -50,18 +67,19 @@ export function splitMdxFrontmatter(raw: string): {
 }
 
 function parseSpecSections(body: string): ContentBlock[] {
+	const normalizedBody = stripMdxPresentationSurface(body);
 	const blocks: ContentBlock[] = [];
 	let lastIndex = 0;
-	const sectionMatches = [...body.matchAll(SPEC_SECTION_RE)];
+	const sectionMatches = [...normalizedBody.matchAll(SPEC_SECTION_RE)];
 
 	for (const match of sectionMatches) {
-		const before = body.slice(lastIndex, match.index).trim();
+		const before = normalizedBody.slice(lastIndex, match.index).trim();
 		if (before) {
 			blocks.push({ type: "markdownProse", bodyMd: before });
 		}
 		const id = match[1] ?? match[4] ?? "";
 		const title = match[2] ?? match[5];
-		const inner = match[3]?.trim() ?? "";
+		const inner = stripMdxPresentationSurface(match[3]?.trim() ?? "");
 		blocks.push({
 			type: "specSection",
 			id,
@@ -71,9 +89,9 @@ function parseSpecSections(body: string): ContentBlock[] {
 		lastIndex = (match.index ?? 0) + match[0].length;
 	}
 
-	const tail = body.slice(lastIndex).trim();
+	const tail = normalizedBody.slice(lastIndex).trim();
 	if (tail) {
-		for (const tileMatch of tail.matchAll(DOMAIN_TILES_RE)) {
+		for (const tileMatch of body.matchAll(DOMAIN_TILES_RE)) {
 			blocks.push({
 				type: "domainTiles",
 				props: {
@@ -82,24 +100,75 @@ function parseSpecSections(body: string): ContentBlock[] {
 				},
 			});
 		}
-		const withoutTiles = tail.replace(DOMAIN_TILES_RE, "").trim();
-		if (withoutTiles) {
-			blocks.push({ type: "markdownProse", bodyMd: withoutTiles });
+		if (tail) {
+			blocks.push({ type: "markdownProse", bodyMd: tail });
 		}
 	}
 
-	if (blocks.length === 0 && body.trim()) {
-		blocks.push({ type: "markdownProse", bodyMd: body.trim() });
+	if (blocks.length === 0 && normalizedBody.trim()) {
+		blocks.push({ type: "markdownProse", bodyMd: normalizedBody.trim() });
 	}
 
 	return blocks;
 }
 
-function frontmatterToNode(
+function contentToMarkdown(content: NodeContent): string {
+	const markdown = content.blocks
+		.map((block) => {
+			if (block.type === "markdownProse") return block.bodyMd.trim();
+			if (block.type === "specSection") {
+				const title = block.title ?? block.id;
+				return `## ${title}\n\n${block.bodyMd.trim()}`;
+			}
+			return "";
+		})
+		.filter(Boolean)
+		.join("\n\n");
+	return stripMdxPresentationSurface(markdown);
+}
+
+function resolveNodeRel(relFromMdxRoot: string, pathClass: ReturnType<typeof pathClassFromRel>): string {
+	const base = relFromMdxRoot.replace(/\/index$/, "");
+	const segments = base.split("/").filter(Boolean);
+	const specLevel = specLevelFromPathClass(pathClass);
+
+	if (specLevel === "article") {
+		if (base.includes("/articles/")) return base;
+		// Area-level feature hubs (3 segments) stay as sibling directories, not under articles/.
+		if (segments.length <= 3) return base;
+		const parts = base.split("/");
+		const leaf = parts.pop()!;
+		const hub = parts.join("/");
+		return hub ? `${hub}/${SPEC_ARTICLES_DIR}/${leaf}` : `${SPEC_ARTICLES_DIR}/${leaf}`;
+	}
+
+	if (specLevel === "adr") {
+		if (base.includes(`/${SPEC_ADR_DIR}/`)) return base;
+		const parts = base.split("/");
+		const leaf = parts.pop()!;
+		const hub = parts.join("/");
+		return hub ? `${hub}/${SPEC_ADR_DIR}/${leaf}` : `${SPEC_ADR_DIR}/${leaf}`;
+	}
+
+	return base;
+}
+
+function canonicalSlugFromRel(nodeRel: string, pathClass: ReturnType<typeof pathClassFromRel>): string {
+	const pathClassForNode = pathClassFromNodeRel(nodeRel);
+	const parentSlug = parentSlugFromNodeRel(nodeRel, pathClassForNode);
+	const specLevel = specLevelFromPathClass(pathClass);
+	const leaf = nodeRel.split("/").pop() ?? nodeRel;
+	if (specLevel === "article" || specLevel === "adr") {
+		return parentSlug ? `${parentSlug}/${specLevel === "article" ? SPEC_ARTICLES_DIR : SPEC_ADR_DIR}/${leaf}` : `platform-spec/${nodeRel}`;
+	}
+	return slugFromSpecRel(nodeRel);
+}
+
+function frontmatterToNodeWithRelated(
 	frontmatter: Record<string, unknown>,
 	slug: string,
 	pathClass: ReturnType<typeof pathClassFromRel>,
-): NodeMetadata {
+): { node: NodeMetadata; relatedTopics?: unknown[] } {
 	const owner = frontmatter.owner as
 		| { name?: string; email?: string }
 		| undefined;
@@ -108,10 +177,10 @@ function frontmatterToNode(
 		| undefined;
 	const specLevel = specLevelFromPathClass(pathClass);
 	const relatedTopics = Array.isArray(frontmatter.relatedTopics)
-		? (frontmatter.relatedTopics as string[])
+		? (frontmatter.relatedTopics as unknown[])
 		: undefined;
 
-	return {
+	const node: NodeMetadata = {
 		version: 1,
 		specLevel,
 		slug,
@@ -128,11 +197,20 @@ function frontmatterToNode(
 			? String(frontmatter.adrStatus)
 			: undefined,
 		adrDate: frontmatter.adrDate ? String(frontmatter.adrDate) : undefined,
-		relatedTopics,
 		lastReviewed: frontmatter.lastReviewed
 			? String(frontmatter.lastReviewed)
 			: undefined,
 	};
+
+	return { node, relatedTopics };
+}
+
+function frontmatterToNode(
+	frontmatter: Record<string, unknown>,
+	slug: string,
+	pathClass: ReturnType<typeof pathClassFromRel>,
+): NodeMetadata {
+	return frontmatterToNodeWithRelated(frontmatter, slug, pathClass).node;
 }
 
 function inferLayoutFromMdx(
@@ -142,8 +220,18 @@ function inferLayoutFromMdx(
 	existingLayoutPath: string | null,
 ): LayoutFile {
 	if (existingLayoutPath && fs.existsSync(existingLayoutPath)) {
-		const raw = JSON.parse(fs.readFileSync(existingLayoutPath, "utf8"));
-		return layoutFileWithGrid(raw as LayoutFile);
+		try {
+			const raw = JSON.parse(fs.readFileSync(existingLayoutPath, "utf8")) as Record<
+				string,
+				unknown
+			>;
+			if (raw.extends === "feature-default") {
+				raw.extends = "feature-hub-default";
+			}
+			return layoutFileWithGrid(raw as LayoutFile);
+		} catch {
+			// Fall through to inferred layout when legacy layout.json is invalid.
+		}
 	}
 
 	const presetKey: LayoutPresetKey =
@@ -259,11 +347,20 @@ export function importLegacyMdxTree(
 			}
 
 			const slug = slugFromSpecRel(relFromMdxRoot);
-			const nodeDir = path.join(contentRoot, relFromMdxRoot.replace(/\/index$/, ""));
+			const nodeRel = resolveNodeRel(relFromMdxRoot, pathClass);
+			const nodePathClass = pathClassFromNodeRel(nodeRel);
+			const canonicalSlug = slugFromSpecRel(nodeRel);
+			const nodeDir = path.join(contentRoot, nodeRel);
 
 			const raw = fs.readFileSync(file, "utf8");
 			const { frontmatter, body } = splitMdxFrontmatter(raw);
-			const node = frontmatterToNode(frontmatter, slug, pathClass);
+			const { node, relatedTopics } = frontmatterToNodeWithRelated(
+				frontmatter,
+				canonicalSlug,
+				nodePathClass === "legacy-or-bridge" ? pathClass : nodePathClass,
+			);
+			node.slug = canonicalSlug;
+			node.parentSlug = parentSlugFromNodeRel(nodeRel, nodePathClass);
 			const content: NodeContent = {
 				version: 1,
 				blocks: parseSpecSections(body),
@@ -272,23 +369,29 @@ export function importLegacyMdxTree(
 			const layoutPath = path.join(path.dirname(file), "layout.json");
 			const layout = inferLayoutFromMdx(
 				pathClass,
-				slug,
+				canonicalSlug,
 				body,
 				layoutPath,
 			);
 
 			fs.mkdirSync(nodeDir, { recursive: true });
+			if (isHubLevel(node.specLevel)) {
+				fs.mkdirSync(path.join(nodeDir, SPEC_ARTICLES_DIR), { recursive: true });
+				fs.mkdirSync(path.join(nodeDir, SPEC_ADR_DIR), { recursive: true });
+			}
 			fs.writeFileSync(
 				path.join(nodeDir, SPEC_NODE_FILE),
 				`${JSON.stringify(node, null, 2)}\n`,
 			);
-			fs.writeFileSync(
-				path.join(nodeDir, SPEC_CONTENT_FILE),
-				`${JSON.stringify(content, null, 2)}\n`,
-			);
+			writeNodeMarkdown(nodeDir, contentToMarkdown(content));
 			fs.writeFileSync(
 				path.join(nodeDir, SPEC_LAYOUT_FILE),
 				`${JSON.stringify(layout, null, 2)}\n`,
+			);
+			const relatedTopicsParsed = relatedTopicsFromFrontmatter(relatedTopics);
+			fs.writeFileSync(
+				path.join(nodeDir, SPEC_RELATED_FILE),
+				`${JSON.stringify({ version: 1, topics: relatedTopicsParsed }, null, 2)}\n`,
 			);
 			result.imported++;
 		} catch (err) {
@@ -322,10 +425,6 @@ export function importSingleMdxFile(
 	fs.writeFileSync(
 		path.join(nodeDir, SPEC_NODE_FILE),
 		`${JSON.stringify(node, null, 2)}\n`,
-	);
-	fs.writeFileSync(
-		path.join(nodeDir, SPEC_CONTENT_FILE),
-		`${JSON.stringify(content, null, 2)}\n`,
 	);
 	fs.writeFileSync(
 		path.join(nodeDir, SPEC_LAYOUT_FILE),

@@ -8,7 +8,8 @@ import { SpecOriginProvider } from "./origin-context.js";
 import { SpecPageHeader } from "./spec-page-header.js";
 import { SpecReaderShell } from "./spec-reader-shell.js";
 import { SpecWidgetGrid } from "./spec-widget-grid.js";
-import type { CatalogEntry, SpecCommentItem } from "./types.js";
+import type { CatalogEntry } from "./types.js";
+import type { SpecCommentItem } from "./spec-comments-panel.js";
 
 export interface StructuredSpecDocumentViewProps {
 	title: string;

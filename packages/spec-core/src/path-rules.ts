@@ -1,5 +1,10 @@
 import path from "node:path";
 import { classifyPlatformSpecRel } from "@cyber-nomad-collective/trudoc/layout";
+import {
+	nodeRelForLevel,
+	parentSlugFromNodeRel,
+	pathClassFromNodeRel,
+} from "./node-path.js";
 import type { SpecLevel } from "./workspace/schema.js";
 
 export type PathClass =
@@ -138,11 +143,15 @@ export function validateSpecLevelPath(
 export function nodeDirFromSlug(
 	contentRoot: string,
 	slug: string,
+	specLevel?: SpecLevel,
 ): string {
 	const rel = slug.replace(/^platform-spec\/?/, "");
 	if (!rel || rel === "platform-spec") return contentRoot;
-	return `${contentRoot}/${rel}`;
+	const nodeRel = specLevel ? nodeRelForLevel(slug, specLevel) : rel;
+	return `${contentRoot}/${nodeRel}`;
 }
+
+export { pathClassFromNodeRel, parentSlugFromNodeRel, nodeRelForLevel };
 
 export function slugFromNodeDir(
 	contentRoot: string,

@@ -69,8 +69,8 @@
 		"typecheck": "tsc -p tsconfig.json"
 	},
 	"dependencies": {
-		"zod": "^4.4.3",
-		"yaml": "^2.7.0"
+		"yaml": "^2.9.0",
+		"zod": "^4.4.3"
 	},
 	"keywords": [
 		"astro",

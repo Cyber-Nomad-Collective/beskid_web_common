@@ -27,6 +27,7 @@
 		"./settings": "./src/components/settings/index.ts",
 		"./platform-spec": "./src/platform-spec/index.ts",
 		"./platform-spec/linking": "./src/platform-spec/spec-link-picker.tsx",
+		"./architecture-graph": "./src/architecture-graph/index.ts",
 		"./styles/shadcn-entry.css": "./src/styles/shadcn-entry.css",
 		"./styles/beskid-tokens.css": "./src/styles/beskid-tokens.css",
 		"./styles/shadcn-theme.css": "./src/styles/shadcn-theme.css",
@@ -48,6 +49,8 @@
 	"dependencies": {
 		"@base-ui/react": "^1.5.0",
 		"@cyber-nomad-collective/spec-core": "workspace:*",
+		"@dagrejs/dagre": "^1.1.5",
+		"@xyflow/react": "^12.11.0",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
 		"cmdk": "^1.1.1",
