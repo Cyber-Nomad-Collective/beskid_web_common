@@ -3,9 +3,6 @@ packages/beskid-ui/dist/
 *.log
 .DS_Store
 
-# Lockfiles
-bun.lock
-
 # Build artifacts
 **/*.trace
 **/*.zip
