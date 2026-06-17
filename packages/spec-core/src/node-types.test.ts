@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
 	parseMarkdownSections,
 	scaffoldMarkdownSections,
-	validateMarkdownContent,
 } from "./markdown-content.js";
+import { validateNodeDocumentContent } from "./validate-node-document.js";
 import { specLevelFromTypeFlag } from "./node-types.js";
 import { createSpecNode, defaultManifestForNormativeRepo } from "./scaffold-node.js";
 import fs from "node:fs";
@@ -73,17 +73,19 @@ describe("scaffold-node", () => {
 describe("adr validation", () => {
 	it("flags missing ADR fields", () => {
 		const manifest = defaultManifestForNormativeRepo();
-		const issues = validateMarkdownContent(
-			"/tmp",
+		const issues = validateNodeDocumentContent({
+			workspaceDir: "/tmp",
 			manifest,
-			{
+			node: {
 				version: 1,
 				specLevel: "adr",
 				slug: "platform-spec/x",
 				title: "X",
 			},
-			"## Context\n\n",
-		);
+			frontmatter: { title: "X", specLevel: "adr" },
+			body: "## Context\n\n",
+			markdownPath: "content.md",
+		});
 		expect(issues.some((issue) => issue.code.startsWith("adr-"))).toBe(true);
 	});
 });

@@ -182,3 +182,19 @@ export function validateGeneratedRegions(body: string): string[] {
 	}
 	return errors;
 }
+
+/** Remove generated slot payloads so mdshape validates author prose only. */
+export function stripGeneratedRegions(body: string): string {
+	let next = body;
+	for (const [open, close] of [
+		[GENERATE_ADR_INDEX_OPEN, GENERATE_ADR_INDEX_CLOSE],
+		[GENERATE_ARTICLE_INDEX_OPEN, GENERATE_ARTICLE_INDEX_CLOSE],
+	] as const) {
+		const re = new RegExp(
+			`${escapeRegExp(open)}[\\s\\S]*?${escapeRegExp(close)}`,
+			"m",
+		);
+		next = next.replace(re, `${open}\n${close}`);
+	}
+	return next;
+}

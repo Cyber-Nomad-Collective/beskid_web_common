@@ -24,7 +24,7 @@ import {
 } from "./workspace/schema.js";
 import { createSpecNode, defaultManifestForNormativeRepo } from "./scaffold-node.js";
 import { ensureDefaultTemplates } from "./template-resolve.js";
-import { readNodeMarkdown, validateMarkdownContent } from "./markdown-content.js";
+import { validateNodeDocumentContent } from "./validate-node-document.js";
 import { validateArchitectureGraphsInWorkspace } from "./architecture/validate.js";
 
 export interface ValidationIssue {
@@ -129,16 +129,18 @@ export function validateWorkspace(workspaceDir: string): ValidationReport {
 				);
 			}
 
-			const markdown = readNodeMarkdown(nodeDir);
-			for (const issue of validateMarkdownContent(
+			for (const issue of validateNodeDocumentContent({
 				workspaceDir,
 				manifest,
-				doc.node,
-				markdown,
-			)) {
+				node: doc.node,
+				frontmatter: doc.frontmatter,
+				body: doc.body,
+				markdownPath,
+				nodeDir,
+			})) {
 				issues.push({
 					code: issue.code,
-					severity: issue.code === "missing-section" ? "warning" : "error",
+					severity: issue.severity,
 					path: markdownPath,
 					message: issue.message,
 				});
