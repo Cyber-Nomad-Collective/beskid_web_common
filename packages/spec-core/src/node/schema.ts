@@ -1,5 +1,9 @@
 import { z } from "zod";
 import { specLevelSchema } from "../workspace/schema.js";
+import {
+	architectureGraphAttachmentSchema,
+	type ArchitectureGraphAttachment,
+} from "../architecture/schema.js";
 
 export const nodeMetadataSchema = z.object({
 	version: z.literal(1),
@@ -9,6 +13,7 @@ export const nodeMetadataSchema = z.object({
 	description: z.string().optional(),
 	parentSlug: z.string().nullable().optional(),
 	status: z.string().optional(),
+	architectureGraph: architectureGraphAttachmentSchema.optional(),
 	owner: z
 		.object({
 			name: z.string().optional(),
@@ -29,6 +34,7 @@ export const nodeMetadataSchema = z.object({
 });
 
 export type NodeMetadata = z.infer<typeof nodeMetadataSchema>;
+export type NodeArchitectureGraph = ArchitectureGraphAttachment;
 
 export function parseNodeMetadata(
 	raw: unknown,
@@ -56,6 +62,7 @@ export function nodeMetadataToFrontmatter(
 	if (node.owner) fm.owner = node.owner;
 	if (node.submitter) fm.submitter = node.submitter;
 	if (node.status) fm.status = node.status;
+	if (node.architectureGraph) fm.architectureGraph = node.architectureGraph;
 	if (node.adrId) fm.adrId = node.adrId;
 	if (node.adrStatus) fm.adrStatus = node.adrStatus;
 	if (node.adrDate) fm.adrDate = node.adrDate;

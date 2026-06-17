@@ -16,6 +16,7 @@ import {
 	parseWorkspaceManifest,
 	saveLayoutTemplate,
 	migrateWorkspaceToV2,
+	syncWorkspaceGeneratedSections,
 	seedWorkspace,
 	scrubWorkspacePresentation,
 	validateWorkspace,
@@ -43,6 +44,7 @@ Usage:
   spec init [--dir <path>] [--from-mdx <mdx-root>]
   spec validate [--dir <path>]
   spec migrate v2 [--dir <workspace>]
+  spec sync [--dir <workspace>]
   spec new node -t <Type> --slug <slug> [--title <title>] [--parent <slug>] [--dir <workspace>]
   spec node create --path <slug> --level <level> [--title <title>] [--dir <workspace>]
   spec serve [--dir <workspace>] [--port <n>] [--app <platform-spec-dir>]
@@ -290,6 +292,16 @@ function cmdMigrateV2(args: string[]): number {
 	return result.errors.length > 0 ? 1 : 0;
 }
 
+function cmdSync(args: string[]): number {
+	const workspace = resolveWorkspace(args);
+	const result = syncWorkspaceGeneratedSections(workspace);
+	console.log(
+		`Synced generated hub sections for ${result.synced} nodes (${result.unchanged} unchanged).`,
+	);
+	for (const err of result.errors) console.error(err);
+	return result.errors.length > 0 ? 1 : 0;
+}
+
 function cmdSeed(args: string[]): number {
 	const from = flag(args, "--from");
 	if (!from) {
@@ -489,6 +501,8 @@ export async function runCli(argv: string[]): Promise<number> {
 		case "migrate":
 			if (args[1] === "v2") return cmdMigrateV2(args);
 			break;
+		case "sync":
+			return cmdSync(args);
 		case "import-mdx":
 			return cmdImportMdx(args);
 		case "node":

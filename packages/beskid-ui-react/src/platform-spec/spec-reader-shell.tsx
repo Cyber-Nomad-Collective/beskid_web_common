@@ -7,20 +7,24 @@ import { cn } from "../lib/utils.js";
 export interface SpecReaderShellProps {
 	children: ReactNode;
 	relatedTopics?: { href: string; title: string }[];
+	adrs?: { href: string; title: string }[];
 	articleCount?: number;
 	adrCount?: number;
 	showArticlesTab?: boolean;
 	showAdrsTab?: boolean;
-	defaultTab?: "document" | "articles" | "adrs";
+	architecture?: ReactNode;
+	defaultTab?: "document" | "articles" | "adrs" | "architecture";
 }
 
 export function SpecReaderShell({
 	children,
 	relatedTopics = [],
+	adrs = [],
 	articleCount = 0,
 	adrCount = 0,
 	showArticlesTab = true,
 	showAdrsTab = true,
+	architecture,
 	defaultTab = "document",
 }: SpecReaderShellProps) {
 	const [tab, setTab] = useState(defaultTab);
@@ -31,6 +35,11 @@ export function SpecReaderShell({
 			id: "articles",
 			label: `Articles${articleCount ? ` (${articleCount})` : ""}`,
 			show: showArticlesTab,
+		},
+		{
+			id: "architecture",
+			label: "Architecture",
+			show: Boolean(architecture),
 		},
 	];
 
@@ -62,15 +71,26 @@ export function SpecReaderShell({
 				</div>
 			) : null}
 			{tab === "adrs" && showAdrsTab ? (
-				<p className="text-sm text-muted-foreground">
-					ADR listing is populated from child nodes in the graph.
-				</p>
+				adrs.length > 0 ? (
+					<ul className="space-y-1 text-sm">
+						{adrs.map((adr) => (
+							<li key={adr.href}>
+								<a href={adr.href} className="text-primary underline">
+									{adr.title}
+								</a>
+							</li>
+						))}
+					</ul>
+				) : (
+					<p className="text-sm text-muted-foreground">No ADRs found under this node.</p>
+				)
 			) : null}
 			{tab === "articles" && showArticlesTab ? (
 				<p className="text-sm text-muted-foreground">
 					{articleCount} direct articles under this node.
 				</p>
 			) : null}
+			{tab === "architecture" && architecture ? architecture : null}
 		</div>
 	);
 }

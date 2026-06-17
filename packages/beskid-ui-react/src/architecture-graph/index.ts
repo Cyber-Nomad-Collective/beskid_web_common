@@ -535,3 +535,5 @@ export const relations = {
 	},
 } as const;
 
+export { ArchitectureGraphCanvas } from "./ArchitectureGraphCanvas.js";
+

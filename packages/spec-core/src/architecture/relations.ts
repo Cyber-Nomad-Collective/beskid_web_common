@@ -114,8 +114,18 @@ export interface RelationKindDefinition {
 export const RELATION_KIND_DEFINITIONS: RelationKindDefinition[] = [
 	{
 		kind: "feeds",
-		allowedFromKinds: ["compilerPipelineStage", "astSyntaxNode", "group"],
-		allowedToKinds: ["compilerPipelineStage", "astSyntaxNode", "rustModule"],
+		allowedFromKinds: [
+			"compilerPipelineStage",
+			"astSyntaxNode",
+			"group",
+			"specNode",
+		],
+		allowedToKinds: [
+			"compilerPipelineStage",
+			"astSyntaxNode",
+			"rustModule",
+			"specNode",
+		],
 	},
 	{
 		kind: "dependsOn",
@@ -124,23 +134,34 @@ export const RELATION_KIND_DEFINITIONS: RelationKindDefinition[] = [
 			"rustModule",
 			"compilerPipelineStage",
 			"beskidProject",
+			"specNode",
 		],
-		allowedToKinds: ["dependency", "service", "rustModule"],
+		allowedToKinds: ["dependency", "service", "rustModule", "specNode"],
 	},
 	{
 		kind: "contains",
-		allowedFromKinds: ["group", "beskidWorkspace", "service"],
+		allowedFromKinds: ["group", "beskidWorkspace", "service", "specNode"],
 		allowedToKinds: "*",
 	},
 	{
 		kind: "lowersTo",
-		allowedFromKinds: ["compilerPipelineStage", "astSyntaxNode"],
-		allowedToKinds: ["compilerPipelineStage", "astSyntaxNode"],
+		allowedFromKinds: ["compilerPipelineStage", "astSyntaxNode", "rustModule"],
+		allowedToKinds: ["compilerPipelineStage", "astSyntaxNode", "rustModule"],
 	},
 	{
 		kind: "calls",
-		allowedFromKinds: ["service", "rustModule", "compilerPipelineStage"],
-		allowedToKinds: ["service", "rustModule", "compilerPipelineStage"],
+		allowedFromKinds: [
+			"service",
+			"rustModule",
+			"compilerPipelineStage",
+			"specNode",
+		],
+		allowedToKinds: [
+			"service",
+			"rustModule",
+			"compilerPipelineStage",
+			"specNode",
+		],
 	},
 	{
 		kind: "referencesSpec",
@@ -155,6 +176,7 @@ export const RELATION_KIND_DEFINITIONS: RelationKindDefinition[] = [
 	{
 		kind: "implements",
 		allowedFromKinds: [
+			"specNode",
 			"beskidProject",
 			"rustModule",
 			"dependency",

@@ -95,13 +95,57 @@ export function applyGeneratedHubSections(
 }
 
 export function stripHandAuthoredHubLists(body: string): string {
-	// Remove legacy hand-maintained article bullets after ## Decisions
-	return body
-		.replace(
-			/(## Decisions[\s\S]*?)(?:\n\n)?(- \[[^\]]+\]\(\.\/[^)]+\/\)\n?)+/m,
-			"$1\n",
-		)
-		.trim();
+	// Remove any legacy payload between hub headings so generation can
+	// deterministically re-create the marked regions.
+	//
+	// This is intentionally aggressive on purpose: hubs have historically had
+	// manual prose/bullets under `## Decisions` and `## Articles`, and we want
+	// idempotent `spec sync` (no duplicated marker blocks).
+	const lines = body.split("\n");
+
+	const headingIdx = (heading: "## Decisions" | "## Articles") =>
+		lines.findIndex((l) => l.trim() === heading);
+
+	const isH2 = (l: string) => l.trim().startsWith("## ");
+
+	const decisionsIdx = headingIdx("## Decisions");
+	const articlesIdx = headingIdx("## Articles");
+
+	// Strip Decisions payload up to Articles (or EOF).
+	if (decisionsIdx !== -1) {
+		const end = articlesIdx !== -1 && articlesIdx > decisionsIdx ? articlesIdx : lines.length;
+		lines.splice(decisionsIdx + 1, Math.max(0, end - (decisionsIdx + 1)));
+	}
+
+	// Re-compute indices after splice.
+	const decisionsIdx2 = headingIdx("## Decisions");
+	const articlesIdx2 = headingIdx("## Articles");
+
+	// Strip Articles payload up to next H2 (or EOF).
+	if (articlesIdx2 !== -1) {
+		let end = lines.length;
+		for (let i = articlesIdx2 + 1; i < lines.length; i++) {
+			if (isH2(lines[i])) {
+				end = i;
+				break;
+			}
+		}
+		lines.splice(articlesIdx2 + 1, Math.max(0, end - (articlesIdx2 + 1)));
+	}
+
+	// Collapse duplicate H2 headings (can happen after older manual edits).
+	const out: string[] = [];
+	const seen = new Set<string>();
+	for (const line of lines) {
+		const t = line.trim();
+		if (t === "## Decisions" || t === "## Articles") {
+			if (seen.has(t)) continue;
+			seen.add(t);
+		}
+		out.push(line);
+	}
+
+	return out.join("\n").trim();
 }
 
 export function ensureHubGenerateMarkers(body: string): string {
