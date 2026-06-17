@@ -37,12 +37,10 @@ Hub summary.
 
 ## Decisions
 <!-- spec:generate:adr-index -->
-- [ADR](./adr/0001/)
 <!-- /spec:generate:adr-index -->
 
 ## Articles
 <!-- spec:generate:article-index -->
-- [Article](./articles/foo/)
 <!-- /spec:generate:article-index -->`;
 		const stripped = stripGeneratedRegions(body);
 		expect(validateBodyWithMdshape("feature", stripped)).toEqual([]);

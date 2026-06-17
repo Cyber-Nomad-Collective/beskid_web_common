@@ -12,20 +12,11 @@ export interface LayoutBoilerplateResult {
 	markdownPath: string;
 }
 
-function sectionIdsFromLayout(
-	layout: LayoutFile,
-	manifest: WorkspaceManifest,
-	node: NodeMetadata,
-): string[] {
-	const registration = manifest.nodeTypes[node.specLevel];
+function sectionIdsFromLayout(layout: LayoutFile): string[] {
 	const ids = new Set<string>();
 
 	for (const section of layout.sections ?? []) {
 		if (section.id) ids.add(section.id);
-	}
-
-	for (const required of registration?.contentSections ?? []) {
-		ids.add(required);
 	}
 
 	return [...ids];
@@ -47,7 +38,7 @@ export function applyLayoutBoilerplate(input: {
 		JSON.parse(fs.readFileSync(layoutPath, "utf8")),
 		layoutPath,
 	);
-	const sectionIds = sectionIdsFromLayout(layout, input.manifest, input.node);
+	const sectionIds = sectionIdsFromLayout(layout);
 	const markdownPath = path.join(input.nodeDir, SPEC_MARKDOWN_FILE);
 
 	if (fs.existsSync(markdownPath) && !input.overwrite) {

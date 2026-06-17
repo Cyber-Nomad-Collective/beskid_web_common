@@ -9,12 +9,6 @@ const adrBodySchema = md.document({
 
 const featureHubBodySchema = md.document({
 	summary: md.section("Summary").paragraph().optional(),
-	implementationAnchors: md
-		.section("Implementation anchors")
-		.paragraph()
-		.optional(),
-	decisions: md.section("Decisions").paragraph().optional(),
-	articles: md.section("Articles").paragraph().optional(),
 });
 
 const articleBodySchema = md.document({
