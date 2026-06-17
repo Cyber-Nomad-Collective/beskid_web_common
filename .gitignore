@@ -2,3 +2,14 @@ node_modules/
 packages/beskid-ui/dist/
 *.log
 .DS_Store
+
+# Lockfiles
+bun.lock
+
+# Build artifacts
+**/*.trace
+**/*.zip
+**/*.tar.gz
+**/*.tgz
+package-lock.json
+**/*.bun
