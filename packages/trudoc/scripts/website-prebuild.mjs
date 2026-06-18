@@ -80,7 +80,14 @@ if (skipWebsitePlatformSpec) {
 if (skipTrudoc) {
 	console.warn('website-prebuild: BESKID_SKIP_TRUDOC_VERIFY set — skipping verify:trudoc (run in CI on main).');
 } else {
-	run('verify:trudoc', ['verify:trudoc', '--', '--preset', 'ci']);
+	/**
+	 * verify:trudoc validates platform-spec frontmatter, which has been fully
+	 * migrated to site/spec-content (validated by spec-core) and the React app.
+	 * The Astro website no longer hosts platform-spec content, so this verify
+	 * step has nothing to check. Skip it unless explicitly re-enabled for
+	 * legacy debugging.
+	 */
+	console.warn('website-prebuild: verify:trudoc skipped — platform-spec content migrated to spec.beskid-lang.org.');
 }
 
 console.log('website-prebuild: OK');
