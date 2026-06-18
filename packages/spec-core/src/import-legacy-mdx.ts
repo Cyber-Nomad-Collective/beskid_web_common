@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { createRequire } from "node:module";
-import type { LayoutPresetKey } from "@cyber-nomad-collective/trudoc/layout";
-import { getPresetBase } from "@cyber-nomad-collective/trudoc/layout";
+import type { LayoutPresetKey } from "./layout/schema.js";
+import { getPresetBase } from "./layout/presets.js";
 import {
 	SPEC_ADR_DIR,
 	SPEC_ARTICLES_DIR,

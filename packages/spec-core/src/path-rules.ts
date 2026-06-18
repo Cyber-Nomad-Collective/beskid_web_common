@@ -1,5 +1,6 @@
 import path from "node:path";
-import { classifyPlatformSpecRel } from "@cyber-nomad-collective/trudoc/layout";
+import { classifyPlatformSpecRel } from "./layout/path-class.js";
+import type { PathClass } from "./layout/schema.js";
 import {
 	nodeRelForLevel,
 	parentSlugFromNodeRel,
@@ -7,15 +8,7 @@ import {
 } from "./node-path.js";
 import type { SpecLevel } from "./workspace/schema.js";
 
-export type PathClass =
-	| "domain-root"
-	| "domain"
-	| "area"
-	| "feature"
-	| "article"
-	| "adr"
-	| "legacy-or-bridge"
-	| "component";
+export type { PathClass } from "./layout/schema.js";
 
 const LEGACY_SPEC_MARKER = "src/content/docs/platform-spec/";
 
@@ -152,6 +145,32 @@ export function nodeDirFromSlug(
 }
 
 export { pathClassFromNodeRel, parentSlugFromNodeRel, nodeRelForLevel };
+
+/**
+ * Build a legacy repo path from form fields, ported from
+ * trudoc/src/platform-spec/docs-spec/build-path.ts.
+ * Used by platform-spec draft editor (create/update draft flows).
+ */
+export function buildRepoPathFromForm(
+	specLevel: SpecLevel,
+	parentSlug: string,
+	leafSlug: string,
+): string {
+	const parent = parentSlug.replace(/\/$/, "");
+	const leaf = leafSlug.replace(/^\/+/, "").replace(/\/+$/, "");
+
+	const rel = `${parent}/${leaf}/index`;
+	const relUnderSpec = rel.replace(/^platform-spec\//, "");
+	return repoPathFromSpecRel(relUnderSpec);
+}
+
+export function buildSlugFromRepoPath(repoPath: string): string {
+	const rel = repoPath
+		.replace(/^site\/website\/src\/content\/docs\//, "")
+		.replace(/\.(md|mdx)$/i, "")
+		.replace(/\/index$/, "");
+	return rel.startsWith("platform-spec/") ? rel : `platform-spec/${rel}`;
+}
 
 export function slugFromNodeDir(
 	contentRoot: string,

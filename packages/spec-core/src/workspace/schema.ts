@@ -1,4 +1,4 @@
-import { layoutPresetKeySchema } from "@cyber-nomad-collective/trudoc/layout";
+import { layoutPresetKeySchema } from "../layout/schema.js";
 import { z } from "zod";
 import { DEFAULT_SPEC_CONTENT_ROOT, DEFAULT_SPEC_ORIGIN } from "../constants.js";
 

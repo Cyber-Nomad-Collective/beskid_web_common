@@ -3,7 +3,7 @@ import {
 	widgetSpecSchema,
 	type LayoutContractFile,
 	type WidgetSpec,
-} from "@cyber-nomad-collective/trudoc/layout";
+} from "./layout/schema.js";
 import { z } from "zod";
 
 export const gridLayoutItemSchema = z.object({

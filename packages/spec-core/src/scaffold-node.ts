@@ -25,7 +25,7 @@ import {
 	type SpecLevel,
 	type WorkspaceManifest,
 } from "./workspace/schema.js";
-import { getPresetBase } from "@cyber-nomad-collective/trudoc/layout";
+import { getPresetBase } from "./layout/presets.js";
 import {
 	DEFAULT_ADR_TEMPLATE,
 	DEFAULT_ARTICLE_TEMPLATE,

@@ -1,4 +1,4 @@
-import { widgetSpecSchema } from "@cyber-nomad-collective/trudoc/layout";
+import { widgetSpecSchema } from "../layout/schema.js";
 import { z } from "zod";
 
 const specSectionContentSchema = z.object({

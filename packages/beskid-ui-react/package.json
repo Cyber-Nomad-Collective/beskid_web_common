@@ -31,6 +31,7 @@
 		"./styles/shadcn-entry.css": "./src/styles/shadcn-entry.css",
 		"./styles/beskid-tokens.css": "./src/styles/beskid-tokens.css",
 		"./styles/shadcn-theme.css": "./src/styles/shadcn-theme.css",
+		"./styles/hub.css": "./src/styles/hub.css",
 		"./ui/*": "./src/components/ui/*.tsx"
 	},
 	"files": [

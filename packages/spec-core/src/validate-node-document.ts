@@ -1,5 +1,5 @@
 import type { NodeMetadata } from "./node/schema.js";
-import { validateFrontmatterForLevel } from "@cyber-nomad-collective/trudoc/platform-spec/docs-spec";
+import { validateFrontmatterForLevel } from "./frontmatter/validate.js";
 import { validateBodyWithMdshape } from "./mdshape-schemas.js";
 import {
 	extractArchitectureRefs,
@@ -223,6 +223,46 @@ export function validateNodeDocumentContent(input: {
 				severity: "warning",
 			});
 		}
+	}
+
+	for (const issue of validateStubContent({
+		level: input.node.specLevel,
+		body: input.body,
+	})) {
+		issues.push(issue);
+	}
+
+	return issues;
+}
+
+/**
+ * Stub-content check — flags content that is below a minimum-content threshold
+ * after stripping generated regions. Catches copy-pasted scaffold stubs.
+ * Per the meta-spec anti-stub rule, flagged nodes SHOULD carry status: Proposed.
+ */
+function validateStubContent(input: {
+	level: SpecLevel;
+	body: string;
+}): DocumentValidationIssue[] {
+	const issues: DocumentValidationIssue[] = [];
+	const normalizedBody = stripGeneratedRegions(input.body).trim();
+	if (!normalizedBody) {
+		issues.push({
+			code: "stub-content",
+			message: "Body is empty after stripping generated regions.",
+			severity: "warning",
+		});
+		return issues;
+	}
+
+	/** Minimum substantive content (chars) before a node is considered a stub. */
+	const MIN_BODY_CHARS = input.level === "article" || input.level === "adr" ? 240 : 480;
+	if (normalizedBody.length < MIN_BODY_CHARS) {
+		issues.push({
+			code: "stub-content",
+			message: `Body is only ${normalizedBody.length} chars (minimum ${MIN_BODY_CHARS} for ${input.level}). Expand or set status: Proposed.`,
+			severity: "warning",
+		});
 	}
 
 	return issues;
