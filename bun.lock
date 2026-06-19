@@ -64,7 +64,7 @@
     },
     "packages/beskid-ui-react": {
       "name": "@cyber-nomad-collective/beskid-ui-react",
-      "version": "0.2.1",
+      "version": "0.2.7",
       "dependencies": {
         "@base-ui/react": "^1.5.0",
         "@cyber-nomad-collective/spec-core": "workspace:*",
