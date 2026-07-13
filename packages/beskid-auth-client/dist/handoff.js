@@ -6,7 +6,17 @@ function secretKey(secret) {
     }
     return new TextEncoder().encode(secret);
 }
+/** Returns whether a subject is the canonical stable GitHub user identity. */
+export function isGitHubSubject(subject) {
+    const match = /^github:([1-9]\d*)$/.exec(subject);
+    if (!match)
+        return false;
+    return Number.isSafeInteger(Number(match[1]));
+}
 export async function issueHandoffToken(serviceToken, input) {
+    if (input.app === "pckg" && !isGitHubSubject(input.subject ?? "")) {
+        throw new Error("pckg handoffs require a canonical GitHub subject");
+    }
     const claims = {
         app: input.app,
         sid: input.sessionId,
@@ -15,6 +25,9 @@ export async function issueHandoffToken(serviceToken, input) {
     };
     if (input.name) {
         claims.name = input.name;
+    }
+    if (input.subject) {
+        claims.sub = input.subject;
     }
     return new SignJWT(claims)
         .setProtectedHeader({ alg: "HS256" })
@@ -36,12 +49,17 @@ export async function verifyHandoffToken(serviceToken, token, expectedApp) {
         if (typeof payload.sid !== "string" || typeof payload.login !== "string") {
             return null;
         }
+        const subject = typeof payload.sub === "string" ? payload.sub : null;
+        if (expectedApp === "pckg" && !isGitHubSubject(subject ?? "")) {
+            return null;
+        }
         return {
             app: payload.app,
             sessionId: payload.sid,
             login: payload.login,
             avatarUrl: typeof payload.avatar_url === "string" ? payload.avatar_url : "",
             name: typeof payload.name === "string" ? payload.name : null,
+            subject,
             hubUserToken: token,
         };
     }

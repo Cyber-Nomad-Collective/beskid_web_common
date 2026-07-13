@@ -1,5 +1,5 @@
 /** OpenAPI v1 schema types (hand-maintained from openapi/v1/openapi.yaml). */
-export type AuthAppId = "tracker" | "nexus" | "pckg";
+export type AuthAppId = "tracker" | "nexus" | "pckg" | "platform-spec";
 export interface AuthUser {
     login: string;
     name: string | null;
@@ -83,6 +83,8 @@ export interface HandoffPayload {
     login: string;
     avatarUrl: string;
     name: string | null;
+    /** Stable external identity (`github:<numeric-id>` for GitHub logins). */
+    subject: string | null;
     /** JWT to send to the hub GitHub proxy (`Authorization: Bearer`). */
     hubUserToken: string;
 }

@@ -3,7 +3,7 @@ export const AUTH_API_VERSION = "v1";
 /** @deprecated use HUB_USER_TOKEN_TTL_SECONDS */
 export const HANDOFF_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const HUB_USER_TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60;
-export const AUTH_APP_IDS = ["tracker", "nexus", "pckg"];
+export const AUTH_APP_IDS = ["tracker", "nexus", "pckg", "platform-spec"];
 export const AUTH_APP_META = {
     tracker: {
         label: "Beskid Tracker",
@@ -16,5 +16,9 @@ export const AUTH_APP_META = {
     pckg: {
         label: "pckg registry",
         description: "Package registry accounts and publishing.",
+    },
+    "platform-spec": {
+        label: "Platform Spec Editor",
+        description: "Normative platform-spec drafts, moderation, and git sync.",
     },
 };

@@ -95,6 +95,8 @@ export interface HandoffPayload {
 	login: string;
 	avatarUrl: string;
 	name: string | null;
+	/** Stable external identity (`github:<numeric-id>` for GitHub logins). */
+	subject: string | null;
 	/** JWT to send to the hub GitHub proxy (`Authorization: Bearer`). */
 	hubUserToken: string;
 }

@@ -13,18 +13,31 @@ function secretKey(secret: string): Uint8Array {
 	return new TextEncoder().encode(secret);
 }
 
+/** Returns whether a subject is the canonical stable GitHub user identity. */
+export function isGitHubSubject(subject: string): boolean {
+	const match = /^github:([1-9]\d*)$/.exec(subject);
+	if (!match) return false;
+	return Number.isSafeInteger(Number(match[1]));
+}
+
 export interface IssueHandoffInput {
 	app: AuthAppId;
 	sessionId: string;
 	login: string;
 	avatarUrl: string;
 	name: string | null;
+	/** Stable external identity, for example `github:12345`. */
+	subject?: string;
 }
 
 export async function issueHandoffToken(
 	serviceToken: string,
 	input: IssueHandoffInput,
 ): Promise<string> {
+	if (input.app === "pckg" && !isGitHubSubject(input.subject ?? "")) {
+		throw new Error("pckg handoffs require a canonical GitHub subject");
+	}
+
 	const claims: Record<string, string> = {
 		app: input.app,
 		sid: input.sessionId,
@@ -33,6 +46,9 @@ export async function issueHandoffToken(
 	};
 	if (input.name) {
 		claims.name = input.name;
+	}
+	if (input.subject) {
+		claims.sub = input.subject;
 	}
 
 	return new SignJWT(claims)
@@ -60,6 +76,11 @@ export async function verifyHandoffToken(
 			return null;
 		}
 
+		const subject = typeof payload.sub === "string" ? payload.sub : null;
+		if (expectedApp === "pckg" && !isGitHubSubject(subject ?? "")) {
+			return null;
+		}
+
 		return {
 			app: payload.app as AuthAppId,
 			sessionId: payload.sid,
@@ -67,6 +88,7 @@ export async function verifyHandoffToken(
 			avatarUrl:
 				typeof payload.avatar_url === "string" ? payload.avatar_url : "",
 			name: typeof payload.name === "string" ? payload.name : null,
+			subject,
 			hubUserToken: token,
 		};
 	} catch {

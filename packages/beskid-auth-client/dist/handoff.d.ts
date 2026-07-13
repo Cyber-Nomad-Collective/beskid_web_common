@@ -1,10 +1,14 @@
 import type { AuthAppId, HandoffPayload } from "./v1/types.js";
+/** Returns whether a subject is the canonical stable GitHub user identity. */
+export declare function isGitHubSubject(subject: string): boolean;
 export interface IssueHandoffInput {
     app: AuthAppId;
     sessionId: string;
     login: string;
     avatarUrl: string;
     name: string | null;
+    /** Stable external identity, for example `github:12345`. */
+    subject?: string;
 }
 export declare function issueHandoffToken(serviceToken: string, input: IssueHandoffInput): Promise<string>;
 export declare function verifyHandoffToken(serviceToken: string, token: string, expectedApp?: AuthAppId): Promise<HandoffPayload | null>;
