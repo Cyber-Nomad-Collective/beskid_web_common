@@ -1,6 +1,6 @@
 {
 	"name": "@cyber-nomad-collective/beskid-ui",
-	"version": "0.2.0",
+	"version": "0.2.7",
 	"description": "Shared Astro/React UI for Beskid platform-spec and book reader chrome.",
 	"type": "module",
 	"repository": {
@@ -50,7 +50,7 @@
 		"typescript": "^5.8.2"
 	},
 	"dependencies": {
-		"@cyber-nomad-collective/trudoc": "file:../trudoc",
+		"@cyber-nomad-collective/trudoc": "^0.2.7",
 		"@dagrejs/dagre": "^1.1.5",
 		"@material/material-color-utilities": "^0.4.0",
 		"astro-navbar": "^2.4.0",

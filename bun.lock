@@ -34,9 +34,9 @@
     },
     "packages/beskid-ui": {
       "name": "@cyber-nomad-collective/beskid-ui",
-      "version": "0.2.0",
+      "version": "0.2.7",
       "dependencies": {
-        "@cyber-nomad-collective/trudoc": "file:../trudoc",
+        "@cyber-nomad-collective/trudoc": "^0.2.7",
         "@dagrejs/dagre": "^1.1.5",
         "@material/material-color-utilities": "^0.4.0",
         "astro-navbar": "^2.4.0",
@@ -64,7 +64,7 @@
     },
     "packages/beskid-ui-react": {
       "name": "@cyber-nomad-collective/beskid-ui-react",
-      "version": "0.2.7",
+      "version": "0.2.8",
       "dependencies": {
         "@base-ui/react": "^1.5.0",
         "class-variance-authority": "^0.7.1",
@@ -106,7 +106,7 @@
     },
     "packages/trudoc": {
       "name": "@cyber-nomad-collective/trudoc",
-      "version": "0.2.0",
+      "version": "0.2.7",
       "bin": {
         "trudoc": "bin/trudoc.mjs",
         "trudoc-layout": "bin/trudoc-layout.mjs",
@@ -1676,8 +1676,6 @@
     "@bruits/satteri-wasm32-wasi/@emnapi/runtime": ["@emnapi/runtime@1.11.1", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw=="],
 
     "@bruits/satteri-wasm32-wasi/@napi-rs/wasm-runtime": ["@napi-rs/wasm-runtime@1.1.6", "", { "dependencies": { "@tybys/wasm-util": "^0.10.3" }, "peerDependencies": { "@emnapi/core": "^1.7.1", "@emnapi/runtime": "^1.7.1" } }, "sha512-ZLv/JdUfkvOy9eCnnBaGfiO+XimbjebAeO+MRQqD/B+FR1tnRN0tpKSJHRbE8sFfS6aqsXZ67TQjfwfsxULVbg=="],
-
-    "@cyber-nomad-collective/beskid-ui/@cyber-nomad-collective/trudoc": ["@cyber-nomad-collective/trudoc@file:packages/trudoc", { "dependencies": { "yaml": "^2.9.0", "zod": "^4.4.3" }, "devDependencies": { "@types/node": "^22.13.5", "astro": "^6.2.2", "tsx": "^4.19.4", "typescript": "^5.8.2", "vite": "^6.4.0" }, "peerDependencies": { "astro": ">=4.0.0" }, "optionalPeers": ["astro"], "bin": { "trudoc": "bin/trudoc.mjs", "trudoc-layout": "bin/trudoc-layout.mjs" } }],
 
     "@mdx-js/mdx/@types/estree": ["@types/estree@1.0.9", "", {}, "sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg=="],
 

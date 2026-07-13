@@ -1,6 +1,6 @@
 {
 	"name": "@cyber-nomad-collective/trudoc",
-	"version": "0.2.0",
+	"version": "0.2.7",
 	"description": "Opinionated docs validation and Starlight helpers (layout trees, CI verify, optional Astro integration).",
 	"type": "module",
 	"repository": {
