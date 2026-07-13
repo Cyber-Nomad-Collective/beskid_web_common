@@ -82,7 +82,7 @@ if (skipTrudoc) {
 } else {
 	/**
 	 * verify:trudoc validates platform-spec frontmatter, which has been fully
-	 * migrated to site/spec-content (validated by spec-core) and the React app.
+	 * migrated to the root OpenSpec catalog and the React reader app.
 	 * The Astro website no longer hosts platform-spec content, so this verify
 	 * step has nothing to check. Skip it unless explicitly re-enabled for
 	 * legacy debugging.
