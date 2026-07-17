@@ -1,0 +1,83 @@
+---
+import type { FactsDagModel } from '@cyber-nomad-collective/beskid-ui-react/graph';
+
+interface Props {
+	id?: string;
+	title?: string;
+	facts?: FactsDagModel;
+	githubRepo?: string;
+	githubRef?: string;
+}
+
+const {
+	id = `facts-dag-${Math.random().toString(36).slice(2, 10)}`,
+	title = 'Facts DAG',
+	facts,
+	githubRepo = 'Cyber-Nomad-Collective/beskid',
+	githubRef = 'main',
+} = Astro.props;
+---
+
+<section class="facts-dag-shell" data-facts-dag-root data-graph-data={`${id}-data`}>
+	<header class="facts-dag-shell__header">
+		<h2 class="facts-dag-shell__title">{title}</h2>
+	</header>
+	<div class="facts-dag-shell__mount" data-facts-dag-mount aria-label="Facts DAG"></div>
+</section>
+
+<script
+	type="application/json"
+	id={`${id}-data`}
+	set:html={JSON.stringify({ facts, githubRepo, githubRef })}
+/>
+
+<script>
+	import { createElement } from 'react';
+	import { createRoot } from 'react-dom/client';
+	import {
+		FactsDagView,
+		sampleFacts,
+	} from '@cyber-nomad-collective/beskid-ui-react/graph';
+
+	function boot() {
+		document.querySelectorAll<HTMLElement>('[data-facts-dag-root]').forEach((root) => {
+			if (root.dataset.mounted === '1') return;
+			root.dataset.mounted = '1';
+			const dataId = root.getAttribute('data-graph-data');
+			const el = dataId ? document.getElementById(dataId) : null;
+			let facts = sampleFacts;
+			let githubRepo = 'Cyber-Nomad-Collective/beskid';
+			let githubRef = 'main';
+			try {
+				if (el?.textContent) {
+					const parsed = JSON.parse(el.textContent) as {
+						facts?: typeof sampleFacts;
+						githubRepo?: string;
+						githubRef?: string;
+					};
+					if (parsed.facts) facts = parsed.facts;
+					if (parsed.githubRepo) githubRepo = parsed.githubRepo;
+					if (parsed.githubRef) githubRef = parsed.githubRef;
+				}
+			} catch {
+				/* fixture fallback */
+			}
+			const mount = root.querySelector<HTMLElement>('[data-facts-dag-mount]');
+			if (mount) {
+				createRoot(mount).render(
+					createElement(FactsDagView, {
+						model: facts,
+						openInEditor: { isLocal: false, githubRepo, githubRef },
+					}),
+				);
+			}
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', boot);
+	} else {
+		boot();
+	}
+	document.addEventListener('astro:page-load', boot);
+</script>

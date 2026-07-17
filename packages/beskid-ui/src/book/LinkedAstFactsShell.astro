@@ -1,0 +1,75 @@
+---
+import type { AstGraphModel, FactsDagModel } from '@cyber-nomad-collective/beskid-ui-react/graph';
+
+interface Props {
+	id?: string;
+	title?: string;
+	description?: string;
+	ast?: AstGraphModel;
+	facts?: FactsDagModel;
+	githubRepo?: string;
+	githubRef?: string;
+}
+
+const {
+	id = `linked-ast-facts-${Math.random().toString(36).slice(2, 10)}`,
+	title = 'AST and facts DAG',
+	description = 'Click an AST node to highlight related facts. Click a fact to open its source on GitHub.',
+	ast,
+	facts,
+	githubRepo = 'Cyber-Nomad-Collective/beskid',
+	githubRef = 'main',
+} = Astro.props;
+
+const payload = {
+	ast,
+	facts,
+	githubRepo,
+	githubRef,
+};
+---
+
+<section
+	class="linked-ast-facts-shell"
+	data-linked-ast-facts-root
+	data-graph-data={`${id}-data`}
+>
+	<header class="linked-ast-facts-shell__header">
+		<h2 class="linked-ast-facts-shell__title">{title}</h2>
+		{description && <p class="linked-ast-facts-shell__desc">{description}</p>}
+	</header>
+	<div
+		class="linked-ast-facts-shell__mount"
+		data-linked-ast-facts-mount
+		aria-label="Linked AST and facts graph"
+	></div>
+</section>
+
+<script type="application/json" id={`${id}-data`} set:html={JSON.stringify(payload)} />
+
+<script>
+	import '../client/linked-ast-facts-client.ts';
+</script>
+
+<style>
+	.linked-ast-facts-shell {
+		margin: 1.5rem 0;
+		padding: 1rem 0;
+	}
+	.linked-ast-facts-shell__header {
+		margin-bottom: 0.75rem;
+	}
+	.linked-ast-facts-shell__title {
+		font-size: 1.15rem;
+		font-weight: 600;
+		margin: 0 0 0.35rem;
+	}
+	.linked-ast-facts-shell__desc {
+		margin: 0;
+		color: var(--sl-color-gray-3, #64748b);
+		font-size: 0.95rem;
+	}
+	.linked-ast-facts-shell__mount {
+		min-height: 320px;
+	}
+</style>

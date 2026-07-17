@@ -1,0 +1,40 @@
+{
+	"nodes": [
+		{
+			"id": "fact_fn_main",
+			"kind": "Decl",
+			"label": "decl Main",
+			"location": { "path": "examples/hello.bs", "line": 1, "column": 1 }
+		},
+		{
+			"id": "fact_block",
+			"kind": "Scope",
+			"label": "block scope",
+			"location": { "path": "examples/hello.bs", "line": 2, "column": 3 }
+		},
+		{
+			"id": "fact_call_print",
+			"kind": "Call",
+			"label": "call Print",
+			"location": { "path": "examples/hello.bs", "line": 3, "column": 5 }
+		},
+		{
+			"id": "fact_str_lit",
+			"kind": "Type",
+			"label": "String",
+			"location": { "path": "examples/hello.bs", "line": 3, "column": 11 }
+		},
+		{
+			"id": "fact_ret",
+			"kind": "Control",
+			"label": "return void",
+			"location": { "path": "examples/hello.bs", "line": 4, "column": 5 }
+		}
+	],
+	"edges": [
+		{ "from": "fact_fn_main", "to": "fact_block", "label": "body" },
+		{ "from": "fact_block", "to": "fact_call_print", "label": "stmt" },
+		{ "from": "fact_call_print", "to": "fact_str_lit", "label": "arg0" },
+		{ "from": "fact_block", "to": "fact_ret", "label": "stmt" }
+	]
+}

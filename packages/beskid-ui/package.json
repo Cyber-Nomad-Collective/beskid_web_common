@@ -1,6 +1,6 @@
 {
 	"name": "@cyber-nomad-collective/beskid-ui",
-	"version": "0.2.7",
+	"version": "0.2.8",
 	"description": "Shared Astro/React UI for Beskid platform-spec and book reader chrome.",
 	"type": "module",
 	"repository": {
@@ -37,19 +37,28 @@
 	"peerDependencies": {
 		"@astrojs/starlight": ">=0.30.0",
 		"astro": ">=5.0.0",
-		"react": ">=18.0.0"
+		"react": ">=18.0.0",
+		"react-dom": ">=18.0.0"
 	},
 	"peerDependenciesMeta": {
 		"react": {
+			"optional": true
+		},
+		"react-dom": {
 			"optional": true
 		}
 	},
 	"devDependencies": {
 		"@types/node": "^22.13.5",
+		"@types/react": "^19.2.0",
+		"@types/react-dom": "^19.2.0",
 		"esbuild": "0.25.0",
+		"react": "^19.2.0",
+		"react-dom": "^19.2.0",
 		"typescript": "^5.8.2"
 	},
 	"dependencies": {
+		"@cyber-nomad-collective/beskid-ui-react": "file:../beskid-ui-react",
 		"@cyber-nomad-collective/trudoc": "^0.2.7",
 		"@dagrejs/dagre": "^1.1.5",
 		"@material/material-color-utilities": "^0.4.0",

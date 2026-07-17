@@ -1,0 +1,45 @@
+{
+	"roots": ["fn_main"],
+	"nodes": [
+		{
+			"id": "fn_main",
+			"kind": "Function",
+			"label": "Main",
+			"span": { "path": "examples/hello.bs", "line": 1, "column": 1 },
+			"factIds": ["fact_fn_main"],
+			"children": ["block_body"]
+		},
+		{
+			"id": "block_body",
+			"kind": "Block",
+			"label": "{ … }",
+			"span": { "path": "examples/hello.bs", "line": 2, "column": 3 },
+			"factIds": ["fact_block"],
+			"children": ["call_print", "ret"]
+		},
+		{
+			"id": "call_print",
+			"kind": "Call",
+			"label": "Print",
+			"span": { "path": "examples/hello.bs", "line": 3, "column": 5 },
+			"factIds": ["fact_call_print", "fact_str_lit"],
+			"children": ["arg_hello"]
+		},
+		{
+			"id": "arg_hello",
+			"kind": "Literal",
+			"label": "\"hello\"",
+			"span": { "path": "examples/hello.bs", "line": 3, "column": 11 },
+			"factIds": ["fact_str_lit"],
+			"children": []
+		},
+		{
+			"id": "ret",
+			"kind": "Return",
+			"label": "return",
+			"span": { "path": "examples/hello.bs", "line": 4, "column": 5 },
+			"factIds": ["fact_ret"],
+			"children": []
+		}
+	]
+}

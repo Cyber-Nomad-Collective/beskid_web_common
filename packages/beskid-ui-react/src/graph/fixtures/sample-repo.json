@@ -1,0 +1,26 @@
+{
+	"path": "",
+	"kind": "dir",
+	"name": "demo-repo",
+	"children": [
+		{
+			"path": "examples",
+			"kind": "dir",
+			"name": "examples",
+			"children": [
+				{ "path": "examples/hello.bs", "kind": "file", "name": "hello.bs" },
+				{ "path": "examples/spawn.bs", "kind": "file", "name": "spawn.bs" }
+			]
+		},
+		{
+			"path": "src",
+			"kind": "dir",
+			"name": "src",
+			"children": [
+				{ "path": "src/lib.bs", "kind": "file", "name": "lib.bs" },
+				{ "path": "src/main.bs", "kind": "file", "name": "main.bs" }
+			]
+		},
+		{ "path": "Project.bproj", "kind": "file", "name": "Project.bproj" }
+	]
+}

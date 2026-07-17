@@ -1,0 +1,71 @@
+---
+/**
+ * Thin AST-only shell; prefer LinkedAstFactsShell for demos.
+ */
+import type { AstGraphModel } from '@cyber-nomad-collective/beskid-ui-react/graph';
+
+interface Props {
+	id?: string;
+	title?: string;
+	ast?: AstGraphModel;
+	githubRepo?: string;
+	githubRef?: string;
+}
+
+const {
+	id = `ast-graph-${Math.random().toString(36).slice(2, 10)}`,
+	title = 'AST tree',
+	ast,
+	githubRepo = 'Cyber-Nomad-Collective/beskid',
+	githubRef = 'main',
+} = Astro.props;
+---
+
+<section class="ast-graph-shell" data-ast-graph-root data-graph-data={`${id}-data`}>
+	<header class="ast-graph-shell__header">
+		<h2 class="ast-graph-shell__title">{title}</h2>
+	</header>
+	<div class="ast-graph-shell__mount" data-ast-graph-mount aria-label="AST tree"></div>
+</section>
+
+<script
+	type="application/json"
+	id={`${id}-data`}
+	set:html={JSON.stringify({ ast, githubRepo, githubRef })}
+/>
+
+<script>
+	import { createElement } from 'react';
+	import { createRoot } from 'react-dom/client';
+	import {
+		AstTreeView,
+		sampleAst,
+	} from '@cyber-nomad-collective/beskid-ui-react/graph';
+
+	function boot() {
+		document.querySelectorAll<HTMLElement>('[data-ast-graph-root]').forEach((root) => {
+			if (root.dataset.mounted === '1') return;
+			root.dataset.mounted = '1';
+			const dataId = root.getAttribute('data-graph-data');
+			const el = dataId ? document.getElementById(dataId) : null;
+			let ast = sampleAst;
+			try {
+				if (el?.textContent) {
+					const parsed = JSON.parse(el.textContent) as { ast?: typeof sampleAst };
+					if (parsed.ast) ast = parsed.ast;
+				}
+			} catch {
+				/* fixture fallback */
+			}
+			const mount = root.querySelector<HTMLElement>('[data-ast-graph-mount]');
+			if (mount) createRoot(mount).render(createElement(AstTreeView, { model: ast }));
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', boot);
+	} else {
+		boot();
+	}
+	document.addEventListener('astro:page-load', boot);
+</script>

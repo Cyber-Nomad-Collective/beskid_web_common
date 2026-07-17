@@ -8,12 +8,24 @@ Shared **shadcn** React components extracted from Beskid Tracker for auth, accou
 - `@cyber-nomad-collective/beskid-ui-react/button`, `/input`, `/card`, … (`./ui/*`)
 - `@cyber-nomad-collective/beskid-ui-react/auth` — `AuthPageShell`, `ServicePicker`, `ProfileCard`
 - `@cyber-nomad-collective/beskid-ui-react/settings` — `SettingsDialog`, `defineSettingsRegistry`, `SettingsProvider`, form renderer
+- `@cyber-nomad-collective/beskid-ui-react/graph` — `AstTreeView`, `FactsDagView`, `LinkedAstFactsView`, `useAstFactsLink`, fixtures (re-exports `openInEditorUrl` for convenience)
+- `@cyber-nomad-collective/beskid-ui-react/explorer` — **canonical** `openInEditorUrl` + `RepoExplorerDialog`
+
+`openInEditorUrl` lives once under `./explorer`. Local hosts prefer `cursor://` / `vscode://`; public docs pass `{ isLocal: false, githubRepo, githubRef }` so facts-DAG clicks open GitHub blobs.
 
 Tracker can re-export from local shims:
 
 ```ts
 export { Button, buttonVariants } from "@beskid/ui-react/button";
 export { SettingsDialog } from "@beskid/ui-react/settings";
+export { AstTreeView, FactsDagView, useAstFactsLink } from "@beskid/ui-react/graph";
+export { RepoExplorerDialog, openInEditorUrl } from "@beskid/ui-react/explorer";
+```
+
+Graph viewers require the ReactFlow stylesheet once in the host app:
+
+```ts
+import "@xyflow/react/dist/style.css";
 ```
 
 Import `@cyber-nomad-collective/beskid-ui-react/styles/shadcn-entry.css` or mirror tokens in the host app (see `site/auth/src/styles.css`).
@@ -41,10 +53,13 @@ cd packages/beskid-ui-react
 npm publish --access public
 ```
 
-After publish, refresh superrepo consumers:
+After publish, switch any temporary `file:` pins back to `npm:@cyber-nomad-collective/...@^0.2.0`, then refresh consumers:
 
 ```bash
-./scripts/sync-beskid-packages.sh beskid_tracker site/auth
+./scripts/sync-beskid-packages.sh
+# or: beskid_tracker site/auth site/website site/platform-spec pckg/web
 ```
 
-**Blocker without token:** publish cannot run locally or in CI without `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` with `write:packages`. The export surface is ready; only registry upload remains.
+The sync script skips `file:` pins so local submodule links stay intact until publish.
+
+**Blocker without token:** publish cannot run locally or in CI without `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` with `write:packages`. The export surface is ready; only registry upload remains. Pre-publish consumers (`site/website`, `site/platform-spec`, `pckg/web`, tracker `ui-react`) use `file:` pins to `beskid_web_common/packages/*`.
