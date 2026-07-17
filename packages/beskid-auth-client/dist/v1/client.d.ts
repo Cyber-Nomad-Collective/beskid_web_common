@@ -12,6 +12,8 @@ export declare class BeskidAuthClient {
     getHealth(): Promise<HealthResponse>;
     getMe(cookieHeader?: string): Promise<MeResponse | null>;
     listApps(): Promise<AppsResponse>;
+    /** Discover hub health, app metadata, and pairing state in one request contract. */
+    discoverApp(appId: PairingApproveRequest["appId"]): Promise<import("./types.js").AuthDiscovery>;
     getAdminStatus(setupToken?: string): Promise<AdminStatusResponse>;
     createPairingRequest(body: PairingRequestCreate, cookieHeader: string): Promise<PairingRequestCreated>;
     approvePairing(body: PairingApproveRequest): Promise<PairingApproveResponse>;

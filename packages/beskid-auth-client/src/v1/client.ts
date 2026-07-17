@@ -53,6 +53,20 @@ export class BeskidAuthClient {
 		return this.getJson<AppsResponse>("/apps");
 	}
 
+	/** Discover hub health, app metadata, and pairing state in one request contract. */
+	async discoverApp(appId: PairingApproveRequest["appId"]): Promise<import("./types.js").AuthDiscovery> {
+		const [health, apps, pairing] = await Promise.all([
+			this.getHealth(),
+			this.listApps(),
+			this.getPairingStatus(appId),
+		]);
+		return {
+			health,
+			app: apps.apps.find((candidate) => candidate.id === appId) ?? null,
+			pairing,
+		};
+	}
+
 	async getAdminStatus(setupToken?: string): Promise<AdminStatusResponse> {
 		return this.getJson<AdminStatusResponse>(
 			"/admin/status",

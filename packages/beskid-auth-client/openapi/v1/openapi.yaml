@@ -172,7 +172,7 @@ paths:
           required: true
           schema:
             type: string
-            enum: [tracker, nexus, pckg]
+            enum: [tracker, nexus, pckg, platform-spec]
       responses:
         "200":
           description: Pairing status
@@ -230,7 +230,7 @@ components:
       properties:
         id:
           type: string
-          enum: [tracker, nexus, pckg]
+          enum: [tracker, nexus, pckg, platform-spec]
         label:
           type: string
         description:
@@ -274,7 +274,7 @@ components:
       properties:
         appId:
           type: string
-          enum: [tracker, nexus, pckg]
+          enum: [tracker, nexus, pckg, platform-spec]
         publicUrl:
           type: string
           format: uri
@@ -300,7 +300,7 @@ components:
           type: string
         appId:
           type: string
-          enum: [tracker, nexus, pckg]
+          enum: [tracker, nexus, pckg, platform-spec]
         publicUrl:
           type: string
           format: uri
@@ -320,7 +320,7 @@ components:
       properties:
         appId:
           type: string
-          enum: [tracker, nexus, pckg]
+          enum: [tracker, nexus, pckg, platform-spec]
         paired:
           type: boolean
         publicUrl:
@@ -355,7 +355,7 @@ components:
             properties:
               id:
                 type: string
-                enum: [tracker, nexus, pckg]
+                enum: [tracker, nexus, pckg, platform-spec]
               publicUrl:
                 type: string
                 format: uri

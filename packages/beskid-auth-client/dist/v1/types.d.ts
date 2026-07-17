@@ -24,6 +24,15 @@ export interface AuthApp {
 export interface AppsResponse {
     apps: AuthApp[];
 }
+/**
+ * Public, non-secret view of an app's registration at the auth hub.
+ * Consumers use this to decide whether pairing is required before login.
+ */
+export interface AuthDiscovery {
+    app: AuthApp | null;
+    pairing: PairingStatusResponse;
+    health: HealthResponse;
+}
 export interface AdminStatusResponse {
     onboarded: boolean;
     oauthConfigured: boolean;
