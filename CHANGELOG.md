@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Graph consumers import `openInEditorUrl` / `OpenInEditorOptions` from the single
   explorer implementation (graph re-exports only; no duplicate helper module).
+- Route the repository `test` script through the React package's Vitest/jsdom runner so
+  DOM component tests use their declared environment instead of Bun's raw test runner.
 
 ## [0.2.7] - 2026-07-13
 

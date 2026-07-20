@@ -9,7 +9,7 @@
 	"scripts": {
 		"typecheck": "bun run --filter '@cyber-nomad-collective/trudoc' typecheck && bun run --filter '@cyber-nomad-collective/beskid-ui-react' typecheck && bun run --filter '@cyber-nomad-collective/beskid-ui-react' test && bun run --filter '@cyber-nomad-collective/beskid-auth-client' build && bun run --filter '@cyber-nomad-collective/beskid-auth-client' typecheck && bun run --filter '@cyber-nomad-collective/beskid-server-observability' build && bun run --filter '@cyber-nomad-collective/beskid-server-observability' typecheck",
 		"build": "bun run --filter '@cyber-nomad-collective/beskid-ui' build:hub-client && bun run --filter '@cyber-nomad-collective/beskid-server-observability' build",
-		"test": "bun test",
+		"test": "bun run --filter '@cyber-nomad-collective/beskid-ui-react' test",
 		"lint": "bun run --filter '@cyber-nomad-collective/eslint-config' --if-present echo ok"
 	},
 	"repository": {
