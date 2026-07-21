@@ -4,3 +4,4 @@ export type { IssueHandoffInput } from "./handoff.js";
 export { BeskidAuthClient } from "./v1/client.js";
 export type { BeskidAuthClientOptions } from "./v1/client.js";
 export type * from "./v1/types.js";
+//# sourceMappingURL=index.d.ts.map
