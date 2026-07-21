@@ -27,6 +27,19 @@ export class BeskidAuthClient {
     async listApps() {
         return this.getJson("/apps");
     }
+    /** Discover hub health, app metadata, and pairing state in one request contract. */
+    async discoverApp(appId) {
+        const [health, apps, pairing] = await Promise.all([
+            this.getHealth(),
+            this.listApps(),
+            this.getPairingStatus(appId),
+        ]);
+        return {
+            health,
+            app: apps.apps.find((candidate) => candidate.id === appId) ?? null,
+            pairing,
+        };
+    }
     async getAdminStatus(setupToken) {
         return this.getJson("/admin/status", setupToken ? { bearer: setupToken } : undefined);
     }

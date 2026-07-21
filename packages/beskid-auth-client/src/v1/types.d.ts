@@ -24,6 +24,15 @@ export interface AuthApp {
 export interface AppsResponse {
     apps: AuthApp[];
 }
+/**
+ * Public, non-secret view of an app's registration at the auth hub.
+ * Consumers use this to decide whether pairing is required before login.
+ */
+export interface AuthDiscovery {
+    app: AuthApp | null;
+    pairing: PairingStatusResponse;
+    health: HealthResponse;
+}
 export interface AdminStatusResponse {
     onboarded: boolean;
     oauthConfigured: boolean;
@@ -83,6 +92,9 @@ export interface HandoffPayload {
     login: string;
     avatarUrl: string;
     name: string | null;
+    /** Stable external identity (`github:<numeric-id>` for GitHub logins). */
+    subject: string | null;
     /** JWT to send to the hub GitHub proxy (`Authorization: Bearer`). */
     hubUserToken: string;
 }
+//# sourceMappingURL=types.d.ts.map

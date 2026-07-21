@@ -9,3 +9,4 @@ export declare const AUTH_APP_META: Record<AuthAppId, {
     label: string;
     description: string;
 }>;
+//# sourceMappingURL=constants.d.ts.map
