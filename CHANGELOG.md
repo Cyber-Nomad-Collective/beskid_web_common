@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Resolve `@dagrejs/dagre` Graph via fail-closed interop helper so Facts DAG layout
+  no longer crashes with `gm.Graph is not a constructor` when a hoisted v1 CJS
+  package shadows the ui-react v3 named export.
+- Align `@beskid/beskid-ui` on `@dagrejs/dagre@^3.0.0` (drop v1 dual dependency).
+
 ### Added
 
 - `@beskid/ui-react` **0.2.9**: `./graph` (`AstTreeView`, `FactsDagView`, `LinkedAstFactsView`,

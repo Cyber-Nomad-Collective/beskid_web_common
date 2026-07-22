@@ -1,6 +1,10 @@
-import { Graph, layout } from "@dagrejs/dagre";
+import * as dagre from "@dagrejs/dagre";
 import type { Edge, Node } from "@xyflow/react";
 
+import {
+	resolveDagreGraph,
+	resolveDagreLayout,
+} from "./resolve-dagre.js";
 import type { FactsDagLocation, FactsDagModel } from "./types.js";
 
 export type FactsFlowNodeData = {
@@ -13,6 +17,9 @@ export type FactsFlowNodeData = {
 
 const NODE_WIDTH = 180;
 const NODE_HEIGHT = 44;
+
+const Graph = resolveDagreGraph(dagre);
+const layout = resolveDagreLayout(dagre);
 
 /**
  * Layout a facts DAG with dagre, producing ReactFlow nodes/edges.
