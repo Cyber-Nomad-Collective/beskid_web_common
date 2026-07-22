@@ -60,7 +60,7 @@
 	"dependencies": {
 		"@cyber-nomad-collective/beskid-ui-react": "file:../beskid-ui-react",
 		"@cyber-nomad-collective/trudoc": "^0.2.7",
-		"@dagrejs/dagre": "^1.1.5",
+		"@dagrejs/dagre": "^3.0.0",
 		"@material/material-color-utilities": "^0.4.0",
 		"astro-navbar": "^2.4.0",
 		"d3": "^7.9.0",
