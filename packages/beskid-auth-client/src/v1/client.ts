@@ -54,7 +54,9 @@ export class BeskidAuthClient {
 	}
 
 	/** Discover hub health, app metadata, and pairing state in one request contract. */
-	async discoverApp(appId: PairingApproveRequest["appId"]): Promise<import("./types.js").AuthDiscovery> {
+	async discoverApp(
+		appId: PairingApproveRequest["appId"],
+	): Promise<import("./types.js").AuthDiscovery> {
 		const [health, apps, pairing] = await Promise.all([
 			this.getHealth(),
 			this.listApps(),
@@ -110,7 +112,9 @@ export class BeskidAuthClient {
 		return parsed;
 	}
 
-	async getPairingStatus(appId: PairingApproveRequest["appId"]): Promise<PairingStatusResponse> {
+	async getPairingStatus(
+		appId: PairingApproveRequest["appId"],
+	): Promise<PairingStatusResponse> {
 		const res = await this.request(
 			`/pairing/status?appId=${encodeURIComponent(appId)}`,
 		);
@@ -120,9 +124,7 @@ export class BeskidAuthClient {
 		return (await res.json()) as PairingStatusResponse;
 	}
 
-	async postAdminSetup(
-		body: AdminSetupRequest,
-	): Promise<OkResponse> {
+	async postAdminSetup(body: AdminSetupRequest): Promise<OkResponse> {
 		const res = await this.request("/admin/setup", {
 			method: "POST",
 			body: JSON.stringify(body),

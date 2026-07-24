@@ -2,8 +2,8 @@
  * Hub MDX: extract and validate known platform-spec components (CI-safe, no full MDX parse).
  * PascalCase opening tags must be listed in `HUB_COMPONENT_PROP_SCHEMAS` or layout verification fails.
  */
-import { z } from 'zod';
-import type { LayoutDiagnostic } from './schema';
+import { z } from "zod";
+import type { LayoutDiagnostic } from "./schema";
 
 const domainTilesPropsSchema = z.object({
 	pathPrefix: z.string().min(1),
@@ -20,7 +20,7 @@ const specPageHeaderPropsSchema = z.object({
 	ownerEmail: z.string().min(3),
 	submitterName: z.string().min(1),
 	submitterEmail: z.string().min(3),
-	status: z.enum(['Standard', 'Proposed']).optional(),
+	status: z.enum(["Standard", "Proposed"]).optional(),
 });
 
 const specSectionPropsSchema = z.object({
@@ -31,10 +31,17 @@ const specSectionPropsSchema = z.object({
 const emptyPropsSchema = z.object({}).strict();
 
 /** Tag name -> Zod schema for string-ish props parsed from opening tag attributes. */
-export const HUB_COMPONENT_PROP_SCHEMAS: Record<string, z.ZodType<Record<string, unknown>>> = {
+export const HUB_COMPONENT_PROP_SCHEMAS: Record<
+	string,
+	z.ZodType<Record<string, unknown>>
+> = {
 	DomainTiles: domainTilesPropsSchema as z.ZodType<Record<string, unknown>>,
-	DomainOrAreaHub: domainOrAreaHubPropsSchema as z.ZodType<Record<string, unknown>>,
-	SpecPageHeader: specPageHeaderPropsSchema as z.ZodType<Record<string, unknown>>,
+	DomainOrAreaHub: domainOrAreaHubPropsSchema as z.ZodType<
+		Record<string, unknown>
+	>,
+	SpecPageHeader: specPageHeaderPropsSchema as z.ZodType<
+		Record<string, unknown>
+	>,
 	SpecSection: specSectionPropsSchema as z.ZodType<Record<string, unknown>>,
 	SpecArticleChrome: emptyPropsSchema as z.ZodType<Record<string, unknown>>,
 	SpecAdrChrome: emptyPropsSchema as z.ZodType<Record<string, unknown>>,
@@ -49,34 +56,42 @@ export type ParsedOpeningTag = {
 };
 
 /** Parse `key="value"` and `key='value'` from first line of an opening tag (multiline tags not supported). */
-function parseOpeningTag(source: string, start: number): ParsedOpeningTag | null {
-	const lt = source.indexOf('<', start);
+function parseOpeningTag(
+	source: string,
+	start: number,
+): ParsedOpeningTag | null {
+	const lt = source.indexOf("<", start);
 	if (lt < 0) return null;
-	const gt = source.indexOf('>', lt);
+	const gt = source.indexOf(">", lt);
 	if (gt < 0) return null;
 	const chunk = source.slice(lt + 1, gt).trim();
 	const firstSpace = chunk.search(/\s/);
-	const name = firstSpace < 0 ? chunk : chunk.slice(0, firstSpace).replace(/\/$/, '');
+	const name =
+		firstSpace < 0 ? chunk : chunk.slice(0, firstSpace).replace(/\/$/, "");
 	if (!/^[A-Za-z][A-Za-z0-9]*$/.test(name)) return null;
-	const attrPart = firstSpace < 0 ? '' : chunk.slice(firstSpace + 1);
+	const attrPart = firstSpace < 0 ? "" : chunk.slice(firstSpace + 1);
 	const props: Record<string, string> = {};
 	const re = /(\w+)=\s*(?:"([^"]*)"|'([^']*)')/g;
 	let m: RegExpExecArray | null;
 	while ((m = re.exec(attrPart)) !== null) {
-		props[m[1]] = m[2] ?? m[3] ?? '';
+		props[m[1]] = m[2] ?? m[3] ?? "";
 	}
 	return { name, index: lt, raw: source.slice(lt, gt + 1), props };
 }
 
 /** Opening tags for components registered in {@link HUB_COMPONENT_PROP_SCHEMAS}. */
-export function* iterHubOpeningTags(source: string): Generator<ParsedOpeningTag> {
+export function* iterHubOpeningTags(
+	source: string,
+): Generator<ParsedOpeningTag> {
 	for (const t of iterPascalCaseOpeningTags(source)) {
 		if (HUB_COMPONENT_PROP_SCHEMAS[t.name]) yield t;
 	}
 }
 
 /** Every PascalCase JSX-style opening tag in `source` (best-effort; not a full MDX parse). */
-export function* iterPascalCaseOpeningTags(source: string): Generator<ParsedOpeningTag> {
+export function* iterPascalCaseOpeningTags(
+	source: string,
+): Generator<ParsedOpeningTag> {
 	let i = 0;
 	while (i < source.length) {
 		const t = parseOpeningTag(source, i);
@@ -88,7 +103,7 @@ export function* iterPascalCaseOpeningTags(source: string): Generator<ParsedOpen
 
 function diag(
 	code: string,
-	severity: LayoutDiagnostic['severity'],
+	severity: LayoutDiagnostic["severity"],
 	slug: string,
 	message: string,
 	detail?: string,
@@ -98,22 +113,26 @@ function diag(
 
 /** Remove fenced code blocks so placeholder syntax like `<Domain title>` in YAML samples is not parsed as JSX. */
 function bodyWithoutFencedCode(body: string): string {
-	return body.replace(/```[^\n]*\r?\n[\s\S]*?```/g, '');
+	return body.replace(/```[^\n]*\r?\n[\s\S]*?```/g, "");
 }
 
 /** Remove inline code spans so generics like `` `Option<T>` `` are not parsed as JSX components. */
 function bodyWithoutInlineCode(body: string): string {
 	let out = body;
 	// MDX-safe literals: `` `Type<T>` `` (inner single backticks)
-	out = out.replace(/``\s*`[^`]+`\s*``/g, (match) => ' '.repeat(match.length));
+	out = out.replace(/``\s*`[^`]+`\s*``/g, (match) => " ".repeat(match.length));
 	// Double-backtick spans without inner backticks: ``Type<T>``
-	out = out.replace(/``[^`\n]+``/g, (match) => ' '.repeat(match.length));
+	out = out.replace(/``[^`\n]+``/g, (match) => " ".repeat(match.length));
 	// Single-backtick inline code
-	out = out.replace(/`[^`\n]+`/g, (match) => ' '.repeat(match.length));
+	out = out.replace(/`[^`\n]+`/g, (match) => " ".repeat(match.length));
 	return out;
 }
 
-export function validateHubMdxComponents(slug: string, contentPath: string, body: string): LayoutDiagnostic[] {
+export function validateHubMdxComponents(
+	slug: string,
+	contentPath: string,
+	body: string,
+): LayoutDiagnostic[] {
 	const out: LayoutDiagnostic[] = [];
 	const stripped = bodyWithoutInlineCode(bodyWithoutFencedCode(body));
 	for (const tag of iterPascalCaseOpeningTags(stripped)) {
@@ -121,8 +140,8 @@ export function validateHubMdxComponents(slug: string, contentPath: string, body
 		if (!schema) {
 			out.push(
 				diag(
-					'MDX_UNKNOWN_COMPONENT',
-					'error',
+					"MDX_UNKNOWN_COMPONENT",
+					"error",
 					slug,
 					`Unknown MDX component <${tag.name} /> in platform-spec hub`,
 					`${contentPath}: add it to HUB_COMPONENT_PROP_SCHEMAS in trudoc (or use markdown-first fences per MARKDOWN-FIRST.md).`,
@@ -132,11 +151,13 @@ export function validateHubMdxComponents(slug: string, contentPath: string, body
 		}
 		const parsed = schema.safeParse(tag.props);
 		if (!parsed.success) {
-			const msg = parsed.error.issues.map((is) => `${is.path.join('.') || tag.name}: ${is.message}`).join('; ');
+			const msg = parsed.error.issues
+				.map((is) => `${is.path.join(".") || tag.name}: ${is.message}`)
+				.join("; ");
 			out.push(
 				diag(
-					'MDX_COMPONENT_PROPS',
-					'error',
+					"MDX_COMPONENT_PROPS",
+					"error",
 					slug,
 					`Invalid <${tag.name} /> props`,
 					`${contentPath}: ${msg}`,

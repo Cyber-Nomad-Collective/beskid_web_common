@@ -9,7 +9,9 @@ describe("Beskid shared service registry", () => {
 	});
 
 	it("links the standard service to the canonical OpenSpec reader", () => {
-		const standard = BESKID_SERVICES.find((service) => service.id === "platform-spec");
+		const standard = BESKID_SERVICES.find(
+			(service) => service.id === "platform-spec",
+		);
 		expect(standard?.href).toBe("https://spec.beskid-lang.org/platform-spec/");
 	});
 });

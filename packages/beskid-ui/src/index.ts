@@ -3,7 +3,15 @@
  * Import Astro components via `@beskid/beskid-ui/platform-spec/…` or `@beskid/beskid-ui/starlight/…`.
  */
 
-export { BESKID_SERVICES, type BeskidService, type BeskidServiceIcon } from './data/beskid-services';
-export { hubIconSvg, hubLauncherIconSvg, type BeskidHubIcon } from './hub/icons';
-export { BeskidHub, type BeskidHubProps } from './react/BeskidHub';
-export { initBeskidHub, initBeskidHubAfterBlazor } from './client/beskid-hub';
+export { initBeskidHub, initBeskidHubAfterBlazor } from "./client/beskid-hub";
+export {
+	BESKID_SERVICES,
+	type BeskidService,
+	type BeskidServiceIcon,
+} from "./data/beskid-services";
+export {
+	type BeskidHubIcon,
+	hubIconSvg,
+	hubLauncherIconSvg,
+} from "./hub/icons";
+export { BeskidHub, type BeskidHubProps } from "./react/BeskidHub";

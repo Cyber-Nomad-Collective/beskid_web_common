@@ -1,13 +1,10 @@
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-import type { PlatformSpecDocumentBundle } from '../catalog';
-import {
-	buildMdxFile,
-	parseFrontmatterJson,
-} from './frontmatter';
-import { specRelFromRepoPath } from './path-rules';
-import type { SpecProposalChange } from './types';
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import type { PlatformSpecDocumentBundle } from "../catalog";
+import { buildMdxFile, parseFrontmatterJson } from "./frontmatter";
+import { specRelFromRepoPath } from "./path-rules";
+import type { SpecProposalChange } from "./types";
 
 export interface MaterializedWorkspace {
 	rootDir: string;
@@ -24,29 +21,25 @@ async function seedBaselineFile(
 	repoPath: string,
 	loadDocument: DocumentLoader,
 ): Promise<void> {
-	const abs = path.join(websiteRoot, repoPath.replace(/^site\/website\//, ''));
+	const abs = path.join(websiteRoot, repoPath.replace(/^site\/website\//, ""));
 	if (fs.existsSync(abs)) return;
 
 	const slug = repoPath
-		.replace(/^site\/website\/src\/content\/docs\//, '')
-		.replace(/\.(md|mdx)$/i, '')
-		.replace(/\/index$/, '');
+		.replace(/^site\/website\/src\/content\/docs\//, "")
+		.replace(/\.(md|mdx)$/i, "")
+		.replace(/\/index$/, "");
 
 	try {
 		const bundle = await loadDocument(slug);
 		fs.mkdirSync(path.dirname(abs), { recursive: true });
-		fs.writeFileSync(
-			abs,
-			buildMdxFile(bundle.frontmatter, bundle.body),
-			'utf8',
-		);
+		fs.writeFileSync(abs, buildMdxFile(bundle.frontmatter, bundle.body), "utf8");
 		if (bundle.layoutJson) {
-			const layoutPath = path.join(path.dirname(abs), 'layout.json');
+			const layoutPath = path.join(path.dirname(abs), "layout.json");
 			if (!fs.existsSync(layoutPath)) {
 				fs.writeFileSync(
 					layoutPath,
 					`${JSON.stringify(bundle.layoutJson, null, 2)}\n`,
-					'utf8',
+					"utf8",
 				);
 			}
 		}
@@ -59,14 +52,14 @@ export async function materializeProposalWorkspace(
 	changes: SpecProposalChange[],
 	options?: { loadDocument?: DocumentLoader },
 ): Promise<MaterializedWorkspace> {
-	const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), 'beskid-proposal-'));
-	const websiteRoot = path.join(rootDir, 'site', 'website');
+	const rootDir = fs.mkdtempSync(path.join(os.tmpdir(), "beskid-proposal-"));
+	const websiteRoot = path.join(rootDir, "site", "website");
 	const specRoot = path.join(
 		websiteRoot,
-		'src',
-		'content',
-		'docs',
-		'platform-spec',
+		"src",
+		"content",
+		"docs",
+		"platform-spec",
 	);
 	fs.mkdirSync(specRoot, { recursive: true });
 
@@ -76,7 +69,7 @@ export async function materializeProposalWorkspace(
 		const rel = specRelFromRepoPath(change.repoPath);
 		changedRelPaths.push(rel);
 
-		if (change.changeKind === 'delete') {
+		if (change.changeKind === "delete") {
 			const abs = path.join(specRoot, rel);
 			if (fs.existsSync(abs)) fs.unlinkSync(abs);
 			continue;
@@ -86,27 +79,19 @@ export async function materializeProposalWorkspace(
 		fs.mkdirSync(path.dirname(abs), { recursive: true });
 
 		const frontmatter = parseFrontmatterJson(change.frontmatterJson);
-		fs.writeFileSync(abs, buildMdxFile(frontmatter, change.bodyMd), 'utf8');
+		fs.writeFileSync(abs, buildMdxFile(frontmatter, change.bodyMd), "utf8");
 
 		if (change.layoutJson) {
 			const layout = JSON.parse(change.layoutJson) as Record<string, unknown>;
-			const layoutPath = path.join(path.dirname(abs), 'layout.json');
-			fs.writeFileSync(
-				layoutPath,
-				`${JSON.stringify(layout, null, 2)}\n`,
-				'utf8',
-			);
+			const layoutPath = path.join(path.dirname(abs), "layout.json");
+			fs.writeFileSync(layoutPath, `${JSON.stringify(layout, null, 2)}\n`, "utf8");
 		}
 	}
 
 	if (options?.loadDocument) {
 		for (const change of changes) {
-			if (change.changeKind === 'update') {
-				await seedBaselineFile(
-					websiteRoot,
-					change.repoPath,
-					options.loadDocument,
-				);
+			if (change.changeKind === "update") {
+				await seedBaselineFile(websiteRoot, change.repoPath, options.loadDocument);
 			}
 		}
 	}

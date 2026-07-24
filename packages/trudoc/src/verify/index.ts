@@ -1,12 +1,12 @@
-export { collectPlatformSpecFrontmatterIssues } from './platform-spec-frontmatter';
-export type { PlatformSpecFrontmatterIssue } from './platform-spec-frontmatter';
 export {
-	verifyPlatformSpecContent,
 	type PlatformSpecContentIssue,
 	type PlatformSpecContentVerifyOptions,
-} from './platform-spec-content';
+	verifyPlatformSpecContent,
+} from "./platform-spec-content";
+export type { PlatformSpecFrontmatterIssue } from "./platform-spec-frontmatter";
+export { collectPlatformSpecFrontmatterIssues } from "./platform-spec-frontmatter";
 export {
-	verifyProposalWorkspace,
 	type ProposalWorkspaceVerifyIssue,
 	type ProposalWorkspaceVerifyOptions,
-} from './proposal-workspace';
+	verifyProposalWorkspace,
+} from "./proposal-workspace";

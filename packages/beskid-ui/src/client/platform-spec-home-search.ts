@@ -1,15 +1,23 @@
-import type { PlatformSpecSearchItem } from '../platform-spec/platformSpecHomeData';
-import { onPageNavigation } from './view-transition-lifecycle';
+import type { PlatformSpecSearchItem } from "../platform-spec/platformSpecHomeData";
+import { onPageNavigation } from "./view-transition-lifecycle";
 
-const LEVEL_ORDER = ['domain', 'area', 'feature', 'article', 'adr', 'root', 'hub'];
+const LEVEL_ORDER = [
+	"domain",
+	"area",
+	"feature",
+	"article",
+	"adr",
+	"root",
+	"hub",
+];
 
 function readSearchIndex(): PlatformSpecSearchItem[] {
-	const el = document.getElementById('platform-spec-home-search-data');
+	const el = document.getElementById("platform-spec-home-search-data");
 	if (!el?.textContent?.trim()) return [];
 	try {
 		return JSON.parse(el.textContent) as PlatformSpecSearchItem[];
 	} catch {
-		console.warn('[platform-spec-home-search] Invalid search index JSON');
+		console.warn("[platform-spec-home-search] Invalid search index JSON");
 		return [];
 	}
 }
@@ -30,7 +38,9 @@ function scoreItem(item: PlatformSpecSearchItem, q: string): number {
 	return 0;
 }
 
-function groupByLevel(items: PlatformSpecSearchItem[]): Map<string, PlatformSpecSearchItem[]> {
+function groupByLevel(
+	items: PlatformSpecSearchItem[],
+): Map<string, PlatformSpecSearchItem[]> {
 	const map = new Map<string, PlatformSpecSearchItem[]>();
 	for (const item of items) {
 		const key = item.level;
@@ -43,14 +53,14 @@ function groupByLevel(items: PlatformSpecSearchItem[]): Map<string, PlatformSpec
 
 function levelHeading(level: string): string {
 	switch (level) {
-		case 'domain':
-			return 'Domains';
-		case 'area':
-			return 'Areas';
-		case 'feature':
-			return 'Features';
-		case 'article':
-			return 'Articles';
+		case "domain":
+			return "Domains";
+		case "area":
+			return "Areas";
+		case "feature":
+			return "Features";
+		case "article":
+			return "Articles";
 		default:
 			return level.charAt(0).toUpperCase() + level.slice(1);
 	}
@@ -58,10 +68,10 @@ function levelHeading(level: string): string {
 
 function escapeHtml(s: string): string {
 	return s
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;');
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;");
 }
 
 function renderResults(items: PlatformSpecSearchItem[], q: string): string {
@@ -73,7 +83,9 @@ function renderResults(items: PlatformSpecSearchItem[], q: string): string {
 	}
 	const grouped = groupByLevel(items);
 	const levels = [...grouped.keys()].sort(
-		(a, b) => (LEVEL_ORDER.indexOf(a) === -1 ? 99 : LEVEL_ORDER.indexOf(a)) - (LEVEL_ORDER.indexOf(b) === -1 ? 99 : LEVEL_ORDER.indexOf(b)),
+		(a, b) =>
+			(LEVEL_ORDER.indexOf(a) === -1 ? 99 : LEVEL_ORDER.indexOf(a)) -
+			(LEVEL_ORDER.indexOf(b) === -1 ? 99 : LEVEL_ORDER.indexOf(b)),
 	);
 	const sections = levels.map((level) => {
 		const rows = grouped.get(level) ?? [];
@@ -82,19 +94,29 @@ function renderResults(items: PlatformSpecSearchItem[], q: string): string {
 				(item) =>
 					`<li><a class="platform-spec-home-search__item" href="${escapeHtml(item.href)}"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.subtitle)} · ${escapeHtml(item.level)}</span></a></li>`,
 			)
-			.join('');
+			.join("");
 		return `<section class="platform-spec-home-search__group"><h3 class="platform-spec-home-search__group-title">${escapeHtml(levelHeading(level))}</h3><ul class="platform-spec-home-search__group-list">${lis}</ul></section>`;
 	});
-	return sections.join('');
+	return sections.join("");
 }
 
 function initPlatformSpecHomeSearch(): void {
-	const root = document.querySelector<HTMLElement>('[data-platform-spec-home-search]');
+	const root = document.querySelector<HTMLElement>(
+		"[data-platform-spec-home-search]",
+	);
 	if (!root) return;
-	const input = root.querySelector<HTMLInputElement>('.platform-spec-home-search__input');
-	const panel = root.querySelector<HTMLElement>('.platform-spec-home-search__panel');
-	const results = root.querySelector<HTMLElement>('.platform-spec-home-search__results');
-	const clearBtn = root.querySelector<HTMLButtonElement>('.platform-spec-home-search__clear');
+	const input = root.querySelector<HTMLInputElement>(
+		".platform-spec-home-search__input",
+	);
+	const panel = root.querySelector<HTMLElement>(
+		".platform-spec-home-search__panel",
+	);
+	const results = root.querySelector<HTMLElement>(
+		".platform-spec-home-search__results",
+	);
+	const clearBtn = root.querySelector<HTMLButtonElement>(
+		".platform-spec-home-search__clear",
+	);
 	if (!input || !results || !panel) return;
 
 	const index = readSearchIndex();
@@ -108,7 +130,9 @@ function initPlatformSpecHomeSearch(): void {
 				: index
 						.map((item) => ({ item, score: scoreItem(item, q) }))
 						.filter((x) => x.score > 0)
-						.sort((a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title))
+						.sort(
+							(a, b) => b.score - a.score || a.item.title.localeCompare(b.item.title),
+						)
 						.slice(0, 24)
 						.map((x) => x.item);
 		results.innerHTML = renderResults(matches, q);
@@ -116,19 +140,19 @@ function initPlatformSpecHomeSearch(): void {
 		panel.hidden = !showPanel;
 	};
 
-	input.addEventListener('input', update);
-	input.addEventListener('focus', () => {
+	input.addEventListener("input", update);
+	input.addEventListener("focus", () => {
 		panel.hidden = false;
 		update();
 	});
 
-	clearBtn?.addEventListener('click', () => {
-		input.value = '';
+	clearBtn?.addEventListener("click", () => {
+		input.value = "";
 		input.focus();
 		update();
 	});
 
-	document.addEventListener('click', (e) => {
+	document.addEventListener("click", (e) => {
 		if (!root.contains(e.target as Node)) {
 			if (!input.value.trim()) panel.hidden = true;
 		}

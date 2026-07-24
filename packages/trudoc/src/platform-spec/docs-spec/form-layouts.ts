@@ -1,4 +1,4 @@
-import type { SpecLevel } from './types';
+import type { SpecLevel } from "./types";
 
 /** Minimal frontmatter ↔ form field mapping shared by tracker and platform-spec app. */
 export function formValuesToFrontmatter(
@@ -20,16 +20,16 @@ export function formValuesToFrontmatter(
 	};
 
 	if (
-		specLevel === 'feature' ||
-		specLevel === 'article' ||
-		specLevel === 'adr'
+		specLevel === "feature" ||
+		specLevel === "article" ||
+		specLevel === "adr"
 	) {
-		fm.status = values.status?.trim() || 'Proposed';
+		fm.status = values.status?.trim() || "Proposed";
 	}
 
-	if (specLevel === 'adr') {
+	if (specLevel === "adr") {
 		fm.adrId = values.adrId?.trim();
-		fm.adrStatus = values.adrStatus?.trim() || 'Proposed';
+		fm.adrStatus = values.adrStatus?.trim() || "Proposed";
 		if (values.adrDate?.trim()) fm.adrDate = values.adrDate.trim();
 	}
 
@@ -57,19 +57,19 @@ export function frontmatterToFormValues(
 		| undefined;
 
 	return {
-		title: String(frontmatter.title ?? ''),
-		description: String(frontmatter.description ?? ''),
-		status: String(frontmatter.status ?? 'Proposed'),
-		adrId: String(frontmatter.adrId ?? ''),
-		adrStatus: String(frontmatter.adrStatus ?? 'Proposed'),
-		adrDate: String(frontmatter.adrDate ?? ''),
-		owner_name: String(owner?.name ?? ''),
-		owner_email: String(owner?.email ?? ''),
-		submitter_name: String(submitter?.name ?? ''),
-		submitter_email: String(submitter?.email ?? ''),
+		title: String(frontmatter.title ?? ""),
+		description: String(frontmatter.description ?? ""),
+		status: String(frontmatter.status ?? "Proposed"),
+		adrId: String(frontmatter.adrId ?? ""),
+		adrStatus: String(frontmatter.adrStatus ?? "Proposed"),
+		adrDate: String(frontmatter.adrDate ?? ""),
+		owner_name: String(owner?.name ?? ""),
+		owner_email: String(owner?.email ?? ""),
+		submitter_name: String(submitter?.name ?? ""),
+		submitter_email: String(submitter?.email ?? ""),
 		related_topics: frontmatter.relatedTopics
 			? JSON.stringify(frontmatter.relatedTopics, null, 2)
-			: '[]',
+			: "[]",
 		body_md: bodyMd,
 	};
 }

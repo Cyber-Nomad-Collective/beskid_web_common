@@ -1,11 +1,14 @@
 #!/usr/bin/env node
-import fs from 'node:fs';
-import path from 'node:path';
-import { buildLayoutTree } from '../layout/scan';
-import { evaluateCompleteness, type NodeScanRow } from '../layout/completeness';
-import { parseLayoutContractJson, effectiveLayoutSchema } from '../layout/schema';
-import { mergeLayoutContract, toEffectiveLayout } from '../layout/merge';
-import { resolveTrudocWebsiteRoot } from './site-root';
+import fs from "node:fs";
+import path from "node:path";
+import { evaluateCompleteness, type NodeScanRow } from "../layout/completeness";
+import { mergeLayoutContract, toEffectiveLayout } from "../layout/merge";
+import { buildLayoutTree } from "../layout/scan";
+import {
+	effectiveLayoutSchema,
+	parseLayoutContractJson,
+} from "../layout/schema";
+import { resolveTrudocWebsiteRoot } from "./site-root";
 
 const siteRoot = resolveTrudocWebsiteRoot(process.argv, import.meta.url);
 
@@ -15,18 +18,27 @@ function main() {
 		slug: n.slug,
 		level: n.level,
 		contentPath: n.contentPath,
-		body: fs.readFileSync(path.join(siteRoot, 'src', 'content', 'docs', ...n.contentPath.split('/')), 'utf8'),
+		body: fs.readFileSync(
+			path.join(siteRoot, "src", "content", "docs", ...n.contentPath.split("/")),
+			"utf8",
+		),
 		effective: n.effective,
 	}));
-	const report = evaluateCompleteness(rows, { docsRoot: path.join(siteRoot, 'src', 'content', 'docs') });
+	const report = evaluateCompleteness(rows, {
+		docsRoot: path.join(siteRoot, "src", "content", "docs"),
+	});
 
-	const outDir = path.join(siteRoot, 'src', 'generated');
+	const outDir = path.join(siteRoot, "src", "generated");
 	fs.mkdirSync(outDir, { recursive: true });
-	fs.writeFileSync(path.join(outDir, 'platform-spec-layout-report.json'), JSON.stringify(report, null, 2), 'utf8');
+	fs.writeFileSync(
+		path.join(outDir, "platform-spec-layout-report.json"),
+		JSON.stringify(report, null, 2),
+		"utf8",
+	);
 
 	if (report.summary.errors > 0) {
-		console.error('\nplatform-spec layout verification failed.\n');
-		for (const d of report.diagnostics.filter((x) => x.severity === 'error')) {
+		console.error("\nplatform-spec layout verification failed.\n");
+		for (const d of report.diagnostics.filter((x) => x.severity === "error")) {
 			console.error(`- [${d.code}] ${d.slug}: ${d.message}`);
 		}
 		process.exit(1);
@@ -40,8 +52,13 @@ function main() {
 /** Smoke-test shared Zod helpers (regression guard). */
 function selfCheck() {
 	const raw = parseLayoutContractJson(
-		{ version: 1, level: 'domain', extends: 'domain-default', pathPrefix: 'platform-spec/x' },
-		'selfcheck',
+		{
+			version: 1,
+			level: "domain",
+			extends: "domain-default",
+			pathPrefix: "platform-spec/x",
+		},
+		"selfcheck",
 	);
 	const merged = mergeLayoutContract(raw, { presetFromExtends: raw.extends });
 	effectiveLayoutSchema.parse(toEffectiveLayout(merged));

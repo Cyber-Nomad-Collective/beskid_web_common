@@ -97,9 +97,7 @@ export function SettingsNav({
 				</SidebarHeader>
 				<SidebarContent>
 					{visibleGroups.length === 0 ? (
-						<p className="text-muted-foreground px-4 py-3 text-sm">
-							{emptyMessage}
-						</p>
+						<p className="text-muted-foreground px-4 py-3 text-sm">{emptyMessage}</p>
 					) : (
 						visibleGroups.map(({ group, sections }) => {
 							const Icon = group.icon;

@@ -5,20 +5,20 @@ export const HANDOFF_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const HUB_USER_TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const AUTH_APP_IDS = ["tracker", "nexus", "pckg", "platform-spec"];
 export const AUTH_APP_META = {
-    tracker: {
-        label: "Beskid Tracker",
-        description: "Kanban and platform-spec docs on GitHub issues.",
-    },
-    nexus: {
-        label: "Beskid Nexus",
-        description: "Compiler graph explorer and catalog.",
-    },
-    pckg: {
-        label: "pckg registry",
-        description: "Package registry accounts and publishing.",
-    },
-    "platform-spec": {
-        label: "Platform Spec Editor",
-        description: "Normative platform-spec drafts, moderation, and git sync.",
-    },
+	tracker: {
+		label: "Beskid Tracker",
+		description: "Kanban and platform-spec docs on GitHub issues.",
+	},
+	nexus: {
+		label: "Beskid Nexus",
+		description: "Compiler graph explorer and catalog.",
+	},
+	pckg: {
+		label: "pckg registry",
+		description: "Package registry accounts and publishing.",
+	},
+	"platform-spec": {
+		label: "Platform Spec Editor",
+		description: "Normative platform-spec drafts, moderation, and git sync.",
+	},
 };

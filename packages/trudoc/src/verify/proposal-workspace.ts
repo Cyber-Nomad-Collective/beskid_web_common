@@ -1,15 +1,15 @@
 import {
+	type PlatformSpecContentIssue,
+	verifyPlatformSpecContent,
+} from "./platform-spec-content";
+import {
 	collectPlatformSpecFrontmatterIssues,
 	type PlatformSpecFrontmatterIssue,
-} from './platform-spec-frontmatter';
-import {
-	verifyPlatformSpecContent,
-	type PlatformSpecContentIssue,
-} from './platform-spec-content';
+} from "./platform-spec-frontmatter";
 
 export type ProposalWorkspaceVerifyIssue = {
 	code: string;
-	severity: 'error' | 'warn';
+	severity: "error" | "warn";
 	file: string;
 	message: string;
 	source: string;
@@ -21,7 +21,7 @@ export type ProposalWorkspaceVerifyOptions = {
 };
 
 function normalizeSpecRel(rel: string): string {
-	return rel.replace(/\\/g, '/').replace(/^\//, '');
+	return rel.replace(/\\/g, "/").replace(/^\//, "");
 }
 
 function toVerifyIssue(
@@ -46,15 +46,15 @@ export function verifyProposalWorkspace(
 	const frontmatter = collectPlatformSpecFrontmatterIssues(
 		options.websiteRoot,
 		filter,
-	).map((issue) => toVerifyIssue(issue, 'frontmatter'));
+	).map((issue) => toVerifyIssue(issue, "frontmatter"));
 
 	const content = verifyPlatformSpecContent({
 		websiteRoot: options.websiteRoot,
 	})
 		.filter((issue) => filter.has(normalizeSpecRel(issue.file)))
-		.map((issue) => toVerifyIssue(issue, 'platform-spec-content'));
+		.map((issue) => toVerifyIssue(issue, "platform-spec-content"));
 
 	const issues = [...frontmatter, ...content];
-	const ok = !issues.some((issue) => issue.severity === 'error');
+	const ok = !issues.some((issue) => issue.severity === "error");
 	return { ok, issues };
 }

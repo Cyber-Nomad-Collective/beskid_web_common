@@ -32,7 +32,9 @@ export function BeskidHub({ className }: BeskidHubProps) {
 	}, []);
 
 	const servicesJson = JSON.stringify(BESKID_SERVICES);
-	const rootClass = className ? `beskid-hub-root ${className}` : "beskid-hub-root";
+	const rootClass = className
+		? `beskid-hub-root ${className}`
+		: "beskid-hub-root";
 
 	return (
 		<div className={rootClass} data-beskid-hub-root data-services={servicesJson}>

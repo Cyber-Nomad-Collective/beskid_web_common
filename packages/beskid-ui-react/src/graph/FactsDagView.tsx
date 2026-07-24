@@ -3,22 +3,21 @@
 import {
 	Background,
 	Controls,
-	MiniMap,
-	ReactFlow,
 	Handle,
-	Position,
+	MiniMap,
 	type Node,
 	type NodeProps,
+	Position,
+	ReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useMemo } from "react";
-
-import { cn } from "../lib/utils.js";
 import {
-	openInEditorUrl,
 	type OpenInEditorOptions,
+	openInEditorUrl,
 } from "../explorer/open-in-editor.js";
-import { layoutFactsDag, type FactsFlowNodeData } from "./layout-dag.js";
+import { cn } from "../lib/utils.js";
+import { type FactsFlowNodeData, layoutFactsDag } from "./layout-dag.js";
 import type { FactsDagModel, FactsDagNode } from "./types.js";
 
 export type FactsDagViewProps = {
@@ -43,16 +42,25 @@ function FactNodeCard({ data, selected }: NodeProps<Node<FactsFlowNodeData>>) {
 			className={cn(
 				"flex h-full w-full flex-col justify-center rounded-md border px-2 py-1 text-left shadow-sm",
 				"border-border bg-card text-card-foreground",
-				data.highlighted && "border-amber-600/70 bg-amber-500/10 dark:border-amber-400/60",
+				data.highlighted &&
+					"border-amber-600/70 bg-amber-500/10 dark:border-amber-400/60",
 				(selected || data.selected) && "border-primary ring-2 ring-primary/40",
 			)}
 		>
-			<Handle type="target" position={Position.Top} className="!bg-muted-foreground" />
+			<Handle
+				type="target"
+				position={Position.Top}
+				className="!bg-muted-foreground"
+			/>
 			<span className="truncate text-[10px] uppercase tracking-wide text-muted-foreground">
 				{data.kind}
 			</span>
 			<span className="truncate text-xs font-medium">{data.label}</span>
-			<Handle type="source" position={Position.Bottom} className="!bg-muted-foreground" />
+			<Handle
+				type="source"
+				position={Position.Bottom}
+				className="!bg-muted-foreground"
+			/>
 		</div>
 	);
 }
@@ -121,7 +129,9 @@ export function FactsDagView({
 	);
 
 	return (
-		<div className={cn("h-[320px] w-full rounded-lg border border-border", className)}>
+		<div
+			className={cn("h-[320px] w-full rounded-lg border border-border", className)}
+		>
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}

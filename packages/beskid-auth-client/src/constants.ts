@@ -6,7 +6,12 @@ export const AUTH_API_VERSION = "v1";
 export const HANDOFF_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const HUB_USER_TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60;
 
-export const AUTH_APP_IDS = ["tracker", "nexus", "pckg", "platform-spec"] as const;
+export const AUTH_APP_IDS = [
+	"tracker",
+	"nexus",
+	"pckg",
+	"platform-spec",
+] as const;
 
 export const AUTH_APP_META: Record<
 	AuthAppId,

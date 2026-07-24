@@ -1,9 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-	resolveDagreGraph,
-	resolveDagreLayout,
-} from "./resolve-dagre.js";
+import { resolveDagreGraph, resolveDagreLayout } from "./resolve-dagre.js";
 
 describe("resolveDagreGraph", () => {
 	it("prefers the top-level Graph export (dagre v3)", () => {
@@ -25,9 +22,7 @@ describe("resolveDagreGraph", () => {
 			constructor() {}
 		};
 		expect(resolveDagreGraph({ default: { Graph } })).toBe(Graph);
-		expect(resolveDagreGraph({ default: { graphlib: { Graph } } })).toBe(
-			Graph,
-		);
+		expect(resolveDagreGraph({ default: { graphlib: { Graph } } })).toBe(Graph);
 	});
 
 	it("fails closed when Graph is missing (hoisted broken interop)", () => {

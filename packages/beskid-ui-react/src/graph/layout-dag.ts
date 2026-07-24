@@ -1,10 +1,7 @@
 import * as dagre from "@dagrejs/dagre";
 import type { Edge, Node } from "@xyflow/react";
 
-import {
-	resolveDagreGraph,
-	resolveDagreLayout,
-} from "./resolve-dagre.js";
+import { resolveDagreGraph, resolveDagreLayout } from "./resolve-dagre.js";
 import type { FactsDagLocation, FactsDagModel } from "./types.js";
 
 export type FactsFlowNodeData = {

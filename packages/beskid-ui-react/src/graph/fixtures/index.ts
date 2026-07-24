@@ -1,9 +1,8 @@
+import type { RepoEntry } from "../../explorer/types.js";
+import type { AstGraphModel, FactsDagModel } from "../types.js";
 import sampleAstJson from "./sample-ast.json";
 import sampleFactsJson from "./sample-facts.json";
 import sampleRepoJson from "./sample-repo.json";
-
-import type { AstGraphModel, FactsDagModel } from "../types.js";
-import type { RepoEntry } from "../../explorer/types.js";
 
 export const sampleAst = sampleAstJson as AstGraphModel;
 export const sampleFacts = sampleFactsJson as FactsDagModel;

@@ -1,5 +1,11 @@
-import type { ArticleDefaults, LayoutContractFile, LayoutPresetKey, SectionRule, WidgetSpec } from './schema';
-import { getPresetBase } from './presets';
+import { getPresetBase } from "./presets";
+import type {
+	ArticleDefaults,
+	LayoutContractFile,
+	LayoutPresetKey,
+	SectionRule,
+	WidgetSpec,
+} from "./schema";
 
 /** Later entries win so node `layout.json` can override preset section rules. */
 function dedupeSectionsLastWins(rules: SectionRule[]): SectionRule[] {
@@ -12,11 +18,17 @@ function dedupeSectionsLastWins(rules: SectionRule[]): SectionRule[] {
 	return out;
 }
 
-function mergeSections(a: SectionRule[] | undefined, b: SectionRule[] | undefined): SectionRule[] {
+function mergeSections(
+	a: SectionRule[] | undefined,
+	b: SectionRule[] | undefined,
+): SectionRule[] {
 	return dedupeSectionsLastWins([...(a ?? []), ...(b ?? [])]);
 }
 
-function mergeWidgets(a: WidgetSpec[] | undefined, b: WidgetSpec[] | undefined): WidgetSpec[] {
+function mergeWidgets(
+	a: WidgetSpec[] | undefined,
+	b: WidgetSpec[] | undefined,
+): WidgetSpec[] {
 	return [...(a ?? []), ...(b ?? [])];
 }
 
@@ -26,7 +38,10 @@ function mergeWidgets(a: WidgetSpec[] | undefined, b: WidgetSpec[] | undefined):
  */
 export function mergeLayoutContract(
 	node: LayoutContractFile,
-	options: { parent?: LayoutContractFile; presetFromExtends?: LayoutPresetKey } = {},
+	options: {
+		parent?: LayoutContractFile;
+		presetFromExtends?: LayoutPresetKey;
+	} = {},
 ): LayoutContractFile {
 	const chain: LayoutContractFile[] = [];
 
@@ -61,7 +76,9 @@ export function mergeLayoutContract(
 }
 
 /** Build `EffectiveLayout` view for scanners / UI. */
-export function toEffectiveLayout(merged: LayoutContractFile): import('./schema').EffectiveLayout {
+export function toEffectiveLayout(
+	merged: LayoutContractFile,
+): import("./schema").EffectiveLayout {
 	return {
 		...merged,
 		effectiveSections: dedupeSectionsLastWins(merged.sections ?? []),
@@ -82,7 +99,10 @@ export function mergeArticleDefaults(
 	if (!override) return { ...base };
 	return {
 		extends: override.extends ?? base.extends,
-		sections: dedupeSectionsLastWins([...(base.sections ?? []), ...(override.sections ?? [])]),
+		sections: dedupeSectionsLastWins([
+			...(base.sections ?? []),
+			...(override.sections ?? []),
+		]),
 		minSpecSections: override.minSpecSections ?? base.minSpecSections,
 		minMarkdownHeadings: override.minMarkdownHeadings ?? base.minMarkdownHeadings,
 		widgets: mergeWidgets(base.widgets, override.widgets),

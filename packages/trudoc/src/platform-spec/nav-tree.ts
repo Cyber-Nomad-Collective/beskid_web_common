@@ -1,4 +1,4 @@
-import type { LayoutLevel, PathClass } from '../layout/schema';
+import type { LayoutLevel, PathClass } from "../layout/schema";
 
 export type NavTreeLevel = LayoutLevel;
 
@@ -18,7 +18,7 @@ export type NavTreeDocRow = {
 };
 
 /** Domains shown in Starlight sidebar but omitted from hierarchy nav (meta / mapping). */
-export const SKIP_NAV_DOMAINS = new Set(['legacy-spec-mapping']);
+export const SKIP_NAV_DOMAINS = new Set(["legacy-spec-mapping"]);
 
 export function slugToHref(slug: string): string {
 	return `/${slug}/`;
@@ -26,28 +26,28 @@ export function slugToHref(slug: string): string {
 
 export function pathClassToNavLevel(cls: PathClass): NavTreeLevel | null {
 	switch (cls) {
-		case 'domain-root':
-			return 'root';
-		case 'domain':
-			return 'domain';
-		case 'area':
-			return 'area';
-		case 'feature':
-			return 'feature';
-		case 'article':
-			return 'article';
+		case "domain-root":
+			return "root";
+		case "domain":
+			return "domain";
+		case "area":
+			return "area";
+		case "feature":
+			return "feature";
+		case "article":
+			return "article";
 		default:
 			return null;
 	}
 }
 
 function parentSlugFor(slug: string, level: NavTreeLevel): string {
-	const parts = slug.split('/').filter(Boolean);
-	if (level === 'domain') return 'platform-spec';
-	if (level === 'area') return parts.slice(0, 2).join('/');
-	if (level === 'feature') return parts.slice(0, 3).join('/');
-	if (level === 'article') return parts.slice(0, -1).join('/');
-	return 'platform-spec';
+	const parts = slug.split("/").filter(Boolean);
+	if (level === "domain") return "platform-spec";
+	if (level === "area") return parts.slice(0, 2).join("/");
+	if (level === "feature") return parts.slice(0, 3).join("/");
+	if (level === "article") return parts.slice(0, -1).join("/");
+	return "platform-spec";
 }
 
 function sortChildrenRecursive(node: NavTreeNode): void {
@@ -62,19 +62,19 @@ function sortChildrenRecursive(node: NavTreeNode): void {
 export function buildNavTree(rows: NavTreeDocRow[]): NavTreeNode {
 	const sorted = [...rows].sort((a, b) => a.slug.localeCompare(b.slug));
 
-	const rootRow = sorted.find((r) => r.slug === 'platform-spec');
+	const rootRow = sorted.find((r) => r.slug === "platform-spec");
 	const root: NavTreeNode = {
-		slug: 'platform-spec',
-		href: '/platform-spec/',
-		title: rootRow?.title ?? 'Platform specification',
-		level: 'root',
+		slug: "platform-spec",
+		href: "/platform-spec/",
+		title: rootRow?.title ?? "Platform specification",
+		level: "root",
 		children: [],
 	};
 
-	const bySlug = new Map<string, NavTreeNode>([['platform-spec', root]]);
+	const bySlug = new Map<string, NavTreeNode>([["platform-spec", root]]);
 
 	for (const row of sorted) {
-		if (row.slug === 'platform-spec') {
+		if (row.slug === "platform-spec") {
 			root.title = row.title;
 			continue;
 		}
@@ -84,7 +84,7 @@ export function buildNavTree(rows: NavTreeDocRow[]): NavTreeNode {
 			href: row.href,
 			title: row.title,
 			level: row.level,
-			children: row.level === 'article' ? undefined : [],
+			children: row.level === "article" ? undefined : [],
 		};
 		bySlug.set(row.slug, node);
 
@@ -100,6 +100,6 @@ export function buildNavTree(rows: NavTreeDocRow[]): NavTreeNode {
 }
 
 export function shouldSkipPlatformSpecRel(relUnderSpec: string): boolean {
-	const domain = relUnderSpec.split('/').filter(Boolean)[0];
+	const domain = relUnderSpec.split("/").filter(Boolean)[0];
 	return domain != null && SKIP_NAV_DOMAINS.has(domain);
 }

@@ -43,12 +43,8 @@ function SettingsFieldRenderer<TValues extends Record<string, unknown>>({
 }: {
 	field: SettingsFieldDef<TValues>;
 }) {
-	const {
-		draft,
-		setFieldValue,
-		isFieldDisabled,
-		isFieldHidden,
-	} = useSettings<TValues>();
+	const { draft, setFieldValue, isFieldDisabled, isFieldHidden } =
+		useSettings<TValues>();
 
 	if (isFieldHidden(field.id)) {
 		return null;
@@ -141,7 +137,9 @@ function SettingsFieldRenderer<TValues extends Record<string, unknown>>({
 					<FieldDescription>{field.description}</FieldDescription>
 				) : null}
 			</FieldContent>
-			<div className={cn(field.kind === "switch" ? "flex items-center" : "w-full")}>
+			<div
+				className={cn(field.kind === "switch" ? "flex items-center" : "w-full")}
+			>
 				{control}
 			</div>
 		</Field>

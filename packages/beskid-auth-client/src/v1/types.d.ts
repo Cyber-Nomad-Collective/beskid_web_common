@@ -1,100 +1,100 @@
 /** OpenAPI v1 schema types (hand-maintained from openapi/v1/openapi.yaml). */
 export type AuthAppId = "tracker" | "nexus" | "pckg" | "platform-spec";
 export interface AuthUser {
-    login: string;
-    name: string | null;
-    avatarUrl: string;
+	login: string;
+	name: string | null;
+	avatarUrl: string;
 }
 export interface HealthResponse {
-    ok: true;
-    version: string;
+	ok: true;
+	version: string;
 }
 export interface MeResponse {
-    user: AuthUser;
-    isAdmin: boolean;
+	user: AuthUser;
+	isAdmin: boolean;
 }
 export interface AuthApp {
-    id: AuthAppId;
-    label: string;
-    description: string;
-    publicUrl: string;
-    loginUrl: string;
-    enabled?: boolean;
+	id: AuthAppId;
+	label: string;
+	description: string;
+	publicUrl: string;
+	loginUrl: string;
+	enabled?: boolean;
 }
 export interface AppsResponse {
-    apps: AuthApp[];
+	apps: AuthApp[];
 }
 /**
  * Public, non-secret view of an app's registration at the auth hub.
  * Consumers use this to decide whether pairing is required before login.
  */
 export interface AuthDiscovery {
-    app: AuthApp | null;
-    pairing: PairingStatusResponse;
-    health: HealthResponse;
+	app: AuthApp | null;
+	pairing: PairingStatusResponse;
+	health: HealthResponse;
 }
 export interface AdminStatusResponse {
-    onboarded: boolean;
-    oauthConfigured: boolean;
-    oauthSource?: "env" | "db" | "file" | "none";
-    hasSessionSecret: boolean;
-    hasSetupToken?: boolean;
-    appCount: number;
+	onboarded: boolean;
+	oauthConfigured: boolean;
+	oauthSource?: "env" | "db" | "file" | "none";
+	hasSessionSecret: boolean;
+	hasSetupToken?: boolean;
+	appCount: number;
 }
 export interface AdminSetupRequest {
-    setupToken?: string;
-    githubClientId: string;
-    githubClientSecret: string;
-    githubOAuthCallbackUrl: string;
-    adminGitHubLogins: string[];
-    apps?: Array<{
-        id: AuthAppId;
-        publicUrl: string;
-        enabled?: boolean;
-    }>;
+	setupToken?: string;
+	githubClientId: string;
+	githubClientSecret: string;
+	githubOAuthCallbackUrl: string;
+	adminGitHubLogins: string[];
+	apps?: Array<{
+		id: AuthAppId;
+		publicUrl: string;
+		enabled?: boolean;
+	}>;
 }
 export interface PairingRequestCreate {
-    appId: AuthAppId;
-    publicUrl: string;
+	appId: AuthAppId;
+	publicUrl: string;
 }
 export interface PairingRequestCreated {
-    requestId: string;
-    pairingCode: string;
-    expiresAt: string;
-    approveUrlTemplate: string;
+	requestId: string;
+	pairingCode: string;
+	expiresAt: string;
+	approveUrlTemplate: string;
 }
 export interface PairingApproveRequest {
-    code: string;
-    appId: AuthAppId;
-    publicUrl: string;
-    approverLogin: string;
-    approvalNonce?: string;
+	code: string;
+	appId: AuthAppId;
+	publicUrl: string;
+	approverLogin: string;
+	approvalNonce?: string;
 }
 export interface PairingApproveResponse {
-    /** Long-lived credential for this consumer app (store server-side only). */
-    serviceToken: string;
+	/** Long-lived credential for this consumer app (store server-side only). */
+	serviceToken: string;
 }
 export interface PairingStatusResponse {
-    appId: AuthAppId;
-    paired: boolean;
-    publicUrl?: string;
+	appId: AuthAppId;
+	paired: boolean;
+	publicUrl?: string;
 }
 export interface ErrorResponse {
-    error: string;
+	error: string;
 }
 export interface OkResponse {
-    ok: true;
+	ok: true;
 }
 export interface HandoffPayload {
-    app: AuthAppId;
-    /** Hub-side session id (GitHub token stays on the auth hub). */
-    sessionId: string;
-    login: string;
-    avatarUrl: string;
-    name: string | null;
-    /** Stable external identity (`github:<numeric-id>` for GitHub logins). */
-    subject: string | null;
-    /** JWT to send to the hub GitHub proxy (`Authorization: Bearer`). */
-    hubUserToken: string;
+	app: AuthAppId;
+	/** Hub-side session id (GitHub token stays on the auth hub). */
+	sessionId: string;
+	login: string;
+	avatarUrl: string;
+	name: string | null;
+	/** Stable external identity (`github:<numeric-id>` for GitHub logins). */
+	subject: string | null;
+	/** JWT to send to the hub GitHub proxy (`Authorization: Bearer`). */
+	hubUserToken: string;
 }
 //# sourceMappingURL=types.d.ts.map

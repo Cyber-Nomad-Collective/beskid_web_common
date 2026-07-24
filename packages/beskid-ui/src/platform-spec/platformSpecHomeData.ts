@@ -1,7 +1,12 @@
-import type { CollectionEntry } from 'astro:content';
-import { SKIP_NAV_DOMAINS } from '@cyber-nomad-collective/trudoc/platform-spec';
-import type { GitCommitRow, GitFileMeta, NavTreeNode, PlatformSpecGitMeta } from '@cyber-nomad-collective/trudoc/platform-spec';
-import { docEntryHref, normalizeDocSlug } from './specSlug';
+import type { CollectionEntry } from "astro:content";
+import type {
+	GitCommitRow,
+	GitFileMeta,
+	NavTreeNode,
+	PlatformSpecGitMeta,
+} from "@cyber-nomad-collective/trudoc/platform-spec";
+import { SKIP_NAV_DOMAINS } from "@cyber-nomad-collective/trudoc/platform-spec";
+import { docEntryHref, normalizeDocSlug } from "./specSlug";
 
 export type DomainNavCounts = {
 	areas: number;
@@ -33,9 +38,9 @@ function countSubtree(node: NavTreeNode): DomainNavCounts {
 	let features = 0;
 	let articles = 0;
 	for (const child of node.children ?? []) {
-		if (child.level === 'area') areas += 1;
-		if (child.level === 'feature') features += 1;
-		if (child.level === 'article') articles += 1;
+		if (child.level === "area") areas += 1;
+		if (child.level === "feature") features += 1;
+		if (child.level === "article") articles += 1;
 		const nested = countSubtree(child);
 		areas += nested.areas;
 		features += nested.features;
@@ -45,19 +50,25 @@ function countSubtree(node: NavTreeNode): DomainNavCounts {
 }
 
 /** Nav-tree counts per domain slug (`platform-spec/compiler`, …). */
-export function domainStatsFromNavTree(tree: NavTreeNode): Map<string, DomainNavCounts> {
+export function domainStatsFromNavTree(
+	tree: NavTreeNode,
+): Map<string, DomainNavCounts> {
 	const out = new Map<string, DomainNavCounts>();
 	for (const child of tree.children ?? []) {
-		if (child.level !== 'domain' || SKIP_NAV_DOMAINS.has(child.slug.split('/')[1] ?? '')) continue;
+		if (
+			child.level !== "domain" ||
+			SKIP_NAV_DOMAINS.has(child.slug.split("/")[1] ?? "")
+		)
+			continue;
 		out.set(child.slug, countSubtree(child));
 	}
 	return out;
 }
 
 export function standingCountsForDomain(
-	docs: CollectionEntry<'docs'>[],
+	docs: CollectionEntry<"docs">[],
 	domainSlug: string,
-	slugOf: (e: CollectionEntry<'docs'>) => string,
+	slugOf: (e: CollectionEntry<"docs">) => string,
 ): DomainStandingCounts {
 	let standard = 0;
 	let proposed = 0;
@@ -66,8 +77,8 @@ export function standingCountsForDomain(
 		const s = slugOf(e);
 		if (s !== domainSlug && !s.startsWith(prefix)) continue;
 		const status = (e.data as { status?: string }).status;
-		if (status === 'Standard') standard += 1;
-		else if (status === 'Proposed') proposed += 1;
+		if (status === "Standard") standard += 1;
+		else if (status === "Proposed") proposed += 1;
 	}
 	return { standard, proposed };
 }
@@ -85,56 +96,62 @@ export function mergeDomainTileStats(
 	};
 }
 
-export function domainTileBadges(stats: DomainTileStats): { label: string; variant: 'neutral' | 'accent' | 'muted' }[] {
-	const badges: { label: string; variant: 'neutral' | 'accent' | 'muted' }[] = [];
+export function domainTileBadges(
+	stats: DomainTileStats,
+): { label: string; variant: "neutral" | "accent" | "muted" }[] {
+	const badges: { label: string; variant: "neutral" | "accent" | "muted" }[] =
+		[];
 	if (stats.areas > 0) {
 		badges.push({
-			label: `${stats.areas} area${stats.areas === 1 ? '' : 's'}`,
-			variant: 'neutral',
+			label: `${stats.areas} area${stats.areas === 1 ? "" : "s"}`,
+			variant: "neutral",
 		});
 	}
 	if (stats.features > 0) {
 		badges.push({
-			label: `${stats.features} feature${stats.features === 1 ? '' : 's'}`,
-			variant: 'neutral',
+			label: `${stats.features} feature${stats.features === 1 ? "" : "s"}`,
+			variant: "neutral",
 		});
 	}
 	if (stats.standard > 0) {
 		badges.push({
 			label: `${stats.standard} Standard`,
-			variant: 'accent',
+			variant: "accent",
 		});
 	}
 	if (stats.proposed > 0) {
 		badges.push({
 			label: `${stats.proposed} Proposed`,
-			variant: 'muted',
+			variant: "muted",
 		});
 	}
 	if (stats.articles > 0 && badges.length < 4) {
 		badges.push({
-			label: `${stats.articles} article${stats.articles === 1 ? '' : 's'}`,
-			variant: 'muted',
+			label: `${stats.articles} article${stats.articles === 1 ? "" : "s"}`,
+			variant: "muted",
 		});
 	}
 	return badges.slice(0, 4);
 }
 
-function flattenNavForSearch(node: NavTreeNode, trail: string[]): PlatformSpecSearchItem[] {
+function flattenNavForSearch(
+	node: NavTreeNode,
+	trail: string[],
+): PlatformSpecSearchItem[] {
 	const title = node.title;
-	const nextTrail = node.level === 'root' ? trail : [...trail, title];
+	const nextTrail = node.level === "root" ? trail : [...trail, title];
 	const items: PlatformSpecSearchItem[] = [];
-	if (node.level !== 'root') {
+	if (node.level !== "root") {
 		items.push({
 			title,
 			href: node.href,
 			level: node.level,
-			subtitle: nextTrail.slice(0, -1).join(' › ') || 'Platform specification',
+			subtitle: nextTrail.slice(0, -1).join(" › ") || "Platform specification",
 		});
 	}
 	for (const child of node.children ?? []) {
-		if (child.level === 'domain') {
-			const domainKey = child.slug.split('/')[1] ?? '';
+		if (child.level === "domain") {
+			const domainKey = child.slug.split("/")[1] ?? "";
 			if (SKIP_NAV_DOMAINS.has(domainKey)) continue;
 		}
 		items.push(...flattenNavForSearch(child, nextTrail));
@@ -142,13 +159,19 @@ function flattenNavForSearch(node: NavTreeNode, trail: string[]): PlatformSpecSe
 	return items;
 }
 
-export function buildPlatformSpecSearchIndex(tree: NavTreeNode): PlatformSpecSearchItem[] {
-	return flattenNavForSearch(tree, []).sort((a, b) => a.title.localeCompare(b.title));
+export function buildPlatformSpecSearchIndex(
+	tree: NavTreeNode,
+): PlatformSpecSearchItem[] {
+	return flattenNavForSearch(tree, []).sort((a, b) =>
+		a.title.localeCompare(b.title),
+	);
 }
 
 export function websitePathToDocHref(websitePath: string): string | null {
-	if (!websitePath.startsWith('src/content/docs/')) return null;
-	const slug = normalizeDocSlug(websitePath.replace(/^src\/content\/docs\//, ''));
+	if (!websitePath.startsWith("src/content/docs/")) return null;
+	const slug = normalizeDocSlug(
+		websitePath.replace(/^src\/content\/docs\//, ""),
+	);
 	return docEntryHref(slug);
 }
 
@@ -178,14 +201,14 @@ export function collectLatestSpecChanges(
 
 /** Website-relative content paths (`src/content/docs/...`) → page title. */
 export function docTitlesByWebsitePath(
-	docs: CollectionEntry<'docs'>[],
+	docs: CollectionEntry<"docs">[],
 	websitePathOf: (slug: string) => string,
-	slugOf: (e: CollectionEntry<'docs'>) => string,
+	slugOf: (e: CollectionEntry<"docs">) => string,
 ): Map<string, string> {
 	const map = new Map<string, string>();
 	for (const e of docs) {
 		const slug = slugOf(e);
-		if (!slug.startsWith('platform-spec')) continue;
+		if (!slug.startsWith("platform-spec")) continue;
 		const title = String((e.data as { title?: string }).title ?? slug);
 		map.set(websitePathOf(slug), title);
 	}
@@ -201,7 +224,11 @@ export function countNavTreeTotals(tree: NavTreeNode): {
 	let areas = 0;
 	let features = 0;
 	for (const domain of tree.children ?? []) {
-		if (domain.level !== 'domain' || SKIP_NAV_DOMAINS.has(domain.slug.split('/')[1] ?? '')) continue;
+		if (
+			domain.level !== "domain" ||
+			SKIP_NAV_DOMAINS.has(domain.slug.split("/")[1] ?? "")
+		)
+			continue;
 		domains += 1;
 		const c = countSubtree(domain);
 		areas += c.areas;

@@ -1,13 +1,12 @@
-import { createElement } from "react";
-import { createRoot } from "react-dom/client";
-
 import {
+	type AstGraphModel,
+	type FactsDagModel,
 	LinkedAstFactsView,
 	sampleAst,
 	sampleFacts,
-	type AstGraphModel,
-	type FactsDagModel,
 } from "@cyber-nomad-collective/beskid-ui-react/graph";
+import { createElement } from "react";
+import { createRoot } from "react-dom/client";
 
 type ShellPayload = {
 	ast?: AstGraphModel;
@@ -35,8 +34,7 @@ function mountLinkedAstFacts(root: HTMLElement) {
 	const mount = root.querySelector<HTMLElement>("[data-linked-ast-facts-mount]");
 	if (!mount) return;
 
-	const githubRepo =
-		payload.githubRepo ?? "Cyber-Nomad-Collective/beskid";
+	const githubRepo = payload.githubRepo ?? "Cyber-Nomad-Collective/beskid";
 	const githubRef = payload.githubRef ?? "main";
 
 	createRoot(mount).render(

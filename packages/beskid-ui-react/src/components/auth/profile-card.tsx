@@ -1,9 +1,5 @@
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.js";
 import { Badge } from "../ui/badge.js";
-import {
-	Avatar,
-	AvatarFallback,
-	AvatarImage,
-} from "../ui/avatar.js";
 import {
 	Card,
 	CardContent,

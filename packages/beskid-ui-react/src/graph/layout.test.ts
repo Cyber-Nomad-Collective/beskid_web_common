@@ -1,11 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { sampleAst, sampleFacts } from "./fixtures/index.js";
-import {
-	factIdsForAstNode,
-	findAstNode,
-	layoutAstTree,
-} from "./layout-ast.js";
+import { factIdsForAstNode, findAstNode, layoutAstTree } from "./layout-ast.js";
 import { layoutFactsDag } from "./layout-dag.js";
 
 describe("layoutAstTree", () => {

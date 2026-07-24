@@ -3,15 +3,18 @@ export function docAreaFromPathname(pathname: string): {
 	platformSpec: boolean;
 	book: boolean;
 } {
-	const path = pathname.replace(/\/+$/, '') || '/';
+	const path = pathname.replace(/\/+$/, "") || "/";
 	return {
-		platformSpec: path === '/platform-spec' || path.startsWith('/platform-spec/'),
-		book: path === '/book' || path.startsWith('/book/'),
+		platformSpec: path === "/platform-spec" || path.startsWith("/platform-spec/"),
+		book: path === "/book" || path.startsWith("/book/"),
 	};
 }
 
-export function applyDocAreaHtmlAttrs(pathname: string, root: HTMLElement = document.documentElement): void {
+export function applyDocAreaHtmlAttrs(
+	pathname: string,
+	root: HTMLElement = document.documentElement,
+): void {
 	const { platformSpec, book } = docAreaFromPathname(pathname);
-	root.toggleAttribute('data-platform-spec', platformSpec);
-	root.toggleAttribute('data-book', book);
+	root.toggleAttribute("data-platform-spec", platformSpec);
+	root.toggleAttribute("data-book", book);
 }

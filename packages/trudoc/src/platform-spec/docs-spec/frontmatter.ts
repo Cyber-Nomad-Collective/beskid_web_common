@@ -1,3 +1,5 @@
+import { stringify } from "yaml";
+import type { z } from "zod";
 import {
 	adrSpecSchema,
 	areaSpecSchema,
@@ -5,14 +7,12 @@ import {
 	domainSpecSchema,
 	featureSpecSchema,
 	platformSpecNodeSchema,
-} from '../../schema/content';
-import { stringify } from 'yaml';
-import type { z } from 'zod';
+} from "../../schema/content";
 
 export function parseFrontmatterJson(json: string): Record<string, unknown> {
 	try {
 		const parsed = JSON.parse(json) as unknown;
-		if (!parsed || typeof parsed !== 'object') return {};
+		if (!parsed || typeof parsed !== "object") return {};
 		return parsed as Record<string, unknown>;
 	} catch {
 		return {};
@@ -37,7 +37,7 @@ export function validateFrontmatterForLevel(
 	return {
 		ok: false,
 		errors: result.error.issues.map(
-			(i) => `${i.path.join('.') || 'frontmatter'}: ${i.message}`,
+			(i) => `${i.path.join(".") || "frontmatter"}: ${i.message}`,
 		),
 	};
 }
@@ -53,6 +53,6 @@ export function buildMdxFile(
 	body: string,
 ): string {
 	const yaml = stringify(frontmatter).trimEnd();
-	const normalizedBody = body.startsWith('\n') ? body : `\n${body}`;
-	return `---\n${yaml}\n---${normalizedBody.endsWith('\n') ? normalizedBody : `${normalizedBody}\n`}`;
+	const normalizedBody = body.startsWith("\n") ? body : `\n${body}`;
+	return `---\n${yaml}\n---${normalizedBody.endsWith("\n") ? normalizedBody : `${normalizedBody}\n`}`;
 }

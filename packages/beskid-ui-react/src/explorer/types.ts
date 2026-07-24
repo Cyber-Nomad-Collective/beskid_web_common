@@ -18,7 +18,9 @@ export type OpenInEditorTarget = {
 	githubRef?: string;
 };
 
-export type ListChildrenFn = (path: string) => Promise<RepoEntry[]> | RepoEntry[];
+export type ListChildrenFn = (
+	path: string,
+) => Promise<RepoEntry[]> | RepoEntry[];
 
 /** @deprecated Prefer ListChildrenFn */
 export type ListRepoChildren = ListChildrenFn;

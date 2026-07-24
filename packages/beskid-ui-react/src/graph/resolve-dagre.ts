@@ -17,7 +17,11 @@ export type DagreGraphInstance = {
 	setGraph: (label: Record<string, unknown>) => unknown;
 	setDefaultEdgeLabel: (factory: () => Record<string, unknown>) => unknown;
 	setNode: (id: string, label: Record<string, unknown>) => unknown;
-	setEdge: (from: string, to: string, label?: Record<string, unknown>) => unknown;
+	setEdge: (
+		from: string,
+		to: string,
+		label?: Record<string, unknown>,
+	) => unknown;
 	hasNode: (id: string) => boolean;
 	node: (id: string) => { x?: number; y?: number } | undefined;
 };
@@ -47,7 +51,9 @@ function asLayout(value: unknown): DagreLayout | null {
 	return typeof value === "function" ? (value as DagreLayout) : null;
 }
 
-export function resolveDagreGraph(mod: DagreModuleShape): DagreGraphConstructor {
+export function resolveDagreGraph(
+	mod: DagreModuleShape,
+): DagreGraphConstructor {
 	const GraphCtor =
 		asConstructor(mod.Graph) ??
 		asConstructor(mod.default?.Graph) ??
@@ -63,8 +69,7 @@ export function resolveDagreGraph(mod: DagreModuleShape): DagreGraphConstructor 
 }
 
 export function resolveDagreLayout(mod: DagreModuleShape): DagreLayout {
-	const layoutFn =
-		asLayout(mod.layout) ?? asLayout(mod.default?.layout);
+	const layoutFn = asLayout(mod.layout) ?? asLayout(mod.default?.layout);
 
 	if (!layoutFn) {
 		throw new Error(

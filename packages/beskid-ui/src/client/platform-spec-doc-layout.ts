@@ -1,10 +1,14 @@
-import { onPageNavigation } from './view-transition-lifecycle';
+import { onPageNavigation } from "./view-transition-lifecycle";
 
 function mountPlatformSpecDocSplit() {
-	const layouts = document.querySelectorAll<HTMLElement>('[data-platform-spec-doc-split]');
+	const layouts = document.querySelectorAll<HTMLElement>(
+		"[data-platform-spec-doc-split]",
+	);
 	for (const layout of layouts) {
-		if (layout.dataset.platformSpecDocMounted === 'true') continue;
-		const target = layout.querySelector<HTMLElement>('[data-platform-spec-doc-content-target]');
+		if (layout.dataset.platformSpecDocMounted === "true") continue;
+		const target = layout.querySelector<HTMLElement>(
+			"[data-platform-spec-doc-content-target]",
+		);
 		const parent = layout.parentElement;
 		if (!target || !parent) continue;
 		let cursor = layout.nextSibling;
@@ -18,14 +22,16 @@ function mountPlatformSpecDocSplit() {
 			target.appendChild(cursor);
 			cursor = next;
 		}
-		layout.dataset.platformSpecDocMounted = 'true';
+		layout.dataset.platformSpecDocMounted = "true";
 	}
 }
 
 function initPlatformSpecDocSplit() {
 	mountPlatformSpecDocSplit();
 	// Content must be in the first panel before we force Current document on article pages.
-	import('./platform-spec-doc-tabs.ts').then((m) => m.selectCurrentDocumentTab());
+	import("./platform-spec-doc-tabs.ts").then((m) =>
+		m.selectCurrentDocumentTab(),
+	);
 }
 
 onPageNavigation(initPlatformSpecDocSplit);

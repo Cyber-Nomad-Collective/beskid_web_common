@@ -1,5 +1,5 @@
 import { type Logger } from "pino";
-import { Registry, Counter, Histogram } from "prom-client";
+import { Counter, Histogram, Registry } from "prom-client";
 export interface ObservabilityOptions {
     service: string;
 }

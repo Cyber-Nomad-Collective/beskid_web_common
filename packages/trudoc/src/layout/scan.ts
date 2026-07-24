@@ -1,58 +1,71 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import type { LayoutContractFile, LayoutLevel, LayoutPresetKey, LayoutTreeNode } from './schema';
-import { classifyPlatformSpecRel, type PathClass } from './path-class';
-import { effectiveLayoutSchema, parseLayoutContractJson } from './schema';
-import { mergeArticleDefaults, mergeLayoutContract, toEffectiveLayout } from './merge';
-import { defaultArticleDefaultsForFeature, getPresetBase } from './presets';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+	mergeArticleDefaults,
+	mergeLayoutContract,
+	toEffectiveLayout,
+} from "./merge";
+import { classifyPlatformSpecRel, type PathClass } from "./path-class";
+import { defaultArticleDefaultsForFeature, getPresetBase } from "./presets";
+import type {
+	LayoutContractFile,
+	LayoutLevel,
+	LayoutPresetKey,
+	LayoutTreeNode,
+} from "./schema";
+import { effectiveLayoutSchema, parseLayoutContractJson } from "./schema";
 
 const SPEC_SEGMENT = `${path.sep}src${path.sep}content${path.sep}docs${path.sep}platform-spec`;
 
-export type { PathClass } from './path-class';
-export { classifyPlatformSpecRel } from './path-class';
+export type { PathClass } from "./path-class";
+export { classifyPlatformSpecRel } from "./path-class";
 
 export function filePathToDocSlug(absFile: string, docsRoot: string): string {
-	const rel = path.relative(docsRoot, absFile).split(path.sep).join('/');
-	return rel
-		.replace(/\.(md|mdx)$/i, '')
-		.replace(/\/index$/, '');
+	const rel = path.relative(docsRoot, absFile).split(path.sep).join("/");
+	return rel.replace(/\.(md|mdx)$/i, "").replace(/\/index$/, "");
 }
 
 function readJsonIfExists(file: string): unknown | null {
 	if (!fs.existsSync(file)) return null;
-	const raw = fs.readFileSync(file, 'utf8');
+	const raw = fs.readFileSync(file, "utf8");
 	return JSON.parse(raw);
 }
 
 function levelForClass(c: PathClass): LayoutLevel {
 	switch (c) {
-		case 'domain-root':
-			return 'root';
-		case 'domain':
-			return 'domain';
-		case 'area':
-			return 'area';
-		case 'feature':
-			return 'feature';
-		case 'article':
-		case 'adr':
-			return 'article';
-		case 'component':
-			return 'component';
+		case "domain-root":
+			return "root";
+		case "domain":
+			return "domain";
+		case "area":
+			return "area";
+		case "feature":
+			return "feature";
+		case "article":
+		case "adr":
+			return "article";
+		case "component":
+			return "component";
 		default:
-			return 'feature';
+			return "feature";
 	}
 }
 
-export function inferDefaultPreset(c: PathClass, rawBody: string): LayoutPresetKey {
-	if (c === 'domain-root') return 'root-default';
-	if (c === 'domain') return 'domain-default';
-	if (c === 'area') return 'area-default';
-	if (c === 'article' || c === 'adr') return 'article-default';
-	if (c === 'feature') {
-		if (rawBody.includes('id="what-this-feature-specifies"') || rawBody.includes("id='what-this-feature-specifies'")) {
-			return 'feature-contract-default';
+export function inferDefaultPreset(
+	c: PathClass,
+	rawBody: string,
+): LayoutPresetKey {
+	if (c === "domain-root") return "root-default";
+	if (c === "domain") return "domain-default";
+	if (c === "area") return "area-default";
+	if (c === "article" || c === "adr") return "article-default";
+	if (c === "feature") {
+		if (
+			rawBody.includes('id="what-this-feature-specifies"') ||
+			rawBody.includes("id='what-this-feature-specifies'")
+		) {
+			return "feature-contract-default";
 		}
 		if (
 			rawBody.includes('id="features"') ||
@@ -60,12 +73,12 @@ export function inferDefaultPreset(c: PathClass, rawBody: string): LayoutPresetK
 			rawBody.includes('id="feature-index"') ||
 			rawBody.includes("id='feature-index'")
 		) {
-			return 'feature-area-hub-default';
+			return "feature-area-hub-default";
 		}
-		return 'feature-hub-default';
+		return "feature-hub-default";
 	}
-	if (c === 'component') return 'feature-hub-default';
-	return 'feature-hub-default';
+	if (c === "component") return "feature-hub-default";
+	return "feature-hub-default";
 }
 
 function loadLayoutOrThrow(layoutPath: string): LayoutContractFile {
@@ -78,9 +91,9 @@ function loadLayoutOrThrow(layoutPath: string): LayoutContractFile {
 
 function safeReadFile(p: string): string {
 	try {
-		return fs.readFileSync(p, 'utf8');
+		return fs.readFileSync(p, "utf8");
 	} catch {
-		return '';
+		return "";
 	}
 }
 
@@ -100,30 +113,35 @@ export function walkMarkdownFiles(dir: string): string[] {
  * Expects each structural node to have `layout.json` (and optional `<stem>.layout.json` for articles).
  */
 export function buildLayoutTree(siteRoot: string): LayoutTreeNode[] {
-	const docsRoot = path.join(siteRoot, 'src', 'content', 'docs');
-	const specRoot = path.join(docsRoot, 'platform-spec');
+	const docsRoot = path.join(siteRoot, "src", "content", "docs");
+	const specRoot = path.join(docsRoot, "platform-spec");
 	const files = walkMarkdownFiles(specRoot);
 	const nodes: LayoutTreeNode[] = [];
 
 	/** featureDir -> merged feature layout + preset used (needed for article defaults). */
-	const featureLayoutCache = new Map<string, { merged: LayoutContractFile; preset: LayoutPresetKey }>();
+	const featureLayoutCache = new Map<
+		string,
+		{ merged: LayoutContractFile; preset: LayoutPresetKey }
+	>();
 
 	for (const abs of files) {
-		const relFromDocs = path.relative(docsRoot, abs).split(path.sep).join('/');
-		if (!relFromDocs.startsWith('platform-spec/')) continue;
+		const relFromDocs = path.relative(docsRoot, abs).split(path.sep).join("/");
+		if (!relFromDocs.startsWith("platform-spec/")) continue;
 
-		const cls = classifyPlatformSpecRel(relFromDocs.slice('platform-spec/'.length));
-		if (cls === 'legacy-or-bridge' || cls === 'component') continue;
+		const cls = classifyPlatformSpecRel(
+			relFromDocs.slice("platform-spec/".length),
+		);
+		if (cls === "legacy-or-bridge" || cls === "component") continue;
 
 		const slug = filePathToDocSlug(abs, docsRoot);
 		const body = safeReadFile(abs);
 		const level = levelForClass(cls);
 
-		if (cls === 'article' || cls === 'adr') {
+		if (cls === "article" || cls === "adr") {
 			const dir = path.dirname(abs);
-			const featureDir = cls === 'adr' ? path.dirname(dir) : dir;
-			const stem = path.basename(abs).replace(/\.(md|mdx)$/i, '');
-			const featureLayoutPath = path.join(featureDir, 'layout.json');
+			const featureDir = cls === "adr" ? path.dirname(dir) : dir;
+			const stem = path.basename(abs).replace(/\.(md|mdx)$/i, "");
+			const featureLayoutPath = path.join(featureDir, "layout.json");
 			const sidecar = path.join(dir, `${stem}.layout.json`);
 
 			let featureMerged: LayoutContractFile;
@@ -134,9 +152,17 @@ export function buildLayoutTree(siteRoot: string): LayoutTreeNode[] {
 				fpreset = cached.preset;
 			} else {
 				const fl = loadLayoutOrThrow(featureLayoutPath);
-				fpreset = fl.extends ?? inferDefaultPreset('feature', safeReadFile(path.join(featureDir, 'index.mdx')));
+				fpreset =
+					fl.extends ??
+					inferDefaultPreset(
+						"feature",
+						safeReadFile(path.join(featureDir, "index.mdx")),
+					);
 				featureMerged = mergeLayoutContract(fl, { presetFromExtends: fpreset });
-				featureLayoutCache.set(featureDir, { merged: featureMerged, preset: fpreset });
+				featureLayoutCache.set(featureDir, {
+					merged: featureMerged,
+					preset: fpreset,
+				});
 			}
 
 			const ad = mergeArticleDefaults(
@@ -151,9 +177,9 @@ export function buildLayoutTree(siteRoot: string): LayoutTreeNode[] {
 				widgets: ad.widgets,
 				documentStructure: ad.documentStructure,
 			};
-			const presetKey = ad.extends ?? 'article-default';
+			const presetKey = ad.extends ?? "article-default";
 			const baseArticle = mergeLayoutContract(
-				{ version: 1, level: 'article', ...adPartial } as LayoutContractFile,
+				{ version: 1, level: "article", ...adPartial } as LayoutContractFile,
 				{ presetFromExtends: presetKey },
 			);
 
@@ -168,14 +194,19 @@ export function buildLayoutTree(siteRoot: string): LayoutTreeNode[] {
 				});
 			}
 
-			const effective = effectiveLayoutSchema.parse(toEffectiveLayout(finalMerged));
+			const effective = effectiveLayoutSchema.parse(
+				toEffectiveLayout(finalMerged),
+			);
 			nodes.push({
 				slug,
 				contentPath: relFromDocs,
-				level: cls === 'adr' ? 'article' : 'article',
+				level: cls === "adr" ? "article" : "article",
 				layoutPath,
 				rawLayout: fs.existsSync(sidecar)
-					? parseLayoutContractJson(JSON.parse(fs.readFileSync(sidecar, 'utf8')), sidecar)
+					? parseLayoutContractJson(
+							JSON.parse(fs.readFileSync(sidecar, "utf8")),
+							sidecar,
+						)
 					: undefined,
 				effective,
 			});
@@ -183,13 +214,13 @@ export function buildLayoutTree(siteRoot: string): LayoutTreeNode[] {
 		}
 
 		const dir = path.dirname(abs);
-		const layoutPath = path.join(dir, 'layout.json');
+		const layoutPath = path.join(dir, "layout.json");
 		const rawLayout = loadLayoutOrThrow(layoutPath);
 		const inferred = inferDefaultPreset(cls, body);
 		const preset = rawLayout.extends ?? inferred;
 		const merged = mergeLayoutContract(rawLayout, { presetFromExtends: preset });
 
-		if (cls === 'feature') {
+		if (cls === "feature") {
 			const fp = rawLayout.extends ?? inferDefaultPreset(cls, body);
 			featureLayoutCache.set(dir, { merged, preset: fp });
 		}
@@ -219,10 +250,10 @@ export function resolveSiteRoot(fromImportMetaUrl: string): string {
 	if (env) return path.resolve(env);
 	const scriptDir = path.dirname(fileURLToPath(fromImportMetaUrl));
 	const base = path.basename(scriptDir);
-	if (base === 'scripts') {
+	if (base === "scripts") {
 		return path.dirname(scriptDir);
 	}
-	if (base === 'cli') {
+	if (base === "cli") {
 		return process.cwd();
 	}
 	return process.cwd();

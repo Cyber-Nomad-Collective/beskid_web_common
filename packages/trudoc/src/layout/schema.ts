@@ -1,57 +1,64 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 /** Declared in each node’s `layout.json` (and root). */
-export const layoutLevelSchema = z.enum(['root', 'domain', 'area', 'component', 'feature', 'article']);
+export const layoutLevelSchema = z.enum([
+	"root",
+	"domain",
+	"area",
+	"component",
+	"feature",
+	"article",
+]);
 
 export type LayoutLevel = z.infer<typeof layoutLevelSchema>;
 
 /** Built-in preset keys resolved in code (DRY defaults). */
 export const layoutPresetKeySchema = z.enum([
-	'root-default',
-	'domain-default',
-	'area-default',
-	'area-sparse',
-	'feature-contract-default',
-	'feature-hub-default',
-	'feature-area-hub-default',
-	'article-default',
+	"root-default",
+	"domain-default",
+	"area-default",
+	"area-sparse",
+	"feature-contract-default",
+	"feature-hub-default",
+	"feature-area-hub-default",
+	"article-default",
 ]);
 
 export type LayoutPresetKey = z.infer<typeof layoutPresetKeySchema>;
 
 /** Classifies a platform-spec doc path segment layout (no Node deps — safe for client bundles). */
 export type PathClass =
-	| 'domain-root'
-	| 'domain'
-	| 'area'
-	| 'feature'
-	| 'article'
-	| 'adr'
-	| 'component'
-	| 'legacy-or-bridge';
+	| "domain-root"
+	| "domain"
+	| "area"
+	| "feature"
+	| "article"
+	| "adr"
+	| "component"
+	| "legacy-or-bridge";
 
 const sectionRuleSchema = z.object({
 	id: z.string().min(1),
 	required: z.boolean().default(true),
 	/** How to match this section in the MDX/Markdown body. */
-	kind: z.enum(['specSection', 'markdownHeading']).default('specSection'),
+	kind: z.enum(["specSection", "markdownHeading"]).default("specSection"),
 });
 
 export type SectionRule = z.infer<typeof sectionRuleSchema>;
 
-export const documentStructureStepSchema = z.discriminatedUnion('kind', [
+export const documentStructureStepSchema = z.discriminatedUnion("kind", [
 	z.object({
-		kind: z.literal('specSection'),
+		kind: z.literal("specSection"),
 		id: z.string().min(1),
 		required: z.boolean().default(true),
 	}),
 	z.object({
-		kind: z.literal('markdownHeading'),
+		kind: z.literal("markdownHeading"),
 		slug: z.string().min(1),
 		required: z.boolean().default(true),
 	}),
 	z.object({
-		kind: z.literal('component'),
+		kind: z.literal("component"),
 		name: z.string().min(1),
 		required: z.boolean().default(false),
 	}),
@@ -75,27 +82,33 @@ export const childArticlesConstraintSchema = z.object({
 	requireYamlTitle: z.boolean().optional(),
 });
 
-export type ChildArticlesConstraint = z.infer<typeof childArticlesConstraintSchema>;
+export type ChildArticlesConstraint = z.infer<
+	typeof childArticlesConstraintSchema
+>;
 
 const domainTilesPropsSchema = z.object({
 	pathPrefix: z.string().min(1),
-	heading: z.string().default('Explore'),
+	heading: z.string().default("Explore"),
 });
 
 /** v1: two-column only nests `domainTiles` (no recursion) — enough for common hub layouts. */
 const twoColumnPropsSchema = z.object({
-	gap: z.enum(['sm', 'md', 'lg']).default('md'),
-	left: z.array(z.object({ type: z.literal('domainTiles'), props: domainTilesPropsSchema })),
-	right: z.array(z.object({ type: z.literal('domainTiles'), props: domainTilesPropsSchema })),
+	gap: z.enum(["sm", "md", "lg"]).default("md"),
+	left: z.array(
+		z.object({ type: z.literal("domainTiles"), props: domainTilesPropsSchema }),
+	),
+	right: z.array(
+		z.object({ type: z.literal("domainTiles"), props: domainTilesPropsSchema }),
+	),
 });
 
-export const widgetSpecSchema = z.discriminatedUnion('type', [
+export const widgetSpecSchema = z.discriminatedUnion("type", [
 	z.object({
-		type: z.literal('domainTiles'),
+		type: z.literal("domainTiles"),
 		props: domainTilesPropsSchema,
 	}),
 	z.object({
-		type: z.literal('twoColumn'),
+		type: z.literal("twoColumn"),
 		props: twoColumnPropsSchema,
 	}),
 ]);
@@ -169,7 +182,7 @@ export type LayoutTreeNode = z.infer<typeof layoutTreeNodeSchema>;
 
 export const diagnosticSchema = z.object({
 	code: z.string(),
-	severity: z.enum(['error', 'warning', 'info']),
+	severity: z.enum(["error", "warning", "info"]),
 	slug: z.string(),
 	message: z.string(),
 	detail: z.string().optional(),
@@ -188,7 +201,7 @@ export const completenessReportSchema = z.object({
 		z.object({
 			slug: z.string(),
 			level: layoutLevelSchema,
-			status: z.enum(['ok', 'warn', 'fail']),
+			status: z.enum(["ok", "warn", "fail"]),
 			sections: z.array(
 				z.object({
 					id: z.string(),
@@ -208,10 +221,15 @@ export const completenessReportSchema = z.object({
 
 export type CompletenessReport = z.infer<typeof completenessReportSchema>;
 
-export function parseLayoutContractJson(raw: unknown, context: string): LayoutContractFile {
+export function parseLayoutContractJson(
+	raw: unknown,
+	context: string,
+): LayoutContractFile {
 	const parsed = layoutContractFileSchema.safeParse(raw);
 	if (!parsed.success) {
-		const msg = parsed.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ');
+		const msg = parsed.error.issues
+			.map((i) => `${i.path.join(".")}: ${i.message}`)
+			.join("; ");
 		throw new Error(`${context}: invalid layout.json — ${msg}`);
 	}
 	return parsed.data;

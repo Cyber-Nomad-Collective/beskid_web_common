@@ -2,12 +2,12 @@
 
 import {
 	createContext,
+	type ReactNode,
 	useCallback,
 	useContext,
 	useEffect,
 	useMemo,
 	useState,
-	type ReactNode,
 } from "react";
 
 import type { SettingsRegistry } from "./types.js";
@@ -109,10 +109,7 @@ export function SettingsProvider<TValues extends Record<string, unknown>>({
 		});
 	}, [defaultSectionId, registry]);
 
-	const isDirty = useMemo(
-		() => !valuesEqual(values, draft),
-		[values, draft],
-	);
+	const isDirty = useMemo(() => !valuesEqual(values, draft), [values, draft]);
 
 	const setFieldValue = useCallback(
 		<K extends keyof TValues & string>(fieldId: K, value: TValues[K]) => {
@@ -206,9 +203,7 @@ export function SettingsProvider<TValues extends Record<string, unknown>>({
 
 	return (
 		<SettingsContext.Provider
-			value={
-				contextValue as SettingsContextValue<Record<string, unknown>>
-			}
+			value={contextValue as SettingsContextValue<Record<string, unknown>>}
 		>
 			{children}
 		</SettingsContext.Provider>

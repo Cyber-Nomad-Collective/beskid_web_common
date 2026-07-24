@@ -5,6 +5,7 @@ export {
 	AUTH_HUB_ISSUER,
 	HANDOFF_TTL_SECONDS,
 } from "./constants.js";
+export type { IssueHandoffInput } from "./handoff.js";
 export {
 	buildAccountUrl,
 	buildHandoffFinishUrl,
@@ -14,7 +15,6 @@ export {
 	issueHandoffToken,
 	verifyHandoffToken,
 } from "./handoff.js";
-export type { IssueHandoffInput } from "./handoff.js";
-export { BeskidAuthClient } from "./v1/client.js";
 export type { BeskidAuthClientOptions } from "./v1/client.js";
+export { BeskidAuthClient } from "./v1/client.js";
 export type * from "./v1/types.js";

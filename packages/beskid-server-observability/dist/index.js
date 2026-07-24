@@ -1,5 +1,5 @@
 import pino from "pino";
-import { Registry, collectDefaultMetrics, Counter, Histogram, } from "prom-client";
+import { Counter, collectDefaultMetrics, Histogram, Registry, } from "prom-client";
 const PINO_LEVELS = new Set([
     "fatal",
     "error",

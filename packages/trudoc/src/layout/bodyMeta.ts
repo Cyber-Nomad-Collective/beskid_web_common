@@ -34,21 +34,29 @@ function slugifyTitle(title: string): string {
 	return title
 		.toLowerCase()
 		.trim()
-		.replace(/\s+/g, '-')
-		.replace(/[^a-z0-9-]/g, '');
+		.replace(/\s+/g, "-")
+		.replace(/[^a-z0-9-]/g, "");
 }
 
-export function hasSpecSection(signals: BodySignals, sectionId: string): boolean {
+export function hasSpecSection(
+	signals: BodySignals,
+	sectionId: string,
+): boolean {
 	if (signals.specSectionIds.has(sectionId)) return true;
 	if (signals.specSectionTitles.has(sectionId)) return true;
 	return false;
 }
 
 /** Treat `feature-index` as satisfying a `features` section rule (and vice versa). */
-export function satisfiesSpecSectionRule(signals: BodySignals, sectionId: string): boolean {
+export function satisfiesSpecSectionRule(
+	signals: BodySignals,
+	sectionId: string,
+): boolean {
 	if (hasSpecSection(signals, sectionId)) return true;
-	if (sectionId === 'features' && hasSpecSection(signals, 'feature-index')) return true;
-	if (sectionId === 'feature-index' && hasSpecSection(signals, 'features')) return true;
+	if (sectionId === "features" && hasSpecSection(signals, "feature-index"))
+		return true;
+	if (sectionId === "feature-index" && hasSpecSection(signals, "features"))
+		return true;
 	return false;
 }
 

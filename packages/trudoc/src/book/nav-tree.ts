@@ -31,18 +31,22 @@ export function slugToHref(slug: string): string {
  */
 export function docFilePathToSlug(absFile: string, docsRoot: string): string {
 	const rel = absFile
-		.replace(/\\/g, '/')
-		.replace(docsRoot.replace(/\\/g, '/').replace(/\/?$/, '/'), '')
-		.replace(/^\//, '');
-	const baseName = rel.split('/').pop()?.replace(/\.(md|mdx)$/i, '') ?? '';
-	let slug = rel.replace(/\.(md|mdx)$/i, '');
+		.replace(/\\/g, "/")
+		.replace(docsRoot.replace(/\\/g, "/").replace(/\/?$/, "/"), "")
+		.replace(/^\//, "");
+	const baseName =
+		rel
+			.split("/")
+			.pop()
+			?.replace(/\.(md|mdx)$/i, "") ?? "";
+	const slug = rel.replace(/\.(md|mdx)$/i, "");
 	if (/^index$/i.test(baseName)) {
-		return slug.replace(/\/index$/i, '');
+		return slug.replace(/\/index$/i, "");
 	}
-	const parts = slug.split('/');
-	const last = parts[parts.length - 1] ?? '';
+	const parts = slug.split("/");
+	const last = parts[parts.length - 1] ?? "";
 	parts[parts.length - 1] = last.toLowerCase();
-	return parts.join('/');
+	return parts.join("/");
 }
 
 /**
@@ -55,7 +59,7 @@ export function nestTutorialNavNodes(
 ): BookNavTreeNode[] {
 	const childEntries = new Set<string>();
 	for (const entry of entries) {
-		if (entry === 'index') continue;
+		if (entry === "index") continue;
 		for (const other of entries) {
 			if (other !== entry && other.startsWith(`${entry}/`)) {
 				childEntries.add(other);
@@ -76,7 +80,9 @@ export function nestTutorialNavNodes(
 		});
 }
 
-export function buildTutorialPrevNext(sequence: BookNavLink[]): Record<string, BookPrevNext> {
+export function buildTutorialPrevNext(
+	sequence: BookNavLink[],
+): Record<string, BookPrevNext> {
 	const out: Record<string, BookPrevNext> = {};
 	for (let i = 0; i < sequence.length; i++) {
 		const cur = sequence[i]!;

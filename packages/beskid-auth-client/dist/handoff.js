@@ -1,5 +1,5 @@
-import { SignJWT, jwtVerify } from "jose";
-import { AUTH_HUB_ISSUER, HUB_USER_TOKEN_TTL_SECONDS, } from "./constants.js";
+import { jwtVerify, SignJWT } from "jose";
+import { AUTH_HUB_ISSUER, HUB_USER_TOKEN_TTL_SECONDS } from "./constants.js";
 function secretKey(secret) {
     if (secret.length < 32) {
         throw new Error("Service token must be at least 32 characters");

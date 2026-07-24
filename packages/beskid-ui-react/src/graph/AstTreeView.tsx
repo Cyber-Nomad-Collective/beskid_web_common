@@ -3,18 +3,18 @@
 import {
 	Background,
 	Controls,
-	MiniMap,
-	ReactFlow,
 	Handle,
-	Position,
+	MiniMap,
 	type Node,
 	type NodeProps,
+	Position,
+	ReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useCallback, useMemo } from "react";
 
 import { cn } from "../lib/utils.js";
-import { layoutAstTree, type AstFlowNodeData } from "./layout-ast.js";
+import { type AstFlowNodeData, layoutAstTree } from "./layout-ast.js";
 import type { AstGraphModel } from "./types.js";
 
 export type AstTreeViewProps = {
@@ -37,12 +37,20 @@ function AstNodeCard({ data, selected }: NodeProps<Node<AstFlowNodeData>>) {
 					: "border-border bg-card text-card-foreground",
 			)}
 		>
-			<Handle type="target" position={Position.Top} className="!bg-muted-foreground" />
+			<Handle
+				type="target"
+				position={Position.Top}
+				className="!bg-muted-foreground"
+			/>
 			<span className="truncate text-[10px] uppercase tracking-wide text-muted-foreground">
 				{data.kind}
 			</span>
 			<span className="truncate text-xs font-medium">{data.label}</span>
-			<Handle type="source" position={Position.Bottom} className="!bg-muted-foreground" />
+			<Handle
+				type="source"
+				position={Position.Bottom}
+				className="!bg-muted-foreground"
+			/>
 		</div>
 	);
 }
@@ -100,7 +108,9 @@ export function AstTreeView({
 	);
 
 	return (
-		<div className={cn("h-[320px] w-full rounded-lg border border-border", className)}>
+		<div
+			className={cn("h-[320px] w-full rounded-lg border border-border", className)}
+		>
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}

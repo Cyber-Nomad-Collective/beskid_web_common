@@ -1,9 +1,6 @@
-import { SignJWT, jwtVerify } from "jose";
+import { jwtVerify, SignJWT } from "jose";
 
-import {
-	AUTH_HUB_ISSUER,
-	HUB_USER_TOKEN_TTL_SECONDS,
-} from "./constants.js";
+import { AUTH_HUB_ISSUER, HUB_USER_TOKEN_TTL_SECONDS } from "./constants.js";
 import type { AuthAppId, HandoffPayload } from "./v1/types.js";
 
 function secretKey(secret: string): Uint8Array {
@@ -85,8 +82,7 @@ export async function verifyHandoffToken(
 			app: payload.app as AuthAppId,
 			sessionId: payload.sid,
 			login: payload.login,
-			avatarUrl:
-				typeof payload.avatar_url === "string" ? payload.avatar_url : "",
+			avatarUrl: typeof payload.avatar_url === "string" ? payload.avatar_url : "",
 			name: typeof payload.name === "string" ? payload.name : null,
 			subject,
 			hubUserToken: token,
@@ -96,10 +92,7 @@ export async function verifyHandoffToken(
 	}
 }
 
-export function buildLoginUrl(
-	hubPublicUrl: string,
-	app: AuthAppId,
-): string {
+export function buildLoginUrl(hubPublicUrl: string, app: AuthAppId): string {
 	const base = hubPublicUrl.replace(/\/$/, "");
 	return `${base}/login?app=${encodeURIComponent(app)}`;
 }

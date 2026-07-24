@@ -131,7 +131,11 @@ function SettingsDialogFooter({
 			>
 				{cancelLabel}
 			</Button>
-			<Button type="button" onClick={() => void save()} disabled={!isDirty || isSaving}>
+			<Button
+				type="button"
+				onClick={() => void save()}
+				disabled={!isDirty || isSaving}
+			>
 				{isSaving ? "Saving…" : saveLabel}
 			</Button>
 		</DialogFooter>

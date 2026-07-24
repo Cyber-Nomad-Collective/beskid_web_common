@@ -8,20 +8,20 @@ const TUTORIAL_CHAPTER_ROOT = /^(\d{2})-[^/]+$/;
 export function stripManualBookNumberPrefix(title: string): string {
 	return title
 		.trim()
-		.replace(/^\d{1,2}\.\d{1,2}\s+/, '')
-		.replace(/^\d{1,2}\.\s+/, '')
-		.replace(/^\d+\.\s+/, '')
+		.replace(/^\d{1,2}\.\d{1,2}\s+/, "")
+		.replace(/^\d{1,2}\.\s+/, "")
+		.replace(/^\d+\.\s+/, "")
 		.trim();
 }
 
 /** `00` → chapter 1; `08` → `08`; `12` → `12` (matches tutorial folder prefixes). */
 export function chapterLabelFromFolderPrefix(twoDigit: string): string {
-	if (twoDigit === '00') return '1';
-	return twoDigit.startsWith('0') ? twoDigit : String(parseInt(twoDigit, 10));
+	if (twoDigit === "00") return "1";
+	return twoDigit.startsWith("0") ? twoDigit : String(parseInt(twoDigit, 10));
 }
 
 function entryToSlug(entry: string): string {
-	return entry === 'index' ? 'book' : `book/${entry}`;
+	return entry === "index" ? "book" : `book/${entry}`;
 }
 
 /**
@@ -41,7 +41,7 @@ export function buildTutorialDisplayTitleBySlug(
 		const slug = entryToSlug(entry);
 		const stripped = stripManualBookNumberPrefix(rawTitleForEntry(entry));
 
-		if (entry === 'index') {
+		if (entry === "index") {
 			out[slug] = stripped;
 			continue;
 		}

@@ -1,9 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import { ChevronRightIcon, FileIcon, FolderIcon } from "lucide-react";
-
-import { cn } from "../lib/utils.js";
+import {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import { Button } from "../components/ui/button.js";
 import {
 	Dialog,
@@ -14,6 +18,7 @@ import {
 	DialogTitle,
 } from "../components/ui/dialog.js";
 import { ScrollArea } from "../components/ui/scroll-area.js";
+import { cn } from "../lib/utils.js";
 import type { ListChildrenFn, RepoEntry } from "./types.js";
 
 export type RepoExplorerDialogProps = {
@@ -174,9 +179,7 @@ export function RepoExplorerDialog({
 	const [childrenByPath, setChildrenByPath] = useState<Map<string, RepoEntry[]>>(
 		() => new Map(),
 	);
-	const [loadingPaths, setLoadingPaths] = useState<Set<string>>(
-		() => new Set(),
-	);
+	const [loadingPaths, setLoadingPaths] = useState<Set<string>>(() => new Set());
 	const [rootRemote, setRootRemote] = useState<RepoEntry[]>([]);
 	const [rootError, setRootError] = useState<string | null>(null);
 
@@ -276,18 +279,14 @@ export function RepoExplorerDialog({
 			>
 				<DialogHeader className="border-b border-border px-6 py-5">
 					<DialogTitle>{title}</DialogTitle>
-					{description ? (
-						<DialogDescription>{description}</DialogDescription>
-					) : null}
+					{description ? <DialogDescription>{description}</DialogDescription> : null}
 				</DialogHeader>
 
 				<ScrollArea className="min-h-0 flex-1 px-3 py-3">
 					{rootError ? (
 						<p className="px-3 py-2 text-sm text-destructive">{rootError}</p>
 					) : displayRoots.length === 0 ? (
-						<p className="px-3 py-2 text-sm text-muted-foreground">
-							{emptyMessage}
-						</p>
+						<p className="px-3 py-2 text-sm text-muted-foreground">{emptyMessage}</p>
 					) : (
 						<ul className="m-0 list-none p-0">
 							{displayRoots.map((entry) => (

@@ -1,5 +1,5 @@
-import { hierarchy, tree } from "d3-hierarchy";
 import type { Edge, Node } from "@xyflow/react";
+import { hierarchy, tree } from "d3-hierarchy";
 
 import type { AstGraphModel, AstGraphNode } from "./types.js";
 
@@ -60,7 +60,10 @@ export function layoutAstTree(
 	if (!rootDatum) return { nodes: [], edges: [] };
 
 	const root = hierarchy(rootDatum);
-	const layout = tree<HierarchyDatum>().nodeSize([NODE_HEIGHT + 46, NODE_WIDTH + 40]);
+	const layout = tree<HierarchyDatum>().nodeSize([
+		NODE_HEIGHT + 46,
+		NODE_WIDTH + 40,
+	]);
 	layout(root);
 
 	const nodes: Node<AstFlowNodeData>[] = [];

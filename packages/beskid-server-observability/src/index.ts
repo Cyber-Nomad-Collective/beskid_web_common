@@ -1,9 +1,9 @@
 import pino, { type Logger } from "pino";
 import {
-	Registry,
-	collectDefaultMetrics,
 	Counter,
+	collectDefaultMetrics,
 	Histogram,
+	Registry,
 } from "prom-client";
 
 export interface ObservabilityOptions {
@@ -114,7 +114,9 @@ export function createObservability(
 
 let defaultBundle: ObservabilityBundle | undefined;
 
-export function initObservability(options: ObservabilityOptions): ObservabilityBundle {
+export function initObservability(
+	options: ObservabilityOptions,
+): ObservabilityBundle {
 	defaultBundle = createObservability(options);
 	return defaultBundle;
 }

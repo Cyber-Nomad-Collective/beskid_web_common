@@ -1,35 +1,35 @@
-import { repoPathFromSpecRel } from './path-rules';
-import type { SpecLevel } from './types';
+import { repoPathFromSpecRel } from "./path-rules";
+import type { SpecLevel } from "./types";
 
 export function buildRepoPathFromForm(
 	specLevel: SpecLevel,
 	parentSlug: string,
 	leafSlug: string,
 ): string {
-	const parent = parentSlug.replace(/\/$/, '');
-	const leaf = leafSlug.replace(/^\/+/, '').replace(/\/+$/, '');
+	const parent = parentSlug.replace(/\/$/, "");
+	const leaf = leafSlug.replace(/^\/+/, "").replace(/\/+$/, "");
 
 	let rel: string;
-	if (specLevel === 'domain') {
+	if (specLevel === "domain") {
 		rel = `${parent}/${leaf}/index`;
-	} else if (specLevel === 'area') {
+	} else if (specLevel === "area") {
 		rel = `${parent}/${leaf}/index`;
-	} else if (specLevel === 'feature') {
+	} else if (specLevel === "feature") {
 		rel = `${parent}/${leaf}/index`;
-	} else if (specLevel === 'adr') {
+	} else if (specLevel === "adr") {
 		rel = `${parent}/${leaf}`;
 	} else {
 		rel = `${parent}/${leaf}`;
 	}
 
-	const relUnderSpec = rel.replace(/^platform-spec\//, '');
+	const relUnderSpec = rel.replace(/^platform-spec\//, "");
 	return repoPathFromSpecRel(relUnderSpec);
 }
 
 export function buildSlugFromRepoPath(repoPath: string): string {
 	const rel = repoPath
-		.replace(/^site\/website\/src\/content\/docs\//, '')
-		.replace(/\.(md|mdx)$/i, '')
-		.replace(/\/index$/, '');
-	return rel.startsWith('platform-spec/') ? rel : `platform-spec/${rel}`;
+		.replace(/^site\/website\/src\/content\/docs\//, "")
+		.replace(/\.(md|mdx)$/i, "")
+		.replace(/\/index$/, "");
+	return rel.startsWith("platform-spec/") ? rel : `platform-spec/${rel}`;
 }

@@ -1,14 +1,14 @@
 /** Shared rail + mobile drawer behavior for documentation area nav (platform-spec, book). */
 
-export const OPEN_ATTR = 'data-spec-nav-open';
-export const COLLAPSED_ATTR = 'data-rail-collapsed';
-const RAIL_COLLAPSED_STORAGE_KEY = 'beskid:doc-nav-rail-collapsed';
+export const OPEN_ATTR = "data-spec-nav-open";
+export const COLLAPSED_ATTR = "data-rail-collapsed";
+const RAIL_COLLAPSED_STORAGE_KEY = "beskid:doc-nav-rail-collapsed";
 
 export function readPersistedRailCollapsed(defaultCollapsed = true): boolean {
 	try {
 		const stored = sessionStorage.getItem(RAIL_COLLAPSED_STORAGE_KEY);
-		if (stored === 'true' || stored === 'false') {
-			return stored === 'true';
+		if (stored === "true" || stored === "false") {
+			return stored === "true";
 		}
 	} catch {
 		// sessionStorage unavailable (private mode, blocked storage, etc.)
@@ -18,27 +18,36 @@ export function readPersistedRailCollapsed(defaultCollapsed = true): boolean {
 
 export function persistRailCollapsed(collapsed: boolean): void {
 	try {
-		sessionStorage.setItem(RAIL_COLLAPSED_STORAGE_KEY, collapsed ? 'true' : 'false');
+		sessionStorage.setItem(
+			RAIL_COLLAPSED_STORAGE_KEY,
+			collapsed ? "true" : "false",
+		);
 	} catch {
 		// ignore
 	}
 }
 
 export function syncNavRailTopOffset() {
-	const topbar = document.querySelector<HTMLElement>('.page > .header');
+	const topbar = document.querySelector<HTMLElement>(".page > .header");
 	if (!topbar) return;
 	const topPx = topbar.getBoundingClientRect().bottom;
-	document.documentElement.style.setProperty('--platform-spec-panel-top', `${topPx}px`);
+	document.documentElement.style.setProperty(
+		"--platform-spec-panel-top",
+		`${topPx}px`,
+	);
 }
 
-export function mountRailOnBody(rail: HTMLElement, backdrop: HTMLElement | null) {
-	if (rail.dataset.docAreaNavPortaled === 'true') return;
+export function mountRailOnBody(
+	rail: HTMLElement,
+	backdrop: HTMLElement | null,
+) {
+	if (rail.dataset.docAreaNavPortaled === "true") return;
 	if (backdrop) {
 		document.body.appendChild(backdrop);
-		backdrop.dataset.docAreaNavPortaled = 'true';
+		backdrop.dataset.docAreaNavPortaled = "true";
 	}
 	document.body.appendChild(rail);
-	rail.dataset.docAreaNavPortaled = 'true';
+	rail.dataset.docAreaNavPortaled = "true";
 }
 
 export type DocAreaNavOptions = {
@@ -57,14 +66,14 @@ export type DocAreaNavOptions = {
 };
 
 function treeListSelectorFromItemSelector(itemSelector: string): string {
-	return itemSelector.replace('__item', '__list');
+	return itemSelector.replace("__item", "__list");
 }
 
 function navItemLabel(item: HTMLElement, linkSelector: string): string {
 	const link = item.querySelector<HTMLElement>(
 		`:scope > ${linkSelector}, :scope > details > summary ${linkSelector}`,
 	);
-	return link?.textContent?.trim().toLowerCase() ?? '';
+	return link?.textContent?.trim().toLowerCase() ?? "";
 }
 
 function directNavChildItems(
@@ -72,7 +81,9 @@ function directNavChildItems(
 	itemSelector: string,
 	listSelector: string,
 ): HTMLElement[] {
-	const list = item.querySelector<HTMLElement>(`:scope > details > ${listSelector}`);
+	const list = item.querySelector<HTMLElement>(
+		`:scope > details > ${listSelector}`,
+	);
 	if (!list) return [];
 	return [...list.querySelectorAll<HTMLElement>(`:scope > ${itemSelector}`)];
 }
@@ -90,10 +101,14 @@ function navItemMatchesQuery(
 	);
 }
 
-function openNavItemAncestors(item: HTMLElement, rail: HTMLElement, itemSelector: string) {
+function openNavItemAncestors(
+	item: HTMLElement,
+	rail: HTMLElement,
+	itemSelector: string,
+) {
 	let parent = item.parentElement?.closest<HTMLElement>(itemSelector);
 	while (parent && rail.contains(parent)) {
-		const details = parent.querySelector<HTMLDetailsElement>(':scope > details');
+		const details = parent.querySelector<HTMLDetailsElement>(":scope > details");
 		if (details) details.open = true;
 		parent = parent.parentElement?.closest<HTMLElement>(itemSelector);
 	}
@@ -102,7 +117,7 @@ function openNavItemAncestors(item: HTMLElement, rail: HTMLElement, itemSelector
 function applyNavTreeFilter(
 	rail: HTMLElement,
 	query: string,
-	opts: Pick<DocAreaNavOptions, 'treeItemSelector' | 'treeLinkSelector'>,
+	opts: Pick<DocAreaNavOptions, "treeItemSelector" | "treeLinkSelector">,
 ) {
 	const itemSelector = opts.treeItemSelector;
 	const listSelector = treeListSelectorFromItemSelector(itemSelector);
@@ -110,11 +125,17 @@ function applyNavTreeFilter(
 	const q = query.trim().toLowerCase();
 
 	for (const item of items) {
-		if (q === '') {
+		if (q === "") {
 			item.hidden = false;
 			continue;
 		}
-		const visible = navItemMatchesQuery(item, q, opts.treeLinkSelector, itemSelector, listSelector);
+		const visible = navItemMatchesQuery(
+			item,
+			q,
+			opts.treeLinkSelector,
+			itemSelector,
+			listSelector,
+		);
 		item.hidden = !visible;
 		if (visible) openNavItemAncestors(item, rail, itemSelector);
 	}
@@ -136,17 +157,21 @@ export function initDocAreaNav(opts: DocAreaNavOptions) {
 	const collapsedAttr = opts.collapsedAttr ?? COLLAPSED_ATTR;
 	const openAttr = opts.openAttr ?? OPEN_ATTR;
 
-	if (navChrome.dataset.docAreaNavMounted !== 'true') {
-		navChrome.dataset.docAreaNavMounted = 'true';
+	if (navChrome.dataset.docAreaNavMounted !== "true") {
+		navChrome.dataset.docAreaNavMounted = "true";
 		mountRailOnBody(navRail, backdrop);
 	}
 
-	const mobileToggle = document.querySelector<HTMLButtonElement>(opts.mobileToggleSelector);
+	const mobileToggle = document.querySelector<HTMLButtonElement>(
+		opts.mobileToggleSelector,
+	);
 	const closeBtn = navRail.querySelector<HTMLButtonElement>(opts.closeSelector);
-	const filterInput = navRail.querySelector<HTMLInputElement>(opts.filterSelector);
+	const filterInput = navRail.querySelector<HTMLInputElement>(
+		opts.filterSelector,
+	);
 
 	function syncToggleExpanded(collapsed: boolean) {
-		mobileToggle?.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+		mobileToggle?.setAttribute("aria-expanded", collapsed ? "false" : "true");
 	}
 
 	function setMobileOpen(open: boolean) {
@@ -156,14 +181,13 @@ export function initDocAreaNav(opts: DocAreaNavOptions) {
 		if (open) {
 			setRailCollapsed(false);
 			requestAnimationFrame(() => {
-				(
-					filterInput && !filterInput.hidden
-						? filterInput
-						: navRail.querySelector<HTMLAnchorElement>(opts.treeLinkSelector)
+				(filterInput && !filterInput.hidden
+					? filterInput
+					: navRail.querySelector<HTMLAnchorElement>(opts.treeLinkSelector)
 				)?.focus();
 			});
 		} else {
-			if (!window.matchMedia('(min-width: 50rem)').matches) {
+			if (!window.matchMedia("(min-width: 50rem)").matches) {
 				setRailCollapsed(true);
 			}
 			mobileToggle?.focus();
@@ -171,55 +195,55 @@ export function initDocAreaNav(opts: DocAreaNavOptions) {
 	}
 
 	function setRailCollapsed(collapsed: boolean) {
-		const value = collapsed ? 'true' : 'false';
+		const value = collapsed ? "true" : "false";
 		navChrome.setAttribute(collapsedAttr, value);
 		navRail.setAttribute(collapsedAttr, value);
 		persistRailCollapsed(collapsed);
-		if (window.matchMedia('(min-width: 50rem)').matches) {
+		if (window.matchMedia("(min-width: 50rem)").matches) {
 			syncToggleExpanded(!collapsed);
 		}
 	}
 
-	if (mobileToggle && mobileToggle.dataset.docAreaNavToggleBound !== 'true') {
-		mobileToggle.dataset.docAreaNavToggleBound = 'true';
-		mobileToggle.addEventListener('click', () => {
-			const desktop = window.matchMedia('(min-width: 50rem)').matches;
+	if (mobileToggle && mobileToggle.dataset.docAreaNavToggleBound !== "true") {
+		mobileToggle.dataset.docAreaNavToggleBound = "true";
+		mobileToggle.addEventListener("click", () => {
+			const desktop = window.matchMedia("(min-width: 50rem)").matches;
 			if (desktop) {
-				setRailCollapsed(navChrome.getAttribute(collapsedAttr) !== 'true');
+				setRailCollapsed(navChrome.getAttribute(collapsedAttr) !== "true");
 				return;
 			}
 			setMobileOpen(!document.body.hasAttribute(openAttr));
 		});
 	}
 
-	if (closeBtn && closeBtn.dataset.docAreaNavCloseBound !== 'true') {
-		closeBtn.dataset.docAreaNavCloseBound = 'true';
-		closeBtn.addEventListener('click', () => setMobileOpen(false));
+	if (closeBtn && closeBtn.dataset.docAreaNavCloseBound !== "true") {
+		closeBtn.dataset.docAreaNavCloseBound = "true";
+		closeBtn.addEventListener("click", () => setMobileOpen(false));
 	}
 
-	if (backdrop && backdrop.dataset.docAreaNavBackdropBound !== 'true') {
-		backdrop.dataset.docAreaNavBackdropBound = 'true';
-		backdrop.addEventListener('click', () => setMobileOpen(false));
+	if (backdrop && backdrop.dataset.docAreaNavBackdropBound !== "true") {
+		backdrop.dataset.docAreaNavBackdropBound = "true";
+		backdrop.addEventListener("click", () => setMobileOpen(false));
 	}
 
-	if (filterInput && filterInput.dataset.docAreaNavFilterBound !== 'true') {
-		filterInput.dataset.docAreaNavFilterBound = 'true';
-		filterInput.addEventListener('input', () => {
+	if (filterInput && filterInput.dataset.docAreaNavFilterBound !== "true") {
+		filterInput.dataset.docAreaNavFilterBound = "true";
+		filterInput.addEventListener("input", () => {
 			applyNavTreeFilter(navRail, filterInput.value, opts);
 		});
 	}
 
 	if (!document.documentElement.dataset.docAreaNavEscapeBound) {
-		document.documentElement.dataset.docAreaNavEscapeBound = 'true';
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape') {
+		document.documentElement.dataset.docAreaNavEscapeBound = "true";
+		document.addEventListener("keydown", (e) => {
+			if (e.key === "Escape") {
 				if (document.body.hasAttribute(openAttr)) {
 					setMobileOpen(false);
 					return;
 				}
 				if (
-					window.matchMedia('(min-width: 50rem)').matches &&
-					navChrome.getAttribute(collapsedAttr) !== 'true'
+					window.matchMedia("(min-width: 50rem)").matches &&
+					navChrome.getAttribute(collapsedAttr) !== "true"
 				) {
 					setRailCollapsed(true);
 				}
@@ -227,20 +251,22 @@ export function initDocAreaNav(opts: DocAreaNavOptions) {
 		});
 	}
 
-	const active = navRail.querySelector<HTMLAnchorElement>(`${opts.treeLinkSelector}.is-active`);
-	active?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+	const active = navRail.querySelector<HTMLAnchorElement>(
+		`${opts.treeLinkSelector}.is-active`,
+	);
+	active?.scrollIntoView({ block: "nearest", inline: "nearest" });
 
 	const collapsed = readPersistedRailCollapsed(opts.defaultCollapsed ?? true);
 	setRailCollapsed(collapsed);
 	document.body.removeAttribute(openAttr);
 	if (backdrop) backdrop.hidden = true;
-	if (!window.matchMedia('(min-width: 50rem)').matches) {
+	if (!window.matchMedia("(min-width: 50rem)").matches) {
 		syncToggleExpanded(false);
 	}
 }
 
 export function bindDocAreaNavTopSync() {
 	if (document.documentElement.dataset.docAreaNavTopSyncBound) return;
-	document.documentElement.dataset.docAreaNavTopSyncBound = 'true';
-	window.addEventListener('resize', syncNavRailTopOffset);
+	document.documentElement.dataset.docAreaNavTopSyncBound = "true";
+	window.addEventListener("resize", syncNavRailTopOffset);
 }

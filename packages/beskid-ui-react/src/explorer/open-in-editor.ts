@@ -53,9 +53,7 @@ function localEditorUrl(
 ): string {
 	const line = target.line ?? 1;
 	const column = target.column ?? 1;
-	const filePath = target.path.startsWith("/")
-		? target.path
-		: `/${target.path}`;
+	const filePath = target.path.startsWith("/") ? target.path : `/${target.path}`;
 	return `${scheme}://file${filePath}:${line}:${column}`;
 }
 

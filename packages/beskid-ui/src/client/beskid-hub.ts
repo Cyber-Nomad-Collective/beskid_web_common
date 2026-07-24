@@ -118,7 +118,11 @@ export function initBeskidHub(scope: ParentNode = document) {
 /** Re-bind after Blazor enhanced navigation replaces the hub markup. */
 export function initBeskidHubAfterBlazor() {
 	if (typeof window === "undefined") return;
-	const blazor = (window as Window & { Blazor?: { addEventListener?: (event: string, handler: () => void) => void } }).Blazor;
+	const blazor = (
+		window as Window & {
+			Blazor?: { addEventListener?: (event: string, handler: () => void) => void };
+		}
+	).Blazor;
 	if (!blazor?.addEventListener) return;
 	blazor.addEventListener("enhancedload", () => initBeskidHub());
 }

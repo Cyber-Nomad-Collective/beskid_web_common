@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const nonEmptyString = z.string().trim().min(1);
 
@@ -8,24 +8,26 @@ const specPerson = z.object({
 });
 
 const relatedTopicSchema = z.object({
-	type: z.enum(['Domain', 'Area', 'Feature', 'ADR', 'Article']),
+	type: z.enum(["Domain", "Area", "Feature", "ADR", "Article"]),
 	title: nonEmptyString,
 	href: nonEmptyString,
 	relation: nonEmptyString.optional(),
 	blocker: z.boolean().optional(),
-	severity: z.enum(['informational', 'low', 'medium', 'high', 'critical']).optional(),
+	severity: z
+		.enum(["informational", "low", "medium", "high", "critical"])
+		.optional(),
 });
 
 const platformGraphSchema = z.object({
 	source: nonEmptyString.optional(),
 	node: nonEmptyString.optional(),
-	mode: z.enum(['map', 'embedded']).optional(),
+	mode: z.enum(["map", "embedded"]).optional(),
 });
 
 const architectureGraphSchema = z.object({
 	source: nonEmptyString.optional(),
 	entryNode: nonEmptyString.optional(),
-	layout: z.enum(['force', 'hierarchy']).optional(),
+	layout: z.enum(["force", "hierarchy"]).optional(),
 	tags: z.array(nonEmptyString).optional(),
 });
 
@@ -41,38 +43,38 @@ const platformSpecBaseSchema = z.object({
 	architectureGraph: architectureGraphSchema.optional(),
 });
 
-const platformSpecStatusSchema = z.enum(['Standard', 'Proposed', 'Superseded']);
+const platformSpecStatusSchema = z.enum(["Standard", "Proposed", "Superseded"]);
 
 export const domainSpecSchema = platformSpecBaseSchema.extend({
-	specLevel: z.literal('domain'),
+	specLevel: z.literal("domain"),
 	status: z.undefined().optional(),
 });
 
 export const areaSpecSchema = platformSpecBaseSchema.extend({
-	specLevel: z.literal('area'),
+	specLevel: z.literal("area"),
 	status: z.undefined().optional(),
 });
 
 export const featureSpecSchema = platformSpecBaseSchema.extend({
-	specLevel: z.literal('feature'),
+	specLevel: z.literal("feature"),
 	status: platformSpecStatusSchema,
 });
 
 export const articleSpecSchema = platformSpecBaseSchema.extend({
-	specLevel: z.literal('article'),
+	specLevel: z.literal("article"),
 	status: platformSpecStatusSchema,
 });
 
 export const adrSpecSchema = platformSpecBaseSchema.extend({
-	specLevel: z.literal('adr'),
+	specLevel: z.literal("adr"),
 	status: platformSpecStatusSchema,
 	adrId: nonEmptyString,
-	adrStatus: z.enum(['Accepted', 'Superseded', 'Proposed']),
+	adrStatus: z.enum(["Accepted", "Superseded", "Proposed"]),
 	adrDate: z.union([z.string(), z.date()]).optional(),
 	supersedesAdr: nonEmptyString.optional(),
 });
 
-export const platformSpecNodeSchema = z.discriminatedUnion('specLevel', [
+export const platformSpecNodeSchema = z.discriminatedUnion("specLevel", [
 	domainSpecSchema,
 	areaSpecSchema,
 	featureSpecSchema,
@@ -85,7 +87,9 @@ export const platformSpecNodeSchema = z.discriminatedUnion('specLevel', [
  * Keep in sync with validators in `trudoc/layout` / site verify scripts.
  */
 export const platformSpecExtend = z.object({
-	specLevel: z.enum(['domain', 'area', 'component', 'feature', 'article', 'adr']).optional(),
+	specLevel: z
+		.enum(["domain", "area", "component", "feature", "article", "adr"])
+		.optional(),
 	status: platformSpecStatusSchema.optional(),
 	owner: specPerson.optional(),
 	submitter: specPerson.optional(),

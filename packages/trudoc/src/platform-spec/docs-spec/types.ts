@@ -1,15 +1,15 @@
 export type SpecProposalStatus =
-	| 'draft'
-	| 'validating'
-	| 'submitting'
-	| 'pr_open'
-	| 'merged'
-	| 'closed'
-	| 'failed';
+	| "draft"
+	| "validating"
+	| "submitting"
+	| "pr_open"
+	| "merged"
+	| "closed"
+	| "failed";
 
-export type SpecProposalChangeKind = 'create' | 'update' | 'delete';
+export type SpecProposalChangeKind = "create" | "update" | "delete";
 
-export type SpecLevel = 'domain' | 'area' | 'feature' | 'article' | 'adr';
+export type SpecLevel = "domain" | "area" | "feature" | "article" | "adr";
 
 export interface SpecProposal {
 	id: string;
@@ -50,7 +50,7 @@ export interface ProposalValidationResult {
 	ok: boolean;
 	issues: {
 		code: string;
-		severity: 'error' | 'warn';
+		severity: "error" | "warn";
 		file: string;
 		message: string;
 		source: string;

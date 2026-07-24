@@ -9,23 +9,24 @@
  * - `ci` — platform-spec structure + content checks (content step is warn-only until corpus cleanup).
  * - `beskid-prebuild` — deprecated alias for `ci` (git-meta and CLI sync are not part of trudoc).
  */
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { resolveTrudocWebsiteRoot } from './site-root';
-import { stepsForPreset, type VerifyPreset } from '../verify/presets';
-import { runVerifyStep } from '../verify/run';
-import { resolveTsxCli } from '../verify/tsx';
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { stepsForPreset, type VerifyPreset } from "../verify/presets";
+import { runVerifyStep } from "../verify/run";
+import { resolveTsxCli } from "../verify/tsx";
+import { resolveTrudocWebsiteRoot } from "./site-root";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const pkgRoot = path.resolve(__dirname, '..', '..');
-const layoutVerifyTs = path.join(__dirname, 'layout-verify.ts');
+const pkgRoot = path.resolve(__dirname, "..", "..");
+const layoutVerifyTs = path.join(__dirname, "layout-verify.ts");
 
 function parsePreset(argv: string[]): VerifyPreset {
-	const i = argv.indexOf('--preset');
-	if (i >= 0 && argv[i + 1] === 'beskid-prebuild') return 'beskid-prebuild';
-	const j = argv.find((a) => a.startsWith('--preset='));
-	if (j?.slice('--preset='.length) === 'beskid-prebuild') return 'beskid-prebuild';
-	return 'ci';
+	const i = argv.indexOf("--preset");
+	if (i >= 0 && argv[i + 1] === "beskid-prebuild") return "beskid-prebuild";
+	const j = argv.find((a) => a.startsWith("--preset="));
+	if (j?.slice("--preset=".length) === "beskid-prebuild")
+		return "beskid-prebuild";
+	return "ci";
 }
 
 const siteRoot = resolveTrudocWebsiteRoot(process.argv, import.meta.url);

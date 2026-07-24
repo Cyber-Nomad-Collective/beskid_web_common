@@ -5,9 +5,8 @@
  */
 
 import { useCallback, useId, useRef } from "react";
-
-import { BESKID_SERVICES } from "./beskid-services";
 import { HUB_CLOSE_ICON_SVG } from "./beskid-hub-close-icon";
+import { BESKID_SERVICES } from "./beskid-services";
 import { hubIconSvg, hubLauncherIconSvg } from "./icons";
 
 export interface BeskidHubProps {
@@ -33,7 +32,9 @@ export function BeskidHub({ className }: BeskidHubProps) {
 	}, []);
 
 	const servicesJson = JSON.stringify(BESKID_SERVICES);
-	const rootClass = className ? `beskid-hub-root ${className}` : "beskid-hub-root";
+	const rootClass = className
+		? `beskid-hub-root ${className}`
+		: "beskid-hub-root";
 
 	return (
 		<div className={rootClass} data-beskid-hub-root data-services={servicesJson}>

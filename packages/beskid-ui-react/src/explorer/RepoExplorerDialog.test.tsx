@@ -1,5 +1,5 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 import { sampleRepo } from "../graph/fixtures/index.js";
 import { RepoExplorerDialog } from "./RepoExplorerDialog.js";

@@ -3,16 +3,17 @@
  * for pasting into the giscus box (one thread per page; giscus has no native range comments).
  */
 
-import { onPageNavigation } from './view-transition-lifecycle';
+import { onPageNavigation } from "./view-transition-lifecycle";
 
 function isInsideMainContent(node: Node | null): boolean {
 	if (!node) return false;
 	const root =
-		document.querySelector<HTMLElement>('main .sl-markdown-content') ??
-		document.querySelector<HTMLElement>('main [data-platform-spec]') ??
-		document.querySelector<HTMLElement>('main');
+		document.querySelector<HTMLElement>("main .sl-markdown-content") ??
+		document.querySelector<HTMLElement>("main [data-platform-spec]") ??
+		document.querySelector<HTMLElement>("main");
 	if (!root) return false;
-	const el = node.nodeType === Node.TEXT_NODE ? node.parentElement : (node as Element);
+	const el =
+		node.nodeType === Node.TEXT_NODE ? node.parentElement : (node as Element);
 	return !!(el && root.contains(el));
 }
 
@@ -30,43 +31,43 @@ function pageUrlWithNearestHash(range: Range): string {
 }
 
 function stripForQuote(s: string): string {
-	return s.replace(/\s+/g, ' ').trim();
+	return s.replace(/\s+/g, " ").trim();
 }
 
 function hidePopover(pop: HTMLElement): void {
 	pop.hidden = true;
-	pop.innerHTML = '';
+	pop.innerHTML = "";
 }
 
 function showPopover(pop: HTMLElement, range: Range, text: string): void {
 	const rect = range.getBoundingClientRect();
 	const top = Math.min(window.innerHeight - 48, Math.max(8, rect.bottom + 8));
 	const left = Math.min(window.innerWidth - 200, Math.max(8, rect.left));
-	pop.style.position = 'fixed';
+	pop.style.position = "fixed";
 	pop.style.top = `${top}px`;
 	pop.style.left = `${left}px`;
 
 	const url = pageUrlWithNearestHash(range);
-	const body = `> ${text.replace(/\n/g, '\n> ')}\n\n— ${url}`;
+	const body = `> ${text.replace(/\n/g, "\n> ")}\n\n— ${url}`;
 
-	pop.innerHTML = '';
-	const btn = document.createElement('button');
-	btn.type = 'button';
-	btn.className = 'giscus-quote-btn';
-	btn.textContent = 'Copy quote for discussion';
-	btn.title = 'Copies Markdown quote and link; paste into the comment box below';
-	btn.addEventListener('click', async () => {
+	pop.innerHTML = "";
+	const btn = document.createElement("button");
+	btn.type = "button";
+	btn.className = "giscus-quote-btn";
+	btn.textContent = "Copy quote for discussion";
+	btn.title = "Copies Markdown quote and link; paste into the comment box below";
+	btn.addEventListener("click", async () => {
 		try {
 			await navigator.clipboard.writeText(body);
-			btn.textContent = 'Copied';
+			btn.textContent = "Copied";
 			setTimeout(() => {
-				btn.textContent = 'Copy quote for discussion';
+				btn.textContent = "Copy quote for discussion";
 			}, 1600);
 		} catch {
-			btn.textContent = 'Copy failed';
+			btn.textContent = "Copy failed";
 		}
-		const wrap = document.querySelector('.giscus-wrap');
-		wrap?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		const wrap = document.querySelector(".giscus-wrap");
+		wrap?.scrollIntoView({ behavior: "smooth", block: "start" });
 	});
 
 	pop.appendChild(btn);
@@ -74,17 +75,17 @@ function showPopover(pop: HTMLElement, range: Range, text: string): void {
 }
 
 function init(): void {
-	if (document.documentElement.dataset.giscusQuoteBound === 'true') return;
-	if (!document.querySelector('.giscus-wrap')) return;
-	document.documentElement.dataset.giscusQuoteBound = 'true';
+	if (document.documentElement.dataset.giscusQuoteBound === "true") return;
+	if (!document.querySelector(".giscus-wrap")) return;
+	document.documentElement.dataset.giscusQuoteBound = "true";
 
-	const pop = document.createElement('div');
-	pop.className = 'giscus-quote-popover';
-	pop.setAttribute('role', 'status');
+	const pop = document.createElement("div");
+	pop.className = "giscus-quote-popover";
+	pop.setAttribute("role", "status");
 	pop.hidden = true;
 	document.body.appendChild(pop);
 
-	const style = document.createElement('style');
+	const style = document.createElement("style");
 	style.textContent = `
 		.giscus-quote-popover {
 			position: absolute;
@@ -109,7 +110,7 @@ function init(): void {
 	document.head.appendChild(style);
 
 	document.addEventListener(
-		'mouseup',
+		"mouseup",
 		() => {
 			const sel = window.getSelection();
 			if (!sel || sel.isCollapsed || sel.rangeCount === 0) {
@@ -132,7 +133,7 @@ function init(): void {
 		true,
 	);
 
-	document.addEventListener('mousedown', (e) => {
+	document.addEventListener("mousedown", (e) => {
 		if (e.target instanceof Node && pop.contains(e.target)) return;
 		// Defer hide so button click still fires
 		requestAnimationFrame(() => {
@@ -141,9 +142,9 @@ function init(): void {
 		});
 	});
 
-	document.addEventListener('scroll', () => hidePopover(pop), true);
+	document.addEventListener("scroll", () => hidePopover(pop), true);
 }
 
-if (typeof document !== 'undefined') {
+if (typeof document !== "undefined") {
 	onPageNavigation(init);
 }
