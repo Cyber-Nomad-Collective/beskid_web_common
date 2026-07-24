@@ -65,3 +65,10 @@ export {
 	SidebarTrigger,
 	useSidebar,
 } from "./components/ui/sidebar";
+
+export { DownloadsSection } from "./components/downloads/DownloadsSection";
+export { BadgeDialog } from "./components/downloads/BadgeDialog";
+export { ChangelogList } from "./components/downloads/ChangelogList";
+export { useLatestVersion } from "./components/downloads/use-latest-version";
+export { useReleases } from "./components/downloads/use-releases";
+export type { PlatformId, AssetInfo, PackageInfo, ReleaseInfo, VersionPayload, BadgeStyle, BadgeKind, BadgeConfig } from "./components/downloads/types";
