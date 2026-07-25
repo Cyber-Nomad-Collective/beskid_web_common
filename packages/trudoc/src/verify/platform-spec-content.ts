@@ -233,7 +233,7 @@ function extractMarkdownTableSignatures(body: string): string[] {
 		}
 		const block: string[] = [];
 		while (i < lines.length && lines[i]?.trim().startsWith("|")) {
-			block.push(lines[i]!.trim());
+			block.push(lines[i]?.trim());
 			i += 1;
 		}
 		if (block.length < 2) continue;

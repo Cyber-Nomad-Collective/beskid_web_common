@@ -46,10 +46,10 @@ export function createDocAreaHtmlAttrsDevPlugin(
 					pathname === `${prefix}/`;
 
 				const chunks: Buffer[] = [];
-				const originalWrite = res.write.bind(res);
+				const _originalWrite = res.write.bind(res);
 				const originalEnd = res.end.bind(res);
 
-				res.write = ((chunk: unknown, ...args: unknown[]) => {
+				res.write = ((chunk: unknown, ..._args: unknown[]) => {
 					if (chunk)
 						chunks.push(
 							Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk as string),

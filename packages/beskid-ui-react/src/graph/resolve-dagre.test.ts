@@ -4,23 +4,17 @@ import { resolveDagreGraph, resolveDagreLayout } from "./resolve-dagre.js";
 
 describe("resolveDagreGraph", () => {
 	it("prefers the top-level Graph export (dagre v3)", () => {
-		const Graph = class {
-			constructor() {}
-		};
+		const Graph = class {};
 		expect(resolveDagreGraph({ Graph })).toBe(Graph);
 	});
 
 	it("falls back to graphlib.Graph (dagre v1 CJS shape)", () => {
-		const Graph = class {
-			constructor() {}
-		};
+		const Graph = class {};
 		expect(resolveDagreGraph({ graphlib: { Graph } })).toBe(Graph);
 	});
 
 	it("unwraps default-export interop namespaces", () => {
-		const Graph = class {
-			constructor() {}
-		};
+		const Graph = class {};
 		expect(resolveDagreGraph({ default: { Graph } })).toBe(Graph);
 		expect(resolveDagreGraph({ default: { graphlib: { Graph } } })).toBe(Graph);
 	});

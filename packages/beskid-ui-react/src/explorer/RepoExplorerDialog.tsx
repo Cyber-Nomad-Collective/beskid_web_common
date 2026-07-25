@@ -58,11 +58,11 @@ function flattenRoots(entries: RepoEntry[] | undefined): RepoEntry[] {
 	}
 	if (
 		entries.length === 1 &&
-		entries[0]!.kind === "dir" &&
-		(entries[0]!.path === "" || entries[0]!.path === "/") &&
-		entries[0]!.children
+		entries[0]?.kind === "dir" &&
+		(entries[0]?.path === "" || entries[0]?.path === "/") &&
+		entries[0]?.children
 	) {
-		return entries[0]!.children;
+		return entries[0]?.children;
 	}
 	return entries;
 }

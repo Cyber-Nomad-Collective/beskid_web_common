@@ -7,7 +7,7 @@ import {
 	toEffectiveLayout,
 } from "./merge";
 import { classifyPlatformSpecRel, type PathClass } from "./path-class";
-import { defaultArticleDefaultsForFeature, getPresetBase } from "./presets";
+import { defaultArticleDefaultsForFeature } from "./presets";
 import type {
 	LayoutContractFile,
 	LayoutLevel,
@@ -16,7 +16,7 @@ import type {
 } from "./schema";
 import { effectiveLayoutSchema, parseLayoutContractJson } from "./schema";
 
-const SPEC_SEGMENT = `${path.sep}src${path.sep}content${path.sep}docs${path.sep}platform-spec`;
+const _SPEC_SEGMENT = `${path.sep}src${path.sep}content${path.sep}docs${path.sep}platform-spec`;
 
 export type { PathClass } from "./path-class";
 export { classifyPlatformSpecRel } from "./path-class";
