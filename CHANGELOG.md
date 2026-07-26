@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Declare the auth client with its canonical `@beskid/auth-client` identity so
+  file-linked consumers resolve the same package name in frozen CI installs.
 - Resolve `@dagrejs/dagre` Graph via fail-closed interop helper so Facts DAG layout
   no longer crashes with `gm.Graph is not a constructor` when a hoisted v1 CJS
   package shadows the ui-react v3 named export.

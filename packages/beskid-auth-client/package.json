@@ -1,5 +1,5 @@
 {
-	"name": "@cyber-nomad-collective/beskid-auth-client",
+	"name": "@beskid/auth-client",
 	"version": "0.2.9",
 	"description": "Typed client and handoff utilities for the Beskid auth hub (OpenAPI v1).",
 	"type": "module",
