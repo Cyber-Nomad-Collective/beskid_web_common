@@ -73,6 +73,9 @@ const isBook = path === '/book' || path.startsWith('/book/');
 							</a>
 						</li>
 						<li>
+							<a href="https://learn.beskid-lang.org/" class="platform-spec-topbar-actions__btn">Learn</a>
+						</li>
+						<li>
 							<a
 								href="/downloads/"
 								class:list={['platform-spec-topbar-actions__btn', isActive('/downloads') && 'is-active']}
@@ -144,6 +147,15 @@ const isBook = path === '/book' || path.startsWith('/book/');
 							<path d="M8 8h8M8 12h8"></path>
 						</svg>
 						<span>Book</span>
+					</a>
+				</li>
+				<li>
+					<a href="https://learn.beskid-lang.org/" class="beskid-header__mobile-link">
+						<svg class="beskid-header__mobile-link-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+							<path d="M12 3 3 7.5 12 12l9-4.5L12 3z"></path>
+							<path d="M7 10v5.5c0 1.8 2.2 3.5 5 3.5s5-1.7 5-3.5V10"></path>
+						</svg>
+						<span>Learn</span>
 					</a>
 				</li>
 				<li>

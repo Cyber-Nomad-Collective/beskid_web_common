@@ -29,6 +29,7 @@ export const BESKID_SERVICES: BeskidService[] = [
 		href: "https://beskid-lang.org/book/",
 		icon: "book",
 	},
+	{ id: "learn", label: "Learn", href: "https://learn.beskid-lang.org/", icon: "learn" },
 	{
 		id: "pckg",
 		label: "pckg",

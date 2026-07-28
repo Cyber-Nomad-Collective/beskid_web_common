@@ -4,6 +4,7 @@ export type BeskidHubIcon =
 	| "home"
 	| "platform-spec"
 	| "book"
+	| "learn"
 	| "pckg"
 	| "tracker"
 	| "nexus";
@@ -18,6 +19,7 @@ const PATHS: Record<BeskidHubIcon, string> = {
 		'<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
 	book:
 		'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+	learn: '<path d="M12 3 3 7.5 12 12l9-4.5L12 3z"/><path d="M7 10v5.5c0 1.8 2.2 3.5 5 3.5s5-1.7 5-3.5V10"/>',
 	pckg:
 		'<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7"/><path d="m7.5 4.27 9 5.15"/>',
 	tracker:

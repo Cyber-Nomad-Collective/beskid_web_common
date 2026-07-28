@@ -14,4 +14,13 @@ describe("Beskid shared service registry", () => {
 		);
 		expect(standard?.href).toBe("https://spec.beskid-lang.org/platform-spec/");
 	});
+
+	it("includes Learn at its public service URL", () => {
+		expect(BESKID_SERVICES).toContainEqual({
+			id: "learn",
+			label: "Learn",
+			href: "https://learn.beskid-lang.org/",
+			icon: "learn",
+		});
+	});
 });
