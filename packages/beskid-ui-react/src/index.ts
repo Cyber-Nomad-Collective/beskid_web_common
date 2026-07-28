@@ -70,6 +70,12 @@ export {
 	useSidebar,
 } from "./components/ui/sidebar";
 export { Skeleton } from "./components/ui/skeleton";
+export {
+	Tooltip,
+	TooltipContent,
+	TooltipProvider,
+	TooltipTrigger,
+} from "./components/ui/tooltip";
 export { useIsMobile } from "./hooks/use-mobile";
 export type { BeskidHubProps } from "./hub/BeskidHub";
 export { BeskidHub } from "./hub/BeskidHub";
