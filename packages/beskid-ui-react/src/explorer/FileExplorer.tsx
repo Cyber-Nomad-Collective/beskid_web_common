@@ -56,6 +56,10 @@ function fileExtension(name: string): string {
 	return dot >= 0 ? name.slice(dot + 1).toLowerCase() : "";
 }
 
+function normalizeEntryPath(path?: string): string {
+	return path?.replace(/^\.\/+/, "").replace(/\/+$/, "") ?? "";
+}
+
 function FileTypeIcon({
 	entry,
 	className,
@@ -161,7 +165,9 @@ function TreeItem({
 		entry.children ?? childrenByPath.get(entry.path) ?? [];
 	const isLoading = loadingPaths.has(entry.path);
 	const isFocused = focusedPath === entry.path;
-	const isSelected = activePath === entry.path;
+	const isSelected =
+		normalizeEntryPath(activePath) !== "" &&
+		normalizeEntryPath(entry.path) === normalizeEntryPath(activePath);
 
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -176,6 +182,7 @@ function TreeItem({
 			role="treeitem"
 			aria-expanded={isDir ? isExpanded : undefined}
 			aria-selected={isSelected}
+			onClick={() => onClick(entry)}
 		>
 			<button
 				ref={buttonRef}
