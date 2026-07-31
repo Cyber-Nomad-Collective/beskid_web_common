@@ -1,4 +1,17 @@
 export * from "./components/auth/index";
+export type { FileExplorerProps } from "./explorer/FileExplorer.js";
+export { FileExplorer } from "./explorer/FileExplorer.js";
+export type { RepoExplorerDialogProps } from "./explorer/RepoExplorerDialog.js";
+export { RepoExplorerDialog } from "./explorer/RepoExplorerDialog.js";
+export type {
+	FileEntry,
+	ListChildrenFn,
+	OpenInEditorScheme,
+	OpenInEditorTarget,
+	RemoteRepoLoader,
+	RepoEntry,
+	RepoEntryKind,
+} from "./explorer/types.js";
 export { BadgeDialog } from "./components/downloads/BadgeDialog";
 export { ChangelogList } from "./components/downloads/ChangelogList";
 export { DownloadsSection } from "./components/downloads/DownloadsSection";

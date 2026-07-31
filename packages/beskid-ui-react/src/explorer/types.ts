@@ -7,6 +7,9 @@ export type RepoEntry = {
 	children?: RepoEntry[];
 };
 
+/** Alias for use in generic file-explorer contexts. */
+export type FileEntry = RepoEntry;
+
 export type OpenInEditorScheme = "vscode" | "cursor" | "github";
 
 export type OpenInEditorTarget = {
