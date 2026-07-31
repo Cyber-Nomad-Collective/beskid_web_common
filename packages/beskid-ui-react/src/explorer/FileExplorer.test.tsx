@@ -1,5 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { FileExplorer } from "./FileExplorer.js";
 import type { FileEntry } from "./types.js";
@@ -27,6 +27,8 @@ function getTreeItemButton(name: string): HTMLElement {
 	}
 	throw new Error(`Tree item "${name}" not found`);
 }
+
+afterEach(() => { cleanup(); });
 
 describe("FileExplorer", () => {
 	it("renders root entries", () => {

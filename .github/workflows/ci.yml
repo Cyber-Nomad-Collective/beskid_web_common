@@ -20,11 +20,15 @@ jobs:
         with:
           bun-version: "1.3.0"
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: "10.17.1"
+
       - name: Install
         run: bun install --frozen-lockfile || bun install
 
       - name: Typecheck
-        run: bun run typecheck
+        run: pnpm run typecheck
 
       - name: Build beskid-ui hub client
-        run: bun run build
+        run: pnpm run build
