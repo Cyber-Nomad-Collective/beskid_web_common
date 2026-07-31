@@ -56,10 +56,6 @@ function fileExtension(name: string): string {
 	return dot >= 0 ? name.slice(dot + 1).toLowerCase() : "";
 }
 
-function normalizeEntryPath(path?: string): string {
-	return path?.replace(/^\.\/+/, "").replace(/\/+$/, "") ?? "";
-}
-
 function FileTypeIcon({
 	entry,
 	className,
@@ -165,9 +161,7 @@ function TreeItem({
 		entry.children ?? childrenByPath.get(entry.path) ?? [];
 	const isLoading = loadingPaths.has(entry.path);
 	const isFocused = focusedPath === entry.path;
-	const isSelected =
-		normalizeEntryPath(activePath) !== "" &&
-		normalizeEntryPath(entry.path) === normalizeEntryPath(activePath);
+	const isSelected = activePath === entry.path;
 
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -182,7 +176,6 @@ function TreeItem({
 			role="treeitem"
 			aria-expanded={isDir ? isExpanded : undefined}
 			aria-selected={isSelected}
-			onClick={() => onClick(entry)}
 		>
 			<button
 				ref={buttonRef}
@@ -260,6 +253,8 @@ export function FileExplorer({
 		() => new Set(),
 	);
 	const [focusedPath, setFocusedPath] = useState<string | null>(null);
+	const onSelectRef = useRef(onSelect);
+	const allowDirectorySelectRef = useRef(allowDirectorySelect);
 
 	const treeRef = useRef<HTMLUListElement>(null);
 
@@ -275,21 +270,26 @@ export function FileExplorer({
 			setFocusedPath(flatItems[0]!.entry.path);
 		}
 	}, [flatItems, focusedPath]);
+	useEffect(() => {
+		onSelectRef.current = onSelect;
+		allowDirectorySelectRef.current = allowDirectorySelect;
+	}, [onSelect, allowDirectorySelect]);
 
 	const expandDir = useCallback(
 		async (entry: FileEntry) => {
 			if (entry.kind !== "dir") return;
+			const isOpen = expanded.has(entry.path);
 
-			const next = new Set(expanded);
-
-			if (next.has(entry.path)) {
-				next.delete(entry.path);
-				setExpanded(next);
-				return;
-			}
-
-			next.add(entry.path);
-			setExpanded(next);
+			setExpanded((prev) => {
+				const next = new Set(prev);
+				if (next.has(entry.path)) {
+					next.delete(entry.path);
+				} else {
+					next.add(entry.path);
+				}
+				return next;
+			});
+			if (isOpen) return;
 
 			// Lazy-load children if needed
 			const hasEmbedded =
@@ -319,11 +319,14 @@ export function FileExplorer({
 
 	const handleSelect = useCallback(
 		(entry: FileEntry) => {
-			if (entry.kind === "file" || allowDirectorySelect) {
-				onSelect?.(entry);
+			if (
+				entry.kind === "file" ||
+				allowDirectorySelectRef.current === true
+			) {
+				onSelectRef.current?.(entry);
 			}
 		},
-		[onSelect, allowDirectorySelect],
+		[],
 	);
 
 	const handleClick = useCallback(
