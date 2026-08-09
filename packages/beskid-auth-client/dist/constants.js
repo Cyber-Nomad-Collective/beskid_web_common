@@ -8,6 +8,7 @@ export const AUTH_APP_IDS = [
     "nexus",
     "pckg",
     "platform-spec",
+    "learn",
 ];
 export const AUTH_APP_META = {
     tracker: {
@@ -25,5 +26,9 @@ export const AUTH_APP_META = {
     "platform-spec": {
         label: "Platform Spec Editor",
         description: "Normative platform-spec drafts, moderation, and git sync.",
+    },
+    learn: {
+        label: "Beskid Learn",
+        description: "Authenticated interactive Beskid lessons and progress.",
     },
 };
