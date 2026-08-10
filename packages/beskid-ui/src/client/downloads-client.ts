@@ -5,7 +5,7 @@
 import { onPageNavigation } from "./view-transition-lifecycle";
 
 const DEFAULT_RELEASE_BASE =
-	"https://github.com/Cyber-Nomad-Collective/beskid_compiler/releases/download/cli-latest";
+	"https://github.com/Cyber-Nomad-Collective/beskid_compiler/releases/download/cli-stable";
 
 const INSTALL_SH = "curl -fsSL https://beskid-lang.org/install.sh | bash";
 const INSTALL_PS = "iwr https://beskid-lang.org/install.ps1 -useb | iex";

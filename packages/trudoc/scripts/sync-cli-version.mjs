@@ -1,6 +1,6 @@
 /**
  * Sync rolling CLI semver: cli-version.json for the docs site and beskid_cli Cargo.toml.
- * Prefers GitHub cli-latest/cli-version.txt; falls back to local Cargo.toml.
+ * Prefers GitHub cli-stable/cli-version.txt; falls back to local Cargo.toml.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -14,7 +14,20 @@ const cargoPath = join(websiteRoot, "..", "..", "compiler", "crates", "beskid_cl
 const vscodePkgPath = join(websiteRoot, "..", "..", "beskid_vscode", "package.json");
 
 const GITHUB_REPO = "Cyber-Nomad-Collective/beskid_compiler";
-const LATEST_TAG = "cli-latest";
+const DEFAULT_CHANNEL = (process.env.BESKID_RELEASE_CHANNEL ?? "stable")
+	.trim()
+	.toLowerCase();
+
+function resolveRollingTag(channel) {
+	switch (channel) {
+		case "unstable":
+			return "cli-unstable";
+		default:
+			return "cli-stable";
+	}
+}
+
+const LATEST_TAG = resolveRollingTag(DEFAULT_CHANNEL);
 const ROLLING_URL = `https://github.com/${GITHUB_REPO}/releases/download/${LATEST_TAG}/cli-version.txt`;
 const OPEN_VSX_URL = "https://open-vsx.org/api/beskid/beskid-vscode/latest";
 
