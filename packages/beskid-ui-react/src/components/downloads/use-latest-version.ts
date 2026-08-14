@@ -18,6 +18,20 @@ const STALE_MS = 5 * 60 * 1000; // 5 minutes
 
 let cached: { payload: VersionPayload; ts: number } | null = null;
 
+function isVersionPayload(value: unknown): value is VersionPayload {
+	if (!value || typeof value !== "object") return false;
+	const payload = value as Partial<VersionPayload>;
+	return (
+		typeof payload.version === "string" &&
+		typeof payload.source === "string" &&
+		Array.isArray(payload.assets) &&
+		Array.isArray(payload.packages) &&
+		!!payload.installScript &&
+		typeof payload.installScript.sh === "string" &&
+		typeof payload.installScript.ps === "string"
+	);
+}
+
 export function useLatestVersion(): UseLatestVersionResult {
 	const [version, setVersion] = useState<string | null>(null);
 	const [assets, setAssets] = useState<VersionPayload["assets"]>([]);
@@ -45,7 +59,8 @@ export function useLatestVersion(): UseLatestVersionResult {
 			try {
 				const res = await fetch("/api/version.json", { signal: ac.signal });
 				if (!res.ok) throw new Error(`HTTP ${res.status}`);
-				const payload: VersionPayload = await res.json();
+				const payload: unknown = await res.json();
+				if (!isVersionPayload(payload)) throw new Error("Invalid version payload");
 				cached = { payload, ts: Date.now() };
 				applyPayload(payload);
 			} catch (err) {
