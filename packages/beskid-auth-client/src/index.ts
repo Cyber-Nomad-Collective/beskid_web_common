@@ -5,6 +5,14 @@ export {
 	AUTH_HUB_ISSUER,
 	HANDOFF_TTL_SECONDS,
 } from "./constants.js";
+export {
+	approveAuthHubPairing,
+	AuthHubPairingApprovalError,
+	AuthHubPairingApprovalInput,
+	AuthHubPairingApprovalResponse,
+	AuthHubPairingFailureReason,
+	pairingFailureMessage,
+} from "./v1/hub-pairing.js";
 export type { IssueHandoffInput } from "./handoff.js";
 export {
 	buildAccountUrl,
