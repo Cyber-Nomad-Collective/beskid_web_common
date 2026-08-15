@@ -21,7 +21,7 @@ export interface AuthHubPairingApprovalError {
 	reason: AuthHubPairingFailureReason;
 }
 
-type AuthHubPairingApprovalResult =
+export type AuthHubPairingApprovalResult =
 	| AuthHubPairingApprovalResponse
 	| AuthHubPairingApprovalError;
 

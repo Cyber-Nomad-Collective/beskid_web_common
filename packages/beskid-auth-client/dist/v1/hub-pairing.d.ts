@@ -15,10 +15,9 @@ export interface AuthHubPairingApprovalError {
     ok: false;
     reason: AuthHubPairingFailureReason;
 }
-type AuthHubPairingApprovalResult = AuthHubPairingApprovalResponse | AuthHubPairingApprovalError;
+export type AuthHubPairingApprovalResult = AuthHubPairingApprovalResponse | AuthHubPairingApprovalError;
 export declare function approveAuthHubPairing(input: AuthHubPairingApprovalInput): Promise<AuthHubPairingApprovalResult>;
 export declare function pairingFailureMessage(reason: AuthHubPairingFailureReason, options?: {
     approverHint?: string;
 }): string;
-export {};
 //# sourceMappingURL=hub-pairing.d.ts.map
