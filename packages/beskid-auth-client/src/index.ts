@@ -7,11 +7,14 @@ export {
 } from "./constants.js";
 export {
 	approveAuthHubPairing,
+	pairingFailureMessage,
+} from "./v1/hub-pairing.js";
+export type {
 	AuthHubPairingApprovalError,
 	AuthHubPairingApprovalInput,
 	AuthHubPairingApprovalResponse,
+	AuthHubPairingApprovalResult,
 	AuthHubPairingFailureReason,
-	pairingFailureMessage,
 } from "./v1/hub-pairing.js";
 export type { IssueHandoffInput } from "./handoff.js";
 export {
