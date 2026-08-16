@@ -21,7 +21,7 @@ export interface AuthHubPairingApprovalError {
 	reason: AuthHubPairingFailureReason;
 }
 
-type AuthHubPairingApprovalResult =
+export type AuthHubPairingApprovalResult =
 	| AuthHubPairingApprovalResponse
 	| AuthHubPairingApprovalError;
 
@@ -31,13 +31,15 @@ function normalizeInput(input: {
 	code: string;
 	publicUrl: string;
 	approverLogin: string;
-}): AuthHubPairingApprovalResult | {
-	appId: AuthAppId;
-	hubUrl: string;
-	code: string;
-	publicUrl: string;
-	approverLogin: string;
-} {
+}):
+	| AuthHubPairingApprovalResult
+	| {
+			appId: AuthAppId;
+			hubUrl: string;
+			code: string;
+			publicUrl: string;
+			approverLogin: string;
+	  } {
 	const appId = input.appId;
 	const hubUrl = input.hubUrl.trim();
 	const code = input.code.trim();

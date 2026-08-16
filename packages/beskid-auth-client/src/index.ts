@@ -5,14 +5,6 @@ export {
 	AUTH_HUB_ISSUER,
 	HANDOFF_TTL_SECONDS,
 } from "./constants.js";
-export {
-	approveAuthHubPairing,
-	AuthHubPairingApprovalError,
-	AuthHubPairingApprovalInput,
-	AuthHubPairingApprovalResponse,
-	AuthHubPairingFailureReason,
-	pairingFailureMessage,
-} from "./v1/hub-pairing.js";
 export type { IssueHandoffInput } from "./handoff.js";
 export {
 	buildAccountUrl,
@@ -25,4 +17,15 @@ export {
 } from "./handoff.js";
 export type { BeskidAuthClientOptions } from "./v1/client.js";
 export { BeskidAuthClient } from "./v1/client.js";
+export type {
+	AuthHubPairingApprovalError,
+	AuthHubPairingApprovalInput,
+	AuthHubPairingApprovalResponse,
+	AuthHubPairingApprovalResult,
+	AuthHubPairingFailureReason,
+} from "./v1/hub-pairing.js";
+export {
+	approveAuthHubPairing,
+	pairingFailureMessage,
+} from "./v1/hub-pairing.js";
 export type * from "./v1/types.js";
