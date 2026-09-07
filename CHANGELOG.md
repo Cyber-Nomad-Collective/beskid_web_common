@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Route shared hub navigation to the canonical Beskid Standard documentation
+  surface instead of the retired Platform Spec service, with one service
+  registry reused by both React and Astro shells.
+- Export the complete shadcn Tailwind v4 semantic color, radius, chart, and
+  sidebar mapping from `shadcn-entry.css` for isolated consumers.
+- Restrict auth hub application identities to the four deployed interactive
+  services (`tracker`, `nexus`, `pckg`, and `learn`) and restore the auth
+  package to the repository-wide typecheck gate under its canonical name.
 - Ship `@types/d3-hierarchy` with `@beskid/ui-react` so isolated consumers can
   compile the package's exported graph source without undeclared ambient types.
 - Keep the shared downloads widget renderable when a statically hosted version endpoint returns an incomplete error payload instead of release metadata.

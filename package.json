@@ -4,9 +4,9 @@
 	"description": "Shared TypeScript packages for Beskid documentation sites, tracker, and tooling.",
 	"packageManager": "pnpm@10.17.1",
 	"scripts": {
-		"typecheck": "pnpm -r --filter '@cyber-nomad-collective/trudoc' typecheck && pnpm -r --filter '@cyber-nomad-collective/beskid-ui-react' typecheck && pnpm -r --filter '@cyber-nomad-collective/beskid-ui-react' test && pnpm -r --filter '@cyber-nomad-collective/beskid-auth-client' build && pnpm -r --filter '@cyber-nomad-collective/beskid-auth-client' typecheck && pnpm -r --filter '@cyber-nomad-collective/beskid-server-observability' build && pnpm -r --filter '@cyber-nomad-collective/beskid-server-observability' typecheck",
+		"typecheck": "pnpm -r --filter '@cyber-nomad-collective/trudoc' typecheck && pnpm -r --filter '@cyber-nomad-collective/beskid-ui-react' typecheck && pnpm -r --filter '@cyber-nomad-collective/beskid-ui-react' test && pnpm -r --filter '@beskid/auth-client' build && pnpm -r --filter '@beskid/auth-client' typecheck && pnpm -r --filter '@cyber-nomad-collective/beskid-server-observability' build && pnpm -r --filter '@cyber-nomad-collective/beskid-server-observability' typecheck",
 		"build": "pnpm -r --filter '@cyber-nomad-collective/beskid-ui' build:hub-client && pnpm -r --filter '@cyber-nomad-collective/beskid-server-observability' build",
-		"test": "pnpm -r --filter '@cyber-nomad-collective/beskid-ui-react' test",
+		"test": "pnpm -r --filter '@cyber-nomad-collective/beskid-ui-react' test && pnpm -r --filter '@beskid/auth-client' test",
 		"lint": "pnpm -r --filter '@cyber-nomad-collective/eslint-config' --if-present echo ok"
 	},
 	"repository": {

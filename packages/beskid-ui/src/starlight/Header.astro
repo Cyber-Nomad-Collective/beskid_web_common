@@ -8,18 +8,18 @@ import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import BookNavChrome from '../book/BookNavChrome.astro';
 import BookNavToggle from '../book/BookNavToggle.astro';
-import PlatformSpecNavChrome from '../platform-spec/PlatformSpecNavChrome.astro';
+import { BESKID_SERVICES } from '../data/beskid-services';
 import BeskidHubButton from './BeskidHubButton.astro';
-import PlatformSpecNavToggle from '../platform-spec/PlatformSpecNavToggle.astro';
 
 const shouldRenderSearch =
 	config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const standardHref = BESKID_SERVICES.find((service) => service.id === 'platform-spec')?.href ?? '/docs/standard/';
 
 const scopeLabel = (() => {
 	if (path === '/' || path === '') return 'Home';
-	if (path.startsWith('/platform-spec')) return 'Platform specification';
+	if (path.startsWith('/docs/standard')) return 'Beskid Standard';
 	if (path.startsWith('/book')) return 'The Beskid Book';
 	if (path.startsWith('/downloads')) return 'Download';
 	return 'Beskid';
@@ -31,8 +31,6 @@ const isActive = (href: string) => {
 	return path === normalized || path.startsWith(`${normalized}/`);
 };
 
-const isPlatformSpec = path === '/platform-spec' || path.startsWith('/platform-spec/');
-const isPlatformSpecIndex = path === '/platform-spec';
 const isBook = path === '/book' || path.startsWith('/book/');
 ---
 
@@ -40,7 +38,6 @@ const isBook = path === '/book' || path.startsWith('/book/');
 	<Astronav closeOnClick>
 		<div class="beskid-header__row">
 			<div class="beskid-header__brand sl-flex">
-				{isPlatformSpec && <PlatformSpecNavToggle showInTopBar />}
 				{isBook && <BookNavToggle showInTopBar />}
 				<a class="beskid-header__brand-logo-link" href="/" aria-label="Beskid home">
 					<img class="beskid-header__brand-logo" src="/favicon.svg" alt="" width="26" height="26" />
@@ -61,10 +58,10 @@ const isBook = path === '/book' || path.startsWith('/book/');
 						</li>
 						<li>
 							<a
-								href="/platform-spec/"
-								class:list={['platform-spec-topbar-actions__btn', isActive('/platform-spec') && 'is-active']}
+								href={standardHref}
+								class:list={['platform-spec-topbar-actions__btn', isActive('/docs/standard') && 'is-active']}
 							>
-								Platform specification
+								Standard
 							</a>
 						</li>
 						<li>
@@ -130,14 +127,14 @@ const isBook = path === '/book' || path.startsWith('/book/');
 				</li>
 				<li>
 					<a
-						href="/platform-spec/"
-						class:list={['beskid-header__mobile-link', isActive('/platform-spec') && 'is-active']}
+						href={standardHref}
+						class:list={['beskid-header__mobile-link', isActive('/docs/standard') && 'is-active']}
 					>
 						<svg class="beskid-header__mobile-link-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v14.5A1.5 1.5 0 0 1 18.5 20H6.5A2.5 2.5 0 0 0 4 22V6.5z"></path>
 							<path d="M8 8h8M8 12h8"></path>
 						</svg>
-						<span>Platform specification</span>
+						<span>Standard</span>
 					</a>
 				</li>
 				<li>
@@ -173,7 +170,6 @@ const isBook = path === '/book' || path.startsWith('/book/');
 		</MenuItems>
 	</Astronav>
 </div>
-{isPlatformSpec && <PlatformSpecNavChrome currentPath={path} isMapPage={isPlatformSpecIndex} />}
 {isBook && <BookNavChrome currentPath={path} />}
 
 <style>

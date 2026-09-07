@@ -68,7 +68,7 @@ const skipWebsitePlatformSpec =
 	process.env.BESKID_SKIP_WEBSITE_PLATFORM_SPEC !== '0';
 if (skipWebsitePlatformSpec) {
 	console.warn(
-		'website-prebuild: platform-spec generators skipped (served from spec.beskid-lang.org). Set BESKID_SKIP_WEBSITE_PLATFORM_SPEC=0 to restore.',
+		'website-prebuild: legacy platform-spec generators skipped (the standard is linked at /docs/standard/). Set BESKID_SKIP_WEBSITE_PLATFORM_SPEC=0 for local legacy debugging.',
 	);
 } else {
 	run('generate:platform-spec-git-meta', ['generate:platform-spec-git-meta']);
@@ -87,7 +87,7 @@ if (skipTrudoc) {
 	 * step has nothing to check. Skip it unless explicitly re-enabled for
 	 * legacy debugging.
 	 */
-	console.warn('website-prebuild: verify:trudoc skipped — platform-spec content migrated to spec.beskid-lang.org.');
+	console.warn('website-prebuild: verify:trudoc skipped — the legacy platform-spec service is retired.');
 }
 
 console.log('website-prebuild: OK');

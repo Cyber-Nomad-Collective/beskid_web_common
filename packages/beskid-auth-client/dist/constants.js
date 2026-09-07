@@ -7,13 +7,12 @@ export const AUTH_APP_IDS = [
     "tracker",
     "nexus",
     "pckg",
-    "platform-spec",
     "learn",
 ];
 export const AUTH_APP_META = {
     tracker: {
         label: "Beskid Tracker",
-        description: "Kanban and platform-spec docs on GitHub issues.",
+        description: "Kanban delivery tracking and issue management.",
     },
     nexus: {
         label: "Beskid Nexus",
@@ -22,10 +21,6 @@ export const AUTH_APP_META = {
     pckg: {
         label: "pckg registry",
         description: "Package registry accounts and publishing.",
-    },
-    "platform-spec": {
-        label: "Platform Spec Editor",
-        description: "Normative platform-spec drafts, moderation, and git sync.",
     },
     learn: {
         label: "Beskid Learn",

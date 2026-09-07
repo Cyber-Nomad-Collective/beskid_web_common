@@ -39,6 +39,7 @@
 	],
 	"scripts": {
 		"build": "tsc",
+		"test": "node --test test/*.test.mjs",
 		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
