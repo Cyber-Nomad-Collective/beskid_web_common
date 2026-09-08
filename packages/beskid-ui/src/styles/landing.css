@@ -765,6 +765,13 @@ html[data-theme='light'] .landing-terminal__dot--green {
 	background: transparent;
 }
 
+/* Shiki emits the light color inline and carries the dark palette in this
+ * custom property. Make the terminal honour that dark value instead of
+ * letting light-theme token colors leak into the dark landing surface. */
+html:not([data-theme='light']) .landing-terminal [style*='--shiki-dark'] {
+	color: var(--shiki-dark) !important;
+}
+
 .landing-code-kw {
 	color: var(--landing-code-kw);
 }
