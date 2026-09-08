@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Populate the Docs navigation tree with the public getting-started, tooling,
+  project, package, standard, and contribution pages.
 - Keep the Docs menu within the viewport by anchoring it to its trailing edge.
 - Keep Shiki's light-token colors from leaking into dark landing terminals.
 

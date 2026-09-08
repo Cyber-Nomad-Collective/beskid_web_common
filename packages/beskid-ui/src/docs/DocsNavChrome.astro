@@ -28,8 +28,29 @@ const isCurrent = (href: string) => path === href.replace(/\/+$/, '');
 		<nav class="platform-spec-nav-chrome__tree">
 			<ul class="platform-spec-nav-tree__list" data-depth="0">
 				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs') && 'is-active']} aria-current={isCurrent('/docs') ? 'page' : undefined}>Overview</a></li>
+				<li class="platform-spec-nav-tree__item" data-level="branch">
+					<details class="platform-spec-nav-tree__branch" open>
+						<summary class="platform-spec-nav-tree__summary"><span class="platform-spec-nav-tree__link platform-spec-nav-tree__folder-label">Get started</span></summary>
+						<ul class="platform-spec-nav-tree__list" data-depth="1">
+							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/getting-started/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/getting-started') && 'is-active']} aria-current={isCurrent('/docs/getting-started') ? 'page' : undefined}>Overview</a></li>
+							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/getting-started/install/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/getting-started/install') && 'is-active']} aria-current={isCurrent('/docs/getting-started/install') ? 'page' : undefined}>Install Beskid</a></li>
+							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/getting-started/first-program/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/getting-started/first-program') && 'is-active']} aria-current={isCurrent('/docs/getting-started/first-program') ? 'page' : undefined}>First program</a></li>
+						</ul>
+					</details>
+				</li>
+				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/tooling/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/tooling') && 'is-active']} aria-current={isCurrent('/docs/tooling') ? 'page' : undefined}>Tooling</a></li>
+				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/projects/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/projects') && 'is-active']} aria-current={isCurrent('/docs/projects') ? 'page' : undefined}>Projects</a></li>
+				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/packages/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/packages') && 'is-active']} aria-current={isCurrent('/docs/packages') ? 'page' : undefined}>Packages</a></li>
 				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/standard/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/standard') && 'is-active']} aria-current={isCurrent('/docs/standard') ? 'page' : undefined}>Beskid Standard</a></li>
-				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/contributing/documentation/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/contributing/documentation') && 'is-active']} aria-current={isCurrent('/docs/contributing/documentation') ? 'page' : undefined}>Documentation authoring</a></li>
+				<li class="platform-spec-nav-tree__item" data-level="branch">
+					<details class="platform-spec-nav-tree__branch" open>
+						<summary class="platform-spec-nav-tree__summary"><span class="platform-spec-nav-tree__link platform-spec-nav-tree__folder-label">Contribute</span></summary>
+						<ul class="platform-spec-nav-tree__list" data-depth="1">
+							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/contributing/documentation/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/contributing/documentation') && 'is-active']} aria-current={isCurrent('/docs/contributing/documentation') ? 'page' : undefined}>Documentation authoring</a></li>
+							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/contributing/ste-100/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/contributing/ste-100') && 'is-active']} aria-current={isCurrent('/docs/contributing/ste-100') ? 'page' : undefined}>Use ASD-STE100</a></li>
+						</ul>
+					</details>
+				</li>
 				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/book/" class="platform-spec-nav-tree__link">The Beskid Book</a></li>
 			</ul>
 		</nav>
