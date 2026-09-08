@@ -1,19 +1,15 @@
 ---
 import { Astronav, MenuIcon, MenuItems, OpenIcon, CloseIcon } from 'astro-navbar';
-import config from 'virtual:starlight/user-config';
-
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
-import Search from 'virtual:starlight/components/Search';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import BookNavChrome from '../book/BookNavChrome.astro';
 import BookNavToggle from '../book/BookNavToggle.astro';
+import DocsNavChrome from '../docs/DocsNavChrome.astro';
+import DocsNavToggle from '../docs/DocsNavToggle.astro';
 import PlatformSpecNavChrome from '../platform-spec/PlatformSpecNavChrome.astro';
 import BeskidHubButton from './BeskidHubButton.astro';
 import PlatformSpecNavToggle from '../platform-spec/PlatformSpecNavToggle.astro';
-
-const shouldRenderSearch =
-	config.pagefind || config.components.Search !== '@astrojs/starlight/components/Search.astro';
 
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 
@@ -34,12 +30,14 @@ const isActive = (href: string) => {
 const isPlatformSpec = path === '/platform-spec' || path.startsWith('/platform-spec/');
 const isPlatformSpecIndex = path === '/platform-spec';
 const isBook = path === '/book' || path.startsWith('/book/');
+const isDocs = path === '/docs' || path.startsWith('/docs/');
 ---
 
 <div class="header beskid-header">
 	<Astronav closeOnClick>
 		<div class="beskid-header__row">
 			<div class="beskid-header__brand sl-flex">
+				{isDocs && <DocsNavToggle showInTopBar />}
 				{isPlatformSpec && <PlatformSpecNavToggle showInTopBar />}
 				{isBook && <BookNavToggle showInTopBar />}
 				<a class="beskid-header__brand-logo-link" href="/" aria-label="Beskid home">
@@ -49,9 +47,6 @@ const isBook = path === '/book' || path.startsWith('/book/');
 					<span class="beskid-header__brand-name">Beskid</span>
 					<span class="beskid-header__brand-scope">{scopeLabel}</span>
 				</span>
-			</div>
-			<div class="sl-flex print:hidden beskid-header__search">
-				{shouldRenderSearch && <Search />}
 			</div>
 			<div class="sl-flex print:hidden beskid-header__desktop right-group">
 				<MenuItems class="sl-hidden md:sl-flex platform-spec-topbar-actions platform-spec-topbar-actions--labeled">
@@ -175,6 +170,7 @@ const isBook = path === '/book' || path.startsWith('/book/');
 </div>
 {isPlatformSpec && <PlatformSpecNavChrome currentPath={path} isMapPage={isPlatformSpecIndex} />}
 {isBook && <BookNavChrome currentPath={path} />}
+{isDocs && <DocsNavChrome currentPath={path} />}
 
 <style>
 	@layer starlight.components {
@@ -188,7 +184,7 @@ const isBook = path === '/book' || path.startsWith('/book/');
 
 		.beskid-header__row {
 			display: grid;
-			grid-template-columns: auto minmax(0, 1fr) max-content;
+			grid-template-columns: auto max-content;
 			align-items: center;
 			column-gap: clamp(0.45rem, 1.2vw, 1rem);
 			row-gap: 0.35rem;
@@ -258,15 +254,6 @@ const isBook = path === '/book' || path.startsWith('/book/');
 			text-overflow: ellipsis;
 		}
 
-		.beskid-header__search {
-			justify-self: center;
-			width: 100%;
-			max-width: 32rem;
-			min-width: 0;
-			display: flex;
-			justify-content: center;
-		}
-
 		.beskid-header__desktop {
 			justify-self: end;
 			display: flex;
@@ -310,13 +297,6 @@ const isBook = path === '/book' || path.startsWith('/book/');
 			.beskid-header__brand {
 				grid-column: 1;
 				grid-row: 1;
-			}
-
-			.beskid-header__search {
-				grid-column: 1 / -1;
-				grid-row: 2;
-				justify-self: stretch;
-				max-width: none;
 			}
 
 			.beskid-header__desktop {
@@ -416,10 +396,5 @@ const isBook = path === '/book' || path.startsWith('/book/');
 			}
 		}
 
-		@media (max-width: 62rem) {
-			.beskid-header__search {
-				max-width: 20rem;
-			}
-		}
 	}
 </style>

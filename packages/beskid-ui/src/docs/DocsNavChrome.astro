@@ -1,0 +1,52 @@
+---
+import Search from 'virtual:starlight/components/Search';
+
+interface Props {
+	currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+const path = currentPath.replace(/\/+$/, '') || '/';
+const isCurrent = (href: string) => path === href.replace(/\/+$/, '');
+---
+
+<div class="platform-spec-nav-chrome" data-docs-nav-chrome data-rail-collapsed="false">
+	<div class="platform-spec-nav-chrome__backdrop" data-docs-nav-backdrop hidden />
+
+	<aside id="docs-nav-rail" class="platform-spec-nav-chrome__rail" aria-label="Docs contents" data-docs-nav-rail>
+		<div class="platform-spec-nav-chrome__rail-head">
+			<a href="/docs/" class="platform-spec-nav-chrome__map-link">Docs home</a>
+			<button type="button" class="platform-spec-nav-chrome__rail-close md:sl-hidden" aria-label="Close Docs contents" data-docs-nav-close>×</button>
+		</div>
+		<div class="beskid-docs-nav__search print:hidden">
+			<Search />
+		</div>
+		<label class="platform-spec-nav-chrome__filter">
+			<span class="platform-spec-nav-chrome__filter-label">Filter Docs pages</span>
+			<input type="search" class="platform-spec-nav-chrome__filter-input" placeholder="Filter pages…" autocomplete="off" spellcheck="false" data-docs-nav-filter />
+		</label>
+		<nav class="platform-spec-nav-chrome__tree">
+			<ul class="platform-spec-nav-tree__list" data-depth="0">
+				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs') && 'is-active']} aria-current={isCurrent('/docs') ? 'page' : undefined}>Overview</a></li>
+				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/standard/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/standard') && 'is-active']} aria-current={isCurrent('/docs/standard') ? 'page' : undefined}>Beskid Standard</a></li>
+				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/contributing/documentation/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/contributing/documentation') && 'is-active']} aria-current={isCurrent('/docs/contributing/documentation') ? 'page' : undefined}>Documentation authoring</a></li>
+				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/book/" class="platform-spec-nav-tree__link">The Beskid Book</a></li>
+			</ul>
+		</nav>
+	</aside>
+</div>
+
+<script>
+	import '../client/docs-nav.ts';
+</script>
+
+<style>
+	.beskid-docs-nav__search {
+		padding: 0.45rem 0.65rem;
+		border-bottom: 1px solid var(--platform-spec-divider);
+	}
+
+	.beskid-docs-nav__search :global(button) {
+		width: 100%;
+	}
+</style>
