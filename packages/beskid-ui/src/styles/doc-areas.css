@@ -11,6 +11,8 @@
 /* --- Starlight left column: hide empty sidebar shell --- */
 html[data-book] .sidebar,
 html[data-book] nav.sidebar,
+html[data-docs] .sidebar,
+html[data-docs] nav.sidebar,
 html[data-platform-spec] .sidebar,
 html[data-platform-spec] nav.sidebar {
 	display: none !important;
@@ -21,11 +23,14 @@ html[data-platform-spec] nav.sidebar {
 }
 
 html[data-book][data-has-sidebar] .page,
+html[data-docs][data-has-sidebar] .page,
 html[data-platform-spec][data-has-sidebar] .page {
 	--sl-sidebar-width: 0;
 }
 
-html[data-book][data-has-sidebar] .main-frame {
+html[data-book][data-has-sidebar] .main-frame,
+html[data-docs][data-has-sidebar] .main-frame,
+html[data-platform-spec][data-has-sidebar] .main-frame {
 	grid-template-columns: 1fr;
 }
 
@@ -36,6 +41,7 @@ html[data-book][data-has-sidebar] .main-frame {
  * so remove this offset there to avoid extra top band and inset drift.
  */
 html[data-book] .main-frame,
+html[data-docs] .main-frame,
 html[data-platform-spec] .main-frame {
 	grid-template-columns: 1fr;
 	padding-top: 0 !important;
@@ -43,6 +49,7 @@ html[data-platform-spec] .main-frame {
 }
 
 html[data-book],
+html[data-docs],
 html[data-platform-spec] {
 	--sl-content-inline-start: 0;
 	--sl-sidebar-width: 0;
@@ -50,24 +57,28 @@ html[data-platform-spec] {
 
 /* Collapsed (default): full-width content. Expanded: main pane inset for fixed rail. */
 html[data-book] .page .main-pane,
+html[data-docs] .page .main-pane,
 html[data-platform-spec] .page .main-pane {
 	padding-inline-start: 0;
 	transition: padding-inline-start 0.22s ease;
 }
 
 html[data-book]:has(.platform-spec-nav-chrome__rail[data-rail-collapsed='false']) .page .main-pane,
+html[data-docs]:has(.platform-spec-nav-chrome__rail[data-rail-collapsed='false']) .page .main-pane,
 html[data-platform-spec]:has(.platform-spec-nav-chrome__rail[data-rail-collapsed='false']) .page .main-pane {
 	padding-inline-start: var(--platform-spec-nav-width) !important;
 }
 
 @media (max-width: 49.99rem) {
 	html[data-book] .page .main-pane,
+	html[data-docs] .page .main-pane,
 	html[data-platform-spec] .page .main-pane {
 		padding-inline-start: 0 !important;
 	}
 }
 
 html[data-book] .beskid-header,
+html[data-docs] .beskid-header,
 html[data-platform-spec] .beskid-header {
 	overflow: visible;
 }
@@ -78,6 +89,7 @@ html[data-platform-spec] .beskid-header {
 }
 
 html[data-book] .platform-spec-nav-chrome,
+html[data-docs] .platform-spec-nav-chrome,
 html[data-platform-spec] .platform-spec-nav-chrome {
 	display: block;
 }
