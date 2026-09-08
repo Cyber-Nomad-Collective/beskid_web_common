@@ -32,6 +32,8 @@
 		"./openapi/v1": "./openapi/v1/openapi.yaml"
 	},
 	"files": [
+		"LICENSE",
+		"NOTICE",
 		"dist",
 		"src",
 		"openapi",
@@ -49,5 +51,5 @@
 		"@types/node": "^22.15.0",
 		"typescript": "^5.8.2"
 	},
-	"license": "MIT"
+	"license": "Apache-2.0"
 }

@@ -51,6 +51,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- License Beskid-owned reusable web packages under Apache-2.0 and include the
+  license and notice in published package contents.
 - Graph consumers import `openInEditorUrl` / `OpenInEditorOptions` from the single
   explorer implementation (graph re-exports only; no duplicate helper module).
 - Route the repository `test` script through the React package's Vitest/jsdom runner so

@@ -13,7 +13,7 @@
 		"type": "git",
 		"url": "https://github.com/Cyber-Nomad-Collective/beskid_web_common.git"
 	},
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"dependencies": {
 		"yaml": "^2.9.0"
 	}

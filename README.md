@@ -68,3 +68,9 @@ See [beskid `docs/beskid-web-common.md`](https://github.com/Cyber-Nomad-Collecti
 ## CSS mirroring
 
 `packages/trudoc/css/` and `packages/beskid-ui/src/styles/` intentionally mirror platform-spec styles. When changing tokens, update **both** trees until a single `@beskid/beskid-ui` style entrypoint replaces the duplicate (tracked in migration doc).
+
+## License
+
+Beskid-owned source in this repository is licensed under the
+[Apache License 2.0](LICENSE). Published packages include their applicable
+license and notice files.

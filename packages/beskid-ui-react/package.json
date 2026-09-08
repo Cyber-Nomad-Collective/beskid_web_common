@@ -35,6 +35,8 @@
 		"./downloads": "./src/components/downloads/index.ts"
 	},
 	"files": [
+		"LICENSE",
+		"NOTICE",
 		"src",
 		"components.json",
 		"README.md"
@@ -82,5 +84,5 @@
 		"vitest": "^3.2.4",
 		"zod": "^4.4.3"
 	},
-	"license": "MIT"
+	"license": "Apache-2.0"
 }
