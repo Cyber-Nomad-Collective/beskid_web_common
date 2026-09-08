@@ -8,8 +8,14 @@ import BookNavToggle from '../book/BookNavToggle.astro';
 import { BESKID_SERVICES } from '../data/beskid-services';
 import DocsNavChrome from '../docs/DocsNavChrome.astro';
 import DocsNavToggle from '../docs/DocsNavToggle.astro';
+import type { DocsNavigationGroup } from '../docs/docs-navigation';
 import BeskidHubButton from './BeskidHubButton.astro';
 
+interface Props {
+	docsNavigation: DocsNavigationGroup[];
+}
+
+const { docsNavigation } = Astro.props;
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const standardHref = BESKID_SERVICES.find((service) => service.id === 'platform-spec')?.href ?? '/docs/standard/';
 
@@ -164,7 +170,7 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 	</Astronav>
 </div>
 {isBook && <BookNavChrome currentPath={path} />}
-{isDocs && <DocsNavChrome currentPath={path} />}
+{isDocs && <DocsNavChrome currentPath={path} navigation={docsNavigation} />}
 
 <style>
 	@layer starlight.components {

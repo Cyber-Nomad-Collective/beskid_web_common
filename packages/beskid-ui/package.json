@@ -20,6 +20,7 @@
 		"./client/beskid-hub-entry": "./src/client/beskid-hub-entry.ts",
 		"./react/BeskidHub": "./src/react/BeskidHub.tsx",
 		"./styles/hub.css": "./src/styles/hub.css",
+		"./docs/*": "./src/docs/*",
 		"./platform-spec/*": "./src/platform-spec/*",
 		"./starlight/*": "./src/starlight/*",
 		"./book/*": "./src/book/*"

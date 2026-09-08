@@ -1,17 +1,17 @@
 ---
 import Search from 'virtual:starlight/components/Search';
-import { docsNavigation } from '@beskid/docs-navigation';
-import type { DocsNavigationItem, DocsNavigationLink } from '@beskid/docs-navigation';
+import type { DocsNavigationGroup, DocsNavigationItem, DocsNavigationLink } from './docs-navigation';
 
 interface Props {
 	currentPath: string;
+	navigation: DocsNavigationGroup[];
 }
 
-const { currentPath } = Astro.props;
+const { currentPath, navigation } = Astro.props;
 const path = currentPath.replace(/\/+$/, '') || '/';
 const isCurrent = (href: string) => path === href.replace(/\/+$/, '');
 const isLink = (item: DocsNavigationItem): item is DocsNavigationLink => 'link' in item;
-const navigationItems = docsNavigation.flatMap((section) => section.items);
+const navigationItems = navigation.flatMap((section) => section.items);
 const docsHomeLink = navigationItems.find(isLink);
 ---
 
