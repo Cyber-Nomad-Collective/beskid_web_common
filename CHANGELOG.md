@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Keep the landing-page code preview at a readable fixed height with its own
+  scroll viewport, and render multi-file selectors as editor tabs.
 - Route shared hub navigation to the canonical Beskid Standard documentation
   surface instead of the retired Platform Spec service, with one service
   registry reused by both React and Astro shells.

@@ -223,6 +223,14 @@ html[data-theme='light'] .sl-markdown-content a.landing-action--ghost:hover {
 	box-shadow: 0 12px 32px color-mix(in srgb, var(--beskid-primary) 28%, black);
 }
 
+/* The hero is a preview, not an endlessly growing code listing. */
+.landing-hero__code .landing-terminal__body {
+	block-size: clamp(18rem, 52vw, 28rem);
+	overflow: auto;
+	overscroll-behavior: contain;
+	scrollbar-gutter: stable;
+}
+
 html[data-theme='light'] .landing-hero__code .landing-terminal {
 	box-shadow:
 		0 1px 0 color-mix(in srgb, var(--beskid-outline) 35%, white),
@@ -619,6 +627,14 @@ html[data-theme='light'] .landing-terminal {
 	background: var(--landing-terminal-chrome);
 }
 
+.landing-terminal--tabs .landing-terminal__head {
+	align-items: flex-end;
+	justify-content: flex-start;
+	min-height: 3rem;
+	padding: 0.45rem 0.7rem 0;
+	border-bottom: 1px solid var(--landing-border);
+}
+
 html[data-theme='light'] .landing-terminal__head {
 	color: color-mix(in srgb, var(--beskid-on-primary-container) 78%, var(--beskid-outline));
 	background: color-mix(in srgb, var(--landing-code-bg) 82%, var(--beskid-surface-variant));
@@ -636,6 +652,57 @@ html[data-theme='light'] .landing-terminal__head {
 	left: 0.9rem;
 	display: flex;
 	gap: 0.35rem;
+}
+
+.landing-terminal--tabs .landing-terminal__dots {
+	position: static;
+	flex: 0 0 auto;
+	margin: 0 0.55rem 0.55rem 0.15rem;
+}
+
+.landing-terminal__tabs {
+	display: flex;
+	align-items: flex-end;
+	min-width: 0;
+	max-width: 100%;
+	overflow-x: auto;
+	overscroll-behavior-inline: contain;
+	scrollbar-width: thin;
+}
+
+.landing-terminal__tab {
+	position: relative;
+	flex: 0 0 auto;
+	margin: 0;
+	padding: 0.55rem 0.8rem 0.5rem;
+	border: 1px solid transparent;
+	border-bottom: 0;
+	border-radius: 0.45rem 0.45rem 0 0;
+	background: transparent;
+	color: var(--landing-muted);
+	font: inherit;
+	line-height: 1;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.landing-terminal__tab:hover {
+	color: var(--landing-code-fg);
+	background: color-mix(in srgb, var(--landing-code-bg) 68%, var(--beskid-primary) 32%);
+}
+
+.landing-terminal__tab:focus-visible {
+	z-index: 1;
+	outline: 2px solid var(--landing-accent);
+	outline-offset: -2px;
+}
+
+.landing-terminal__tab--active {
+	z-index: 1;
+	margin-bottom: -1px;
+	border-color: var(--landing-border);
+	background: var(--landing-code-bg);
+	color: var(--landing-code-fg);
 }
 
 .landing-terminal__dot {
