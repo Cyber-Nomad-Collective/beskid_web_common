@@ -54,12 +54,12 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 						<li class="beskid-docs-menu">
 							<details>
 								<summary class:list={['platform-spec-topbar-actions__btn', isActive('/docs') && 'is-active']}>
-									Docs
+									Learn
 									<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 6 4 4 4-4"></path></svg>
 								</summary>
 								<div class="beskid-docs-menu__panel">
 									<a href="/docs/">
-										<strong>Docs</strong>
+										<strong>Learn</strong>
 										<span>Practical language and tooling guides.</span>
 									</a>
 									<a href={standardHref}>
@@ -74,7 +74,7 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 							</details>
 						</li>
 						<li>
-							<a href="https://learn.beskid-lang.org/" class="platform-spec-topbar-actions__btn">Learn</a>
+							<a href="/downloads/" class:list={['platform-spec-topbar-actions__btn', isActive('/downloads') && 'is-active']}>Download</a>
 						</li>
 					</ul>
 				</MenuItems>
@@ -140,7 +140,7 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 					</a>
 				</li>
 				<li>
-					<a href="https://learn.beskid-lang.org/" class="beskid-header__mobile-link">
+					<a href="/docs/" class:list={['beskid-header__mobile-link', isActive('/docs') && 'is-active']}>
 						<svg class="beskid-header__mobile-link-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 							<path d="M12 3 3 7.5 12 12l9-4.5L12 3z"></path>
 							<path d="M7 10v5.5c0 1.8 2.2 3.5 5 3.5s5-1.7 5-3.5V10"></path>
