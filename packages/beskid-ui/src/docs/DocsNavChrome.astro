@@ -1,5 +1,7 @@
 ---
 import Search from 'virtual:starlight/components/Search';
+import { docsNavigation } from '@beskid/docs-navigation';
+import type { DocsNavigationItem, DocsNavigationLink } from '@beskid/docs-navigation';
 
 interface Props {
 	currentPath: string;
@@ -8,6 +10,9 @@ interface Props {
 const { currentPath } = Astro.props;
 const path = currentPath.replace(/\/+$/, '') || '/';
 const isCurrent = (href: string) => path === href.replace(/\/+$/, '');
+const isLink = (item: DocsNavigationItem): item is DocsNavigationLink => 'link' in item;
+const navigationItems = docsNavigation.flatMap((section) => section.items);
+const docsHomeLink = navigationItems.find(isLink);
 ---
 
 <div class="platform-spec-nav-chrome" data-docs-nav-chrome data-rail-collapsed="false">
@@ -15,7 +20,7 @@ const isCurrent = (href: string) => path === href.replace(/\/+$/, '');
 
 	<aside id="docs-nav-rail" class="platform-spec-nav-chrome__rail" aria-label="Docs contents" data-docs-nav-rail>
 		<div class="platform-spec-nav-chrome__rail-head">
-			<a href="/docs/" class="platform-spec-nav-chrome__map-link">Docs home</a>
+			{docsHomeLink && isLink(docsHomeLink) && <a href={docsHomeLink.link} class="platform-spec-nav-chrome__map-link">Docs home</a>}
 			<button type="button" class="platform-spec-nav-chrome__rail-close md:sl-hidden" aria-label="Close Docs contents" data-docs-nav-close>×</button>
 		</div>
 		<div class="beskid-docs-nav__search print:hidden">
@@ -27,31 +32,24 @@ const isCurrent = (href: string) => path === href.replace(/\/+$/, '');
 		</label>
 		<nav class="platform-spec-nav-chrome__tree">
 			<ul class="platform-spec-nav-tree__list" data-depth="0">
-				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs') && 'is-active']} aria-current={isCurrent('/docs') ? 'page' : undefined}>Overview</a></li>
-				<li class="platform-spec-nav-tree__item" data-level="branch">
-					<details class="platform-spec-nav-tree__branch" open>
-						<summary class="platform-spec-nav-tree__summary"><span class="platform-spec-nav-tree__link platform-spec-nav-tree__folder-label">Get started</span></summary>
-						<ul class="platform-spec-nav-tree__list" data-depth="1">
-							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/getting-started/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/getting-started') && 'is-active']} aria-current={isCurrent('/docs/getting-started') ? 'page' : undefined}>Overview</a></li>
-							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/getting-started/install/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/getting-started/install') && 'is-active']} aria-current={isCurrent('/docs/getting-started/install') ? 'page' : undefined}>Install Beskid</a></li>
-							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/getting-started/first-program/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/getting-started/first-program') && 'is-active']} aria-current={isCurrent('/docs/getting-started/first-program') ? 'page' : undefined}>First program</a></li>
-						</ul>
-					</details>
-				</li>
-				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/tooling/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/tooling') && 'is-active']} aria-current={isCurrent('/docs/tooling') ? 'page' : undefined}>Tooling</a></li>
-				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/projects/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/projects') && 'is-active']} aria-current={isCurrent('/docs/projects') ? 'page' : undefined}>Projects</a></li>
-				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/packages/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/packages') && 'is-active']} aria-current={isCurrent('/docs/packages') ? 'page' : undefined}>Packages</a></li>
-				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/standard/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/standard') && 'is-active']} aria-current={isCurrent('/docs/standard') ? 'page' : undefined}>Beskid Standard</a></li>
-				<li class="platform-spec-nav-tree__item" data-level="branch">
-					<details class="platform-spec-nav-tree__branch" open>
-						<summary class="platform-spec-nav-tree__summary"><span class="platform-spec-nav-tree__link platform-spec-nav-tree__folder-label">Contribute</span></summary>
-						<ul class="platform-spec-nav-tree__list" data-depth="1">
-							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/contributing/documentation/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/contributing/documentation') && 'is-active']} aria-current={isCurrent('/docs/contributing/documentation') ? 'page' : undefined}>Documentation authoring</a></li>
-							<li class="platform-spec-nav-tree__item" data-level="page"><a href="/docs/contributing/ste-100/" class:list={['platform-spec-nav-tree__link', isCurrent('/docs/contributing/ste-100') && 'is-active']} aria-current={isCurrent('/docs/contributing/ste-100') ? 'page' : undefined}>Use ASD-STE100</a></li>
-						</ul>
-					</details>
-				</li>
-				<li class="platform-spec-nav-tree__item" data-level="page"><a href="/book/" class="platform-spec-nav-tree__link">The Beskid Book</a></li>
+				{navigationItems.map((item) => isLink(item) ? (
+					<li class="platform-spec-nav-tree__item" data-level="page">
+						<a href={item.link} class:list={['platform-spec-nav-tree__link', isCurrent(item.link) && 'is-active']} aria-current={isCurrent(item.link) ? 'page' : undefined}>{item.label}</a>
+					</li>
+				) : (
+					<li class="platform-spec-nav-tree__item" data-level="branch">
+						<details class="platform-spec-nav-tree__branch" open>
+							<summary class="platform-spec-nav-tree__summary"><span class="platform-spec-nav-tree__link platform-spec-nav-tree__folder-label">{item.label}</span></summary>
+							<ul class="platform-spec-nav-tree__list" data-depth="1">
+								{item.items.map((child) => isLink(child) && (
+									<li class="platform-spec-nav-tree__item" data-level="page">
+										<a href={child.link} class:list={['platform-spec-nav-tree__link', isCurrent(child.link) && 'is-active']} aria-current={isCurrent(child.link) ? 'page' : undefined}>{child.label}</a>
+									</li>
+								))}
+							</ul>
+						</details>
+					</li>
+				))}
 			</ul>
 		</nav>
 	</aside>
