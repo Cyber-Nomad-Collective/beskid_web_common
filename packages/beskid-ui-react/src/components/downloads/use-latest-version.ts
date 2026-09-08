@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { VersionPayload } from "./types";
+import type { PlatformId, VersionPayload } from "./types";
 
 interface UseLatestVersionResult {
 	version: string | null;
@@ -18,6 +18,16 @@ const STALE_MS = 5 * 60 * 1000; // 5 minutes
 
 let cached: { payload: VersionPayload; ts: number } | null = null;
 
+const PLATFORM_IDS: readonly PlatformId[] = [
+	"linux-amd64",
+	"darwin-arm64",
+	"windows-amd64",
+];
+
+function isPlatformId(value: unknown): value is PlatformId {
+	return typeof value === "string" && PLATFORM_IDS.includes(value as PlatformId);
+}
+
 function isVersionPayload(value: unknown): value is VersionPayload {
 	if (!value || typeof value !== "object") return false;
 	const payload = value as Partial<VersionPayload>;
@@ -25,7 +35,21 @@ function isVersionPayload(value: unknown): value is VersionPayload {
 		typeof payload.version === "string" &&
 		typeof payload.source === "string" &&
 		Array.isArray(payload.assets) &&
+		payload.assets.every(
+			(asset) =>
+				isPlatformId(asset?.platform) &&
+				asset.kind === "binary" &&
+				typeof asset.url === "string" &&
+				typeof asset.filename === "string",
+		) &&
 		Array.isArray(payload.packages) &&
+		payload.packages.every(
+			(pkg) =>
+				isPlatformId(pkg?.platform) &&
+				typeof pkg.label === "string" &&
+				typeof pkg.command === "string" &&
+				typeof pkg.url === "string",
+		) &&
 		!!payload.installScript &&
 		typeof payload.installScript.sh === "string" &&
 		typeof payload.installScript.ps === "string"

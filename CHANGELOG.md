@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Use exact release-platform identifiers throughout the download widget, reject
+  legacy split OS/architecture payloads, and show metadata-gated packages with
+  channel, immutable pin, install, upgrade, uninstall, and editor guidance.
 - Expose Downloads from the desktop navigation and label the documentation
   menu as Learn, matching the public website navigation.
 - Populate the Docs navigation tree with the public getting-started, tooling,

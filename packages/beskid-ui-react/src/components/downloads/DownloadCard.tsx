@@ -28,7 +28,6 @@ export function DownloadCard({
 			<CardHeader>
 				<CardTitle className="flex items-center gap-2">
 					<Badge>{asset.platform}</Badge>
-					<span>{asset.arch}</span>
 				</CardTitle>
 			</CardHeader>
 			<CardContent className="flex flex-col gap-4">
