@@ -56,32 +56,30 @@ const isBook = path === '/book' || path.startsWith('/book/');
 						<li>
 							<a href="/" class:list={['platform-spec-topbar-actions__btn', isActive('/') && 'is-active']}>Home</a>
 						</li>
-						<li>
-							<a
-								href={standardHref}
-								class:list={['platform-spec-topbar-actions__btn', isActive('/docs/standard') && 'is-active']}
-							>
-								Standard
-							</a>
-						</li>
-						<li>
-							<a href="/book/" class:list={['platform-spec-topbar-actions__btn', isActive('/book') && 'is-active']}>
-								Book
-							</a>
+						<li class="beskid-docs-menu">
+							<details>
+								<summary class:list={['platform-spec-topbar-actions__btn', isActive('/docs') && 'is-active']}>
+									Docs
+									<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 6 4 4 4-4"></path></svg>
+								</summary>
+								<div class="beskid-docs-menu__panel">
+									<a href="/docs/">
+										<strong>Docs</strong>
+										<span>Practical language and tooling guides.</span>
+									</a>
+									<a href={standardHref}>
+										<strong>Standard</strong>
+										<span>Normative requirements and scenarios.</span>
+									</a>
+									<a href="/book/">
+										<strong>Book</strong>
+										<span>A guided introduction to Beskid.</span>
+									</a>
+								</div>
+							</details>
 						</li>
 						<li>
 							<a href="https://learn.beskid-lang.org/" class="platform-spec-topbar-actions__btn">Learn</a>
-						</li>
-						<li>
-							<a
-								href="/downloads/"
-								class:list={['platform-spec-topbar-actions__btn', isActive('/downloads') && 'is-active']}
-							>
-								<svg class="platform-spec-topbar-actions__glyph" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-									<path d="M12 3v11m0 0l-4-4m4 4 4-4M4 17.5h16V21H4z"></path>
-								</svg>
-								<span class="platform-spec-topbar-actions__label">Download</span>
-							</a>
 						</li>
 					</ul>
 				</MenuItems>
@@ -270,6 +268,72 @@ const isBook = path === '/book' || path.startsWith('/book/');
 			gap: 0.75rem;
 		}
 
+		.beskid-docs-menu {
+			position: relative;
+		}
+
+		.beskid-docs-menu summary {
+			cursor: pointer;
+			list-style: none;
+		}
+
+		.beskid-docs-menu summary::-webkit-details-marker {
+			display: none;
+		}
+
+		.beskid-docs-menu summary svg {
+			transition: transform 0.15s ease;
+		}
+
+		.beskid-docs-menu details[open] summary svg {
+			transform: rotate(180deg);
+		}
+
+		.beskid-docs-menu__panel {
+			position: absolute;
+			top: calc(100% + 0.6rem);
+			left: -0.5rem;
+			z-index: 50;
+			display: grid;
+			grid-template-columns: repeat(3, minmax(8.5rem, 1fr));
+			gap: 0.4rem;
+			width: min(34rem, calc(100vw - 2rem));
+			padding: 0.65rem;
+			border: 1px solid var(--sl-color-gray-5);
+			border-radius: 0.7rem;
+			background: var(--sl-color-bg-nav);
+			box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.35);
+		}
+
+		.beskid-docs-menu__panel a {
+			display: grid;
+			gap: 0.25rem;
+			min-height: 4.5rem;
+			padding: 0.65rem;
+			border: 1px solid transparent;
+			border-radius: 0.45rem;
+			color: var(--sl-color-gray-2);
+			text-decoration: none;
+		}
+
+		.beskid-docs-menu__panel a:hover,
+		.beskid-docs-menu__panel a:focus-visible {
+			border-color: color-mix(in srgb, var(--sl-color-text-accent) 50%, transparent);
+			background: color-mix(in srgb, var(--sl-color-accent-low) 35%, transparent);
+			color: var(--sl-color-white);
+			outline: none;
+		}
+
+		.beskid-docs-menu__panel strong {
+			font-size: var(--sl-text-sm);
+		}
+
+		.beskid-docs-menu__panel span {
+			color: var(--sl-color-gray-3);
+			font-size: var(--sl-text-xs);
+			line-height: 1.35;
+		}
+
 		.beskid-header__mobile-end {
 			grid-column: -1;
 			grid-row: 1;
@@ -317,6 +381,10 @@ const isBook = path === '/book' || path.startsWith('/book/');
 
 			.beskid-header__desktop {
 				display: none !important;
+			}
+
+			.beskid-docs-menu__panel {
+				grid-template-columns: 1fr;
 			}
 		}
 

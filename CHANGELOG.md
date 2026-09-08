@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Keep the landing-page code preview at a readable fixed height with its own
   scroll viewport, and render multi-file selectors as editor tabs.
+- Render the Docs table of contents in the left navigation pane and consolidate
+  the desktop header into Home, a Docs menu, and Learn.
 - Route shared hub navigation to the canonical Beskid Standard documentation
   surface instead of the retired Platform Spec service, with one service
   registry reused by both React and Astro shells.
