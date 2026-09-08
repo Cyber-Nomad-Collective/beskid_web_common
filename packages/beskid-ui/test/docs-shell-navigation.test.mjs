@@ -18,4 +18,5 @@ test('desktop navigation groups documentation links under a Docs menu', () => {
 	assert.match(header, /href=\{standardHref\}/);
 	assert.match(header, /href="\/book\/"/);
 	assert.match(header, /href="https:\/\/learn\.beskid-lang\.org\/"/);
+	assert.match(header, /right: 0/);
 });

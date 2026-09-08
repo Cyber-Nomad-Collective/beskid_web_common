@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Keep the Docs menu within the viewport by anchoring it to its trailing edge.
+
+### Fixed
+
 - Keep the landing-page code preview at a readable fixed height with its own
   scroll viewport, and render multi-file selectors as editor tabs.
 - Render the Docs table of contents in the left navigation pane and consolidate
