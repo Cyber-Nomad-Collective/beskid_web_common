@@ -57,6 +57,43 @@ test("rejects broad OS labels that do not identify one selectable platform", asy
 	expect(message.textContent).toContain("Invalid version payload");
 });
 
+test("rejects legacy arch fields even with an exact platform identifier", async () => {
+	vi.stubGlobal(
+		"fetch",
+		vi.fn(async (input: RequestInfo | URL) => {
+			const url = String(input);
+			return new Response(
+				JSON.stringify(
+					url.includes("releases.json")
+						? []
+						: {
+								version: "0.4.607-unstable",
+								source: "github:unstable",
+								assets: [
+									{
+										platform: "linux-amd64",
+										arch: "amd64",
+										kind: "binary",
+										url: "https://example.test/beskid-linux-amd64",
+										filename: "beskid-linux-amd64",
+									},
+								],
+								packages: [],
+								installScript: { sh: "install-sh", ps: "install-ps" },
+								containerImages: { base: "base", runner: "runner" },
+							},
+				),
+				{ status: 200, headers: { "Content-Type": "application/json" } },
+			);
+		}),
+	);
+
+	render(<DownloadsSection />);
+
+	const message = await screen.findByText(/Failed to load download data:/);
+	expect(message.textContent).toContain("Invalid version payload");
+});
+
 test("shows each release asset and package only in its exact platform tab", async () => {
 	vi.stubGlobal(
 		"fetch",

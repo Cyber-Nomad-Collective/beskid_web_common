@@ -38,6 +38,7 @@ function isVersionPayload(value: unknown): value is VersionPayload {
 		payload.assets.every(
 			(asset) =>
 				isPlatformId(asset?.platform) &&
+				!Object.prototype.hasOwnProperty.call(asset, "arch") &&
 				asset.kind === "binary" &&
 				typeof asset.url === "string" &&
 				typeof asset.filename === "string",
