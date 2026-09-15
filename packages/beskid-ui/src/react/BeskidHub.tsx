@@ -88,7 +88,7 @@ export function BeskidHub({ className }: BeskidHubProps) {
 								href={service.href}
 								onClick={closeHub}
 							>
-								<span dangerouslySetInnerHTML={{ __html: hubIconSvg(service.icon) }} />
+								<span dangerouslySetInnerHTML={{ __html: hubIconSvg(service.icon, dialogId) }} />
 								<span className="beskid-hub__tile-label">{service.label}</span>
 							</a>
 						))}

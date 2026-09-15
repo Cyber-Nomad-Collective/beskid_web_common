@@ -3,11 +3,11 @@ export const AUTH_API_VERSION = "v1";
 /** @deprecated use HUB_USER_TOKEN_TTL_SECONDS */
 export const HANDOFF_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const HUB_USER_TOKEN_TTL_SECONDS = 7 * 24 * 60 * 60;
-export const AUTH_APP_IDS = ["tracker", "nexus", "pckg", "platform-spec"];
+export const AUTH_APP_IDS = ["tracker", "nexus", "pckg", "learn"];
 export const AUTH_APP_META = {
 	tracker: {
 		label: "Beskid Tracker",
-		description: "Kanban and platform-spec docs on GitHub issues.",
+		description: "Kanban delivery tracking and issue management.",
 	},
 	nexus: {
 		label: "Beskid Nexus",
@@ -17,8 +17,8 @@ export const AUTH_APP_META = {
 		label: "pckg registry",
 		description: "Package registry accounts and publishing.",
 	},
-	"platform-spec": {
-		label: "Platform Spec Editor",
-		description: "Normative platform-spec drafts, moderation, and git sync.",
+	learn: {
+		label: "Beskid Learn",
+		description: "Authenticated interactive Beskid lessons and progress.",
 	},
 };

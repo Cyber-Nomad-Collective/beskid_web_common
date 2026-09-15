@@ -19,6 +19,8 @@
 		}
 	},
 	"files": [
+		"LICENSE",
+		"NOTICE",
 		"dist",
 		"src",
 		"README.md"
@@ -36,5 +38,5 @@
 		"nitro": "^3.0.260522-beta",
 		"typescript": "^5.8.2"
 	},
-	"license": "MIT"
+	"license": "Apache-2.0"
 }

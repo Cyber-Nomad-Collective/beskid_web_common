@@ -12,7 +12,7 @@ describe("Beskid shared service registry", () => {
 		const standard = BESKID_SERVICES.find(
 			(service) => service.id === "platform-spec",
 		);
-		expect(standard?.href).toBe("https://spec.beskid-lang.org/platform-spec/");
+		expect(standard?.href).toBe("https://beskid-lang.org/docs/standard/");
 	});
 
 	it("includes Learn at its public service URL", () => {

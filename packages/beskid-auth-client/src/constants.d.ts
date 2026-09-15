@@ -8,7 +8,7 @@ export declare const AUTH_APP_IDS: readonly [
 	"tracker",
 	"nexus",
 	"pckg",
-	"platform-spec",
+	"learn",
 ];
 export declare const AUTH_APP_META: Record<
 	AuthAppId,

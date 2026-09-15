@@ -1,15 +1,14 @@
 export type PlatformId = "linux-amd64" | "darwin-arm64" | "windows-amd64";
 
 export interface AssetInfo {
-	platform: string;
-	arch: string;
+	platform: PlatformId;
 	kind: "binary";
 	url: string;
 	filename: string;
 }
 
 export interface PackageInfo {
-	platform: string;
+	platform: PlatformId;
 	label: string;
 	command: string;
 	url: string;

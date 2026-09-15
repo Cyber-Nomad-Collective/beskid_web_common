@@ -20,7 +20,7 @@ export const BESKID_SERVICES: BeskidService[] = [
 	{
 		id: "platform-spec",
 		label: "Specification",
-		href: "https://spec.beskid-lang.org/platform-spec/",
+		href: "https://beskid-lang.org/docs/standard/",
 		icon: "platform-spec",
 	},
 	{
