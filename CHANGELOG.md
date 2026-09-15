@@ -7,7 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Generate shared Ridge and service hub artwork from the canonical brand SVGs,
+  reuse one icon renderer across Astro and React, and update the shared header mark.
+
+- Apply Emerald primary accents to the shared UI and trudoc themes while retaining
+  existing surfaces, neutral and secondary colors, typography, and layout tokens.
+
 ### Fixed
+
+- Align documentation navigation source checks with the dedicated searchable Docs
+  rail and the Learn menu containing guides, Standard, and Book.
 
 - Use exact release-platform identifiers throughout the download widget, reject
   legacy architecture fields even beside exact platform IDs, and show

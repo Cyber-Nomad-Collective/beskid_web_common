@@ -5,6 +5,7 @@ import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
 import BookNavChrome from '../book/BookNavChrome.astro';
 import BookNavToggle from '../book/BookNavToggle.astro';
+import { brandIconSvg, hubIconSvg } from '../hub/icons';
 import { BESKID_SERVICES } from '../data/beskid-services';
 import DocsNavChrome from '../docs/DocsNavChrome.astro';
 import DocsNavToggle from '../docs/DocsNavToggle.astro';
@@ -44,10 +45,10 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 				{isDocs && <DocsNavToggle showInTopBar />}
 				{isBook && <BookNavToggle showInTopBar />}
 				<a class="beskid-header__brand-logo-link" href="/" aria-label="Beskid home">
-					<img class="beskid-header__brand-logo" src="/favicon.svg" alt="" width="26" height="26" />
+					<Fragment set:html={brandIconSvg()} />
 				</a>
 				<span class="beskid-header__brand-text" translate="no">
-					<span class="beskid-header__brand-name">Beskid</span>
+					<span class="beskid-header__brand-name">beskid</span>
 					<span class="beskid-header__brand-scope">{scopeLabel}</span>
 				</span>
 			</div>
@@ -117,10 +118,7 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 			<ul class="beskid-header__mobile-list" aria-label="Primary navigation mobile">
 				<li>
 					<a href="/" class:list={['beskid-header__mobile-link', isActive('/') && 'is-active']}>
-						<svg class="beskid-header__mobile-link-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M3 11.5 12 4l9 7.5"></path>
-							<path d="M5.5 10.5V20h13V10.5"></path>
-						</svg>
+						<Fragment set:html={hubIconSvg("home", "header-mobile").replace('width="32" height="32"', 'width="24" height="24"')} />
 						<span>Home</span>
 					</a>
 				</li>
@@ -129,28 +127,19 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 						href={standardHref}
 						class:list={['beskid-header__mobile-link', isActive('/docs/standard') && 'is-active']}
 					>
-						<svg class="beskid-header__mobile-link-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v14.5A1.5 1.5 0 0 1 18.5 20H6.5A2.5 2.5 0 0 0 4 22V6.5z"></path>
-							<path d="M8 8h8M8 12h8"></path>
-						</svg>
+						<Fragment set:html={hubIconSvg("platform-spec", "header-mobile").replace('width="32" height="32"', 'width="24" height="24"')} />
 						<span>Standard</span>
 					</a>
 				</li>
 				<li>
 					<a href="/book/" class:list={['beskid-header__mobile-link', isActive('/book') && 'is-active']}>
-						<svg class="beskid-header__mobile-link-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H20v14.5A1.5 1.5 0 0 1 18.5 20H6.5A2.5 2.5 0 0 0 4 22V6.5z"></path>
-							<path d="M8 8h8M8 12h8"></path>
-						</svg>
+						<Fragment set:html={hubIconSvg("book", "header-mobile").replace('width="32" height="32"', 'width="24" height="24"')} />
 						<span>Book</span>
 					</a>
 				</li>
 				<li>
 					<a href="/docs/" class:list={['beskid-header__mobile-link', isActive('/docs') && 'is-active']}>
-						<svg class="beskid-header__mobile-link-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-							<path d="M12 3 3 7.5 12 12l9-4.5L12 3z"></path>
-							<path d="M7 10v5.5c0 1.8 2.2 3.5 5 3.5s5-1.7 5-3.5V10"></path>
-						</svg>
+						<Fragment set:html={hubIconSvg("learn", "header-mobile").replace('width="32" height="32"', 'width="24" height="24"')} />
 						<span>Learn</span>
 					</a>
 				</li>

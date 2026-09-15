@@ -1,12 +1,12 @@
 :root {
-	--beskid-material-seed: #0ea5a3;
+	--beskid-material-seed: #047857;
 	/* Pin site typography tokens so docs keep a stable sans stack across Starlight updates. */
 	--sl-font: ui-sans-serif, system-ui, sans-serif;
 	--sl-font-mono: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-	--beskid-primary: #7cf3ef;
-	--beskid-on-primary: #003736;
-	--beskid-primary-container: #00504e;
-	--beskid-on-primary-container: #96fffb;
+	--beskid-primary: #6EE7B7;
+	--beskid-on-primary: #022C22;
+	--beskid-primary-container: #064E3B;
+	--beskid-on-primary-container: #A7F3D0;
 	--beskid-secondary: #b4cccb;
 	--beskid-secondary-container: #354b4a;
 	--beskid-surface: #0f1414;
@@ -31,7 +31,7 @@
 	--platform-spec-edge-label-bg: color-mix(in srgb, var(--platform-spec-surface-strong) 90%, white);
 	--platform-spec-edge-label-stroke: color-mix(in srgb, var(--platform-spec-surface-strong) 98%, white);
 
-	/* Platform spec map (D3) — derived from brand teal, not a separate blue ramp */
+	/* Platform spec map (D3) — derived from the Emerald primary, not a separate blue ramp */
 	--platform-spec-graph-node-root-fill: color-mix(in srgb, var(--beskid-primary-container) 42%, black);
 	--platform-spec-graph-node-root-stroke: color-mix(in srgb, var(--beskid-primary) 88%, white);
 	--platform-spec-graph-node-root-text: var(--beskid-on-primary-container);
@@ -48,10 +48,10 @@
 }
 
 html[data-theme='light'] {
-	--beskid-primary: #006a68;
+	--beskid-primary: #047857;
 	--beskid-on-primary: #ffffff;
-	--beskid-primary-container: #96f1ee;
-	--beskid-on-primary-container: #00201f;
+	--beskid-primary-container: #D1FAE5;
+	--beskid-on-primary-container: #022C22;
 	--beskid-secondary: #4a6361;
 	--beskid-secondary-container: #cde8e6;
 	--beskid-surface: #f4fbfa;

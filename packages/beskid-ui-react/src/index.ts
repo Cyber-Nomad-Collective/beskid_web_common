@@ -96,5 +96,5 @@ export { HUB_CLOSE_ICON_SVG } from "./hub/beskid-hub-close-icon";
 export type { BeskidService, BeskidServiceIcon } from "./hub/beskid-services";
 export { BESKID_SERVICES } from "./hub/beskid-services";
 export type { BeskidHubIcon } from "./hub/icons";
-export { hubIconSvg, hubLauncherIconSvg } from "./hub/icons";
+export { brandIconSvg, hubIconSvg, hubLauncherIconSvg } from "./hub/icons";
 export { cn } from "./lib/utils";
