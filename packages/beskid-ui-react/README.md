@@ -57,9 +57,9 @@ After publish, switch any temporary `file:` pins back to `npm:@cyber-nomad-colle
 
 ```bash
 ./scripts/sync-beskid-packages.sh
-# or: beskid_tracker site/auth site/website site/platform-spec pckg/web
+# or: beskid_tracker site/auth site/website site/platform-spec beskid_sites/apps/pckg
 ```
 
 The sync script skips `file:` pins so local submodule links stay intact until publish.
 
-**Blocker without token:** publish cannot run locally or in CI without `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` with `write:packages`. The export surface is ready; only registry upload remains. Pre-publish consumers (`site/website`, `site/platform-spec`, `pckg/web`, tracker `ui-react`) use `file:` pins to `beskid_web_common/packages/*`.
+**Blocker without token:** publish cannot run locally or in CI without `NODE_AUTH_TOKEN` / `GITHUB_TOKEN` with `write:packages`. The export surface is ready; only registry upload remains. Pre-publish consumers (`site/website`, `site/platform-spec`, `beskid_sites/apps/pckg`, tracker `ui-react`) use `file:` pins to `beskid_web_common/packages/*`.
