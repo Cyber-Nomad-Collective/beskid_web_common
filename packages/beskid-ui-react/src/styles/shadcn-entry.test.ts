@@ -51,4 +51,25 @@ describe("shared shadcn Tailwind theme bridge", () => {
 			expect(stylesheet, `missing ${token}`).toContain(`${token}:`);
 		}
 	});
+
+	it("bridges Base UI style state variants onto Radix data attributes", () => {
+		const bridges: Record<string, string> = {
+			"data-open": '[data-state="open"]',
+			"data-closed": '[data-state="closed"]',
+			"data-checked": '[data-state="checked"]',
+			"data-unchecked": '[data-state="unchecked"]',
+			"data-active": '[data-state="active"]',
+			"data-pressed": '[data-state="on"]',
+			"data-popup-open": '[data-state="open"]',
+			"data-horizontal": '[data-orientation="horizontal"]',
+			"data-vertical": '[data-orientation="vertical"]',
+		};
+
+		for (const [variant, selector] of Object.entries(bridges)) {
+			const block = new RegExp(
+				`@custom-variant ${variant} \\{[^}]*${selector.replace(/[[\]"=]/g, "\\$&")}`,
+			);
+			expect(stylesheet, `missing ${variant} bridge`).toMatch(block);
+		}
+	});
 });

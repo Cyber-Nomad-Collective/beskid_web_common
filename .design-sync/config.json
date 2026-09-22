@@ -1,0 +1,26 @@
+{
+  "projectId": "7541d816-74c6-4a02-acb3-80e3cbc118a4",
+  "shape": "package",
+  "pkg": "@cyber-nomad-collective/beskid-ui-react",
+  "globalName": "BeskidUI",
+  "buildCmd": "node .design-sync/build.mjs",
+  "entry": ".design-sync/.cache/pkg/src/ds-all.ts",
+  "cssEntry": "beskid.css",
+  "provider": {
+    "component": "BeskidThemeRoot",
+    "props": {
+      "theme": "dark"
+    }
+  },
+  "componentSrcMap": {
+    "BeskidThemeRoot": null
+  },
+  "libOverrides": {
+    "source-kit.mjs": "shadcn kebab-file flat exports: match export-list files; group ui/* parts by module"
+  },
+  "overrides": {
+    "Card": {
+      "cardMode": "column"
+    }
+  }
+}

@@ -5,6 +5,68 @@
 @import "./beskid-tokens.css";
 @import "./shadcn-theme.css";
 
+/*
+ * State variant bridge for the radix-maia component style. The components use
+ * Base UI style variants (data-open:, data-checked:, data-horizontal:, ...);
+ * Radix primitives expose the same state as data-state / data-orientation.
+ * Without these, open/close animations, checked controls, active tabs and
+ * orientation layouts silently lose their styles.
+ */
+@custom-variant data-open {
+	&:where([data-state="open"]),
+	&:where([data-open]:not([data-open="false"])) {
+		@slot;
+	}
+}
+@custom-variant data-closed {
+	&:where([data-state="closed"]),
+	&:where([data-closed]:not([data-closed="false"])) {
+		@slot;
+	}
+}
+@custom-variant data-checked {
+	&:where([data-state="checked"]),
+	&:where([data-checked]:not([data-checked="false"])) {
+		@slot;
+	}
+}
+@custom-variant data-unchecked {
+	&:where([data-state="unchecked"]),
+	&:where([data-unchecked]:not([data-unchecked="false"])) {
+		@slot;
+	}
+}
+@custom-variant data-active {
+	&:where([data-state="active"]),
+	&:where([data-active]:not([data-active="false"])) {
+		@slot;
+	}
+}
+@custom-variant data-pressed {
+	&:where([data-state="on"]),
+	&:where([data-pressed]:not([data-pressed="false"])) {
+		@slot;
+	}
+}
+@custom-variant data-popup-open {
+	&:where([data-state="open"]),
+	&:where([data-popup-open]:not([data-popup-open="false"])) {
+		@slot;
+	}
+}
+@custom-variant data-horizontal {
+	&:where([data-orientation="horizontal"]),
+	&:where([data-horizontal]:not([data-horizontal="false"])) {
+		@slot;
+	}
+}
+@custom-variant data-vertical {
+	&:where([data-orientation="vertical"]),
+	&:where([data-vertical]:not([data-vertical="false"])) {
+		@slot;
+	}
+}
+
 /* Canonical shadcn v4 semantic bridge for Tailwind consumers. */
 @theme inline {
 	--color-background: var(--background);
