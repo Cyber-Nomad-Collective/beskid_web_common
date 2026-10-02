@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Move shared package validation and reviewed GitHub Packages publication to
+  the root beskid Woodpecker pipeline, with token-free prebuilt artifacts and
+  exact authored package versions.
+
 - Generate shared Ridge and service hub artwork from the canonical brand SVGs,
   reuse one icon renderer across Astro and React, and update the shared header mark.
 
