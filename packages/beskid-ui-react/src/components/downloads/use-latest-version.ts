@@ -57,7 +57,7 @@ function isVersionPayload(value: unknown): value is VersionPayload {
 	);
 }
 
-export function useLatestVersion(): UseLatestVersionResult {
+export function useLatestVersion(enabled = true): UseLatestVersionResult {
 	const [version, setVersion] = useState<string | null>(null);
 	const [assets, setAssets] = useState<VersionPayload["assets"]>([]);
 	const [packages, setPackages] = useState<VersionPayload["packages"]>([]);
@@ -72,6 +72,8 @@ export function useLatestVersion(): UseLatestVersionResult {
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
+		if (!enabled) return;
+
 		const ac = new AbortController();
 
 		async function fetchVersion() {
@@ -108,7 +110,7 @@ export function useLatestVersion(): UseLatestVersionResult {
 		fetchVersion();
 
 		return () => ac.abort();
-	}, []);
+	}, [enabled]);
 
 	return {
 		version,

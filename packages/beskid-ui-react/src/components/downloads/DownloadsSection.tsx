@@ -1,13 +1,14 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { PlatformId, AssetInfo, PackageInfo } from "./types";
+import type { PlatformId, AssetInfo, PackageInfo, PinnedDownloadRelease } from "./types";
 import { useLatestVersion } from "./use-latest-version";
 import { useReleases } from "./use-releases";
 
 interface DownloadsSectionProps {
 	initialVersion?: string;
 	versionSource?: string;
+	pinnedRelease?: PinnedDownloadRelease;
 }
 
 const PLATFORMS: { id: PlatformId; label: string }[] = [
@@ -53,9 +54,11 @@ function copyText(text: string, cb: (value: boolean) => void) {
 export function DownloadsSection({
 	initialVersion,
 	versionSource,
+	pinnedRelease,
 }: DownloadsSectionProps) {
-	const { version, assets, packages, installScript, source, loading, error } =
-		useLatestVersion();
+	const latest = useLatestVersion(!pinnedRelease);
+	const { version, assets, packages, source } = pinnedRelease ?? latest;
+	const { installScript, error, loading } = latest;
 	const { releases, loading: releasesLoading } = useReleases();
 
 	const [activePlatform, setActivePlatform] = useState<PlatformId>(
@@ -71,11 +74,13 @@ export function DownloadsSection({
 			: displaySource.endsWith(":stable")
 				? "Stable"
 				: "Release";
-	const immutableTag =
+	const immutableTag = pinnedRelease?.tag ?? (
 		displayVersion === "..." || displayVersion === "latest"
 			? null
-			: "cli-v" + displayVersion;
+			: "cli-v" + displayVersion
+	);
 	const platformGuidance = PLATFORM_GUIDANCE[activePlatform];
+	const pinnedPlatform = pinnedRelease?.platforms[activePlatform];
 
 	const activeAsset = useMemo<AssetInfo | undefined>(() => {
 		if (assets.length === 0) return undefined;
@@ -88,17 +93,18 @@ export function DownloadsSection({
 	);
 
 	const installCommand = useMemo(() => {
+		if (pinnedPlatform) return pinnedPlatform.installCommand;
 		if (!installScript) return "";
 		if (activePlatform === "windows-amd64") return installScript.ps;
 		return installScript.sh;
-	}, [installScript, activePlatform]);
+	}, [pinnedPlatform, installScript, activePlatform]);
 
 	const installLabel = useMemo(() => {
 		if (activePlatform === "windows-amd64") return "PowerShell";
 		return "Shell";
 	}, [activePlatform]);
 
-	if (error) {
+	if (!pinnedRelease && error) {
 		return (
 			<div className="downloads-block">
 				<p className="downloads-hint">Failed to load download data: {error}</p>
@@ -207,12 +213,20 @@ export function DownloadsSection({
 									</a>
 									<a
 										className="downloads-btn downloads-btn--secondary"
-										href={activeAsset.url}
+										href={pinnedRelease?.url ?? activeAsset.url}
 										rel="noopener noreferrer"
 										target="_blank"
 									>
 										View binary release
 									</a>
+									{pinnedRelease && (
+										<a
+											className="downloads-btn downloads-btn--secondary"
+											href={pinnedRelease.checksumsUrl}
+										>
+											SHA-256 checksums
+										</a>
+									)}
 								</div>
 
 								</>
@@ -275,7 +289,7 @@ export function DownloadsSection({
 							<div className="downloads-platform-row__main">
 								<span className="downloads-platform-row__label">Install location</span>
 								<code className="downloads-platform-row__cmd">
-									{platformGuidance.installLocation}
+									{pinnedPlatform?.installLocation ?? platformGuidance.installLocation}
 								</code>
 							</div>
 						</div>
@@ -283,16 +297,24 @@ export function DownloadsSection({
 							<div className="downloads-platform-row__main">
 								<span className="downloads-platform-row__label">Upgrade</span>
 								<span className="downloads-platform-row__cmd">
-									Run the install command again for the selected release channel.
+									{pinnedPlatform
+										? "Extract the new archive or install the matching platform package."
+										: "Run the install command again for the selected release channel."}
 								</span>
 							</div>
 						</div>
 						<div className="downloads-platform-row">
 							<div className="downloads-platform-row__main">
 								<span className="downloads-platform-row__label">Uninstall</span>
-								<code className="downloads-platform-row__cmd">
-									{platformGuidance.uninstall}
-								</code>
+								{pinnedPlatform ? (
+									<span className="downloads-platform-row__cmd">
+										Remove the extracted toolchain directory or uninstall it through the package installer.
+									</span>
+								) : (
+									<code className="downloads-platform-row__cmd">
+										{platformGuidance.uninstall}
+									</code>
+								)}
 							</div>
 						</div>
 					</div>
@@ -304,21 +326,38 @@ export function DownloadsSection({
 							VS Code extension
 						</h2>
 					</div>
-					<p className="downloads-hint">
-						The Open VSX extension follows the stable channel. Unstable extension
-						builds are not published.
-					</p>
-					<pre className="downloads-command__pre">
-						<code>code --install-extension beskid.beskid-vscode</code>
-					</pre>
-					<a
-						className="downloads-btn downloads-btn--secondary"
-						href="https://open-vsx.org/extension/beskid/beskid-vscode"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						View the extension on Open VSX
-					</a>
+					{pinnedPlatform ? (
+						<>
+							<p className="downloads-hint">Install the VSIX for the selected platform.</p>
+							<pre className="downloads-command__pre">
+								<code>{`code --install-extension ${pinnedPlatform.editor.filename}`}</code>
+							</pre>
+							<a
+								className="downloads-btn downloads-btn--secondary"
+								href={pinnedPlatform.editor.url}
+							>
+								Download VSIX
+							</a>
+						</>
+					) : (
+						<>
+							<p className="downloads-hint">
+								The Open VSX extension follows the stable channel. Unstable extension
+								builds are not published.
+							</p>
+							<pre className="downloads-command__pre">
+								<code>code --install-extension beskid.beskid-vscode</code>
+							</pre>
+							<a
+								className="downloads-btn downloads-btn--secondary"
+								href="https://open-vsx.org/extension/beskid/beskid-vscode"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								View the extension on Open VSX
+							</a>
+						</>
+					)}
 				</section>
 
 				<section className="downloads-block">

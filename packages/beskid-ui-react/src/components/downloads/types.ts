@@ -31,6 +31,21 @@ export interface VersionPayload {
 	containerImages: { base: string; runner: string };
 }
 
+export interface PinnedDownloadRelease
+	extends Pick<VersionPayload, "version" | "source" | "assets" | "packages"> {
+	tag: string;
+	url: string;
+	checksumsUrl: string;
+	platforms: Record<
+		PlatformId,
+		{
+			installCommand: string;
+			installLocation: string;
+			editor: { filename: string; url: string };
+		}
+	>;
+}
+
 export type BadgeStyle =
 	| "flat"
 	| "flat-square"

@@ -7,6 +7,7 @@ export type {
 	BadgeKind,
 	BadgeStyle,
 	PackageInfo,
+	PinnedDownloadRelease,
 	PlatformId,
 	ReleaseInfo,
 	VersionPayload,
