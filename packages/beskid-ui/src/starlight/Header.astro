@@ -1,5 +1,5 @@
 ---
-import { Astronav, MenuIcon, MenuItems, OpenIcon, CloseIcon } from 'astro-navbar';
+import { Astronav, MenuItems, OpenIcon, CloseIcon } from 'astro-navbar';
 import LanguageSelect from 'virtual:starlight/components/LanguageSelect';
 import SocialIcons from 'virtual:starlight/components/SocialIcons';
 import ThemeSelect from 'virtual:starlight/components/ThemeSelect';
@@ -14,9 +14,11 @@ import BeskidHubButton from './BeskidHubButton.astro';
 
 interface Props {
 	docsNavigation: DocsNavigationGroup[];
+	/** Opt in to the public website blog in both navigation layouts. */
+	showBlog?: boolean;
 }
 
-const { docsNavigation } = Astro.props;
+const { docsNavigation, showBlog = false } = Astro.props;
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const standardHref = BESKID_SERVICES.find((service) => service.id === 'platform-spec')?.href ?? '/docs/standard/';
 
@@ -58,6 +60,7 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 						<li>
 							<a href="/" class:list={['platform-spec-topbar-actions__btn', isActive('/') && 'is-active']}>Home</a>
 						</li>
+						{showBlog && <li><a href="/blog/" aria-current={isActive('/blog') ? 'page' : undefined} class:list={['platform-spec-topbar-actions__btn', isActive('/blog') && 'is-active']}>Blog</a></li>}
 						<li class="beskid-docs-menu">
 							<details>
 								<summary class:list={['platform-spec-topbar-actions__btn', isActive('/docs') && 'is-active']}>
@@ -97,7 +100,7 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 				</div>
 			</div>
 			<div class="md:sl-hidden print:hidden beskid-header__mobile-end">
-				<MenuIcon class="beskid-header__menu-btn" aria-label="Toggle navigation menu">
+				<button id="astronav-menu" type="button" class="beskid-header__menu-btn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="beskid-mobile-navigation">
 					<OpenIcon>
 						<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
 							<path d="M4 7h16M4 12h16M4 17h16"></path>
@@ -108,13 +111,13 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 							<path d="M6 6l12 12M18 6 6 18"></path>
 						</svg>
 					</CloseIcon>
-				</MenuIcon>
+				</button>
 				<div class="beskid-header__hub beskid-header__hub--mobile-bar">
 					<BeskidHubButton />
 				</div>
 			</div>
 		</div>
-		<MenuItems class="hidden md:sl-hidden beskid-header__mobile-menu">
+		<MenuItems id="beskid-mobile-navigation" class="hidden md:sl-hidden beskid-header__mobile-menu">
 			<ul class="beskid-header__mobile-list" aria-label="Primary navigation mobile">
 				<li>
 					<a href="/" class:list={['beskid-header__mobile-link', isActive('/') && 'is-active']}>
@@ -151,6 +154,7 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 						<span>Download</span>
 					</a>
 				</li>
+				{showBlog && <li><a href="/blog/" aria-current={isActive('/blog') ? 'page' : undefined} class:list={['beskid-header__mobile-link', isActive('/blog') && 'is-active']}>Blog</a></li>}
 				<li class="beskid-header__mobile-hub">
 					<BeskidHubButton />
 				</li>
@@ -199,6 +203,7 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 		}
 
 		.beskid-header__brand-logo-link {
+			color: var(--sl-color-text-accent);
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
@@ -368,26 +373,34 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 			gap: 0.2rem;
 		}
 
-		.beskid-header__mobile-toggle :global(button) {
+		.beskid-header__menu-btn {
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
 			width: 2.3rem;
 			height: 2.3rem;
-			border: none;
+			padding: .5rem;
+			cursor: pointer;
+			border: 1px solid var(--sl-color-gray-5);
 			border-radius: 0.45rem;
 			background: transparent;
 			color: var(--sl-color-gray-2);
 		}
 
-		.beskid-header__mobile-toggle :global(button:hover) {
+		.beskid-header__menu-btn:hover {
 			color: var(--sl-color-white);
 			background: color-mix(in srgb, var(--sl-color-white) 8%, transparent);
 		}
 
-		.beskid-header__mobile-toggle svg {
-			width: 1.1rem;
-			height: 1.1rem;
+		.beskid-header__menu-btn:focus-visible {
+			outline: 2px solid var(--sl-color-text-accent);
+			outline-offset: 3px;
+		}
+
+		.beskid-header__menu-btn svg {
+			display: block;
+			width: 1rem;
+			height: 1rem;
 		}
 
 		.beskid-header__mobile-menu {
@@ -457,3 +470,28 @@ const isDocs = path === '/docs' || path.startsWith('/docs/');
 
 	}
 </style>
+
+<script>
+  // Astronav toggles the menu class; mirror that real state for assistive technology.
+  const BindHeaderMenu = () => {
+    const menu = document.getElementById('beskid-mobile-navigation');
+    if (!menu || menu.dataset.a11yBound) return;
+    menu.dataset.a11yBound = 'true';
+    const sync = () => document.getElementById('astronav-menu')?.setAttribute('aria-expanded', String(!menu.classList.contains('hidden')));
+    new MutationObserver(sync).observe(menu, { attributes: true, attributeFilter: ['class'] });
+    sync();
+    menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+      if (!menu.classList.contains('hidden')) document.getElementById('astronav-menu')?.click();
+    }));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu.classList.contains('hidden')) {
+        const button = document.getElementById('astronav-menu');
+        button?.click();
+        button?.focus();
+      }
+    });
+  };
+  document.addEventListener('DOMContentLoaded', BindHeaderMenu);
+  document.addEventListener('astro:page-load', BindHeaderMenu);
+  BindHeaderMenu();
+</script>

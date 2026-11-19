@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep the header brand mark in the theme accent instead of inheriting visited-link purple.
+
+
+- Render an explicitly styled mobile menu button with visible icons, a compact target matching the service launcher, expanded state and Escape dismissal.
+
+### Added
+
+- Allow the website to opt into Blog links in desktop and mobile header navigation.
+
+
 ### Changed
 
 - Move shared package validation and reviewed GitHub Packages publication to
